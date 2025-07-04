@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class OrderController {
+public class OrderController extends BaseController {
     @FXML private DatePicker deliveryDatePicker;
     @FXML private TextField deliveryTimeField;
     @FXML private TextArea deliveryAddressArea;
@@ -111,19 +111,5 @@ public class OrderController {
         totalPriceLabel.setText("Total: $0.00");
     }
     
-    private void showError(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-    
-    private void showSuccess(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+
 }

@@ -32,6 +32,23 @@ public class ApiService {
         }
     }
 
+    public static UserDTO register(UserDTO user) throws IOException {
+        String json = mapper.writeValueAsString(user);
+        RequestBody body = RequestBody.create(json, JSON);
+        
+        Request request = new Request.Builder()
+            .url(BASE_URL + "register")
+            .post(body)
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), UserDTO.class);
+            }
+            return null;
+        }
+    }
+
 
     public static OrderDTO createOrder(OrderDTO order) throws IOException {
         String json = mapper.writeValueAsString(order);
@@ -115,58 +132,58 @@ public class ApiService {
     }
 
     public static List<ProductDTO> getAllProducts() throws IOException {
-    Request request = new Request.Builder()
-        .url(BASE_URL + "products")
-        .get()
-        .build();
-    
-    try (Response response = client.newCall(request).execute()) {
-        if (response.isSuccessful() && response.body() != null) {
-            return mapper.readValue(
-                response.body().string(), 
-                mapper.getTypeFactory().constructCollectionType(List.class, ProductDTO.class)
-            );
+        Request request = new Request.Builder()
+            .url(BASE_URL + "products")
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(
+                    response.body().string(), 
+                    mapper.getTypeFactory().constructCollectionType(List.class, ProductDTO.class)
+                );
+            }
+            return List.of(); // Return empty list if no products
         }
-        return List.of(); // Return empty list if no products
     }
-}
 
-public static List<ProductDTO> getProductsByCategory(String category) throws IOException {
-    Request request = new Request.Builder()
-        .url(BASE_URL + "products/category/" + category)
-        .get()
-        .build();
-    
-    try (Response response = client.newCall(request).execute()) {
-        if (response.isSuccessful() && response.body() != null) {
-            return mapper.readValue(
-                response.body().string(), 
-                mapper.getTypeFactory().constructCollectionType(List.class, ProductDTO.class)
-            );
+    public static List<ProductDTO> getProductsByCategory(String category) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "products/category/" + category)
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(
+                    response.body().string(), 
+                    mapper.getTypeFactory().constructCollectionType(List.class, ProductDTO.class)
+                );
+            }
+            return List.of();
         }
-        return List.of();
     }
-}
 
-public static List<ProductDTO> searchProducts(String query) throws IOException {
-    HttpUrl url = HttpUrl.parse(BASE_URL + "products/search").newBuilder()
-        .addQueryParameter("q", query)
-        .build();
-    
-    Request request = new Request.Builder()
-        .url(url)
-        .get()
-        .build();
-    
-    try (Response response = client.newCall(request).execute()) {
-        if (response.isSuccessful() && response.body() != null) {
-            return mapper.readValue(
-                response.body().string(), 
-                mapper.getTypeFactory().constructCollectionType(List.class, ProductDTO.class)
-            );
+    public static List<ProductDTO> searchProducts(String query) throws IOException {
+        HttpUrl url = HttpUrl.parse(BASE_URL + "products/search").newBuilder()
+            .addQueryParameter("q", query)
+            .build();
+        
+        Request request = new Request.Builder()
+            .url(url)
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(
+                    response.body().string(), 
+                    mapper.getTypeFactory().constructCollectionType(List.class, ProductDTO.class)
+                );
+            }
+            return List.of();
         }
-        return List.of();
     }
-}
 
 }

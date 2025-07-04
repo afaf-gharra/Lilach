@@ -29,8 +29,17 @@ public class User {
     @JsonProperty("isActive")
     private boolean isActive = true;
     
+    @Enumerated(EnumType.STRING)
+    private UserRole role = UserRole.CUSTOMER;
+
     public enum AccountType {
         STORE, CHAIN, MEMBER
+    }
+
+    public enum UserRole {
+        CUSTOMER,
+        STORE_MANAGER,
+        NETWORK_ADMIN
     }
 
     // Getters and setters
@@ -56,4 +65,6 @@ public class User {
     public void setCreditCard(String creditCard) { this.creditCard = creditCard; }
     public boolean isActive() { return isActive; }
     public void setActive(boolean isActive) { this.isActive = isActive; }
+    public UserRole getRole() { return role; }
+    public void setRole(UserRole role) { this.role = role; }
 }

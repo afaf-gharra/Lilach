@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      alignment="CENTER" 
+      spacing="20"
+      styleClass="bg-primary"
+      prefWidth="1200" 
+      prefHeight="800">
+    
+    <Label text="Network Admin Dashboard" styleClass="h1 text-white"/>
+    
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Manage Stores" styleClass="btn btn-info" prefWidth="200" prefHeight="80"/>
+        <Button text="User Management" styleClass="btn btn-warning" prefWidth="200" prefHeight="80"/>
+        <Button text="Network Reports" styleClass="btn btn-success" prefWidth="200" prefHeight="80"/>
+        <Button text="System Settings" styleClass="btn btn-danger" prefWidth="200" prefHeight="80"/>
+    </HBox>
+    
+    <VBox styleClass="card p-4" spacing="15" prefWidth="1100">
+        <Label text="Network Overview" styleClass="h2 text-dark"/>
+        
+        <HBox spacing="20">
+            <VBox styleClass="stat-card" spacing="5">
+                <Label text="Total Stores" styleClass="h3 text-dark"/>
+                <Label text="24" styleClass="h1 text-lilac"/>
+            </VBox>
+            
+            <VBox styleClass="stat-card" spacing="5">
+                <Label text="Active Users" styleClass="h3 text-dark"/>
+                <Label text="1,542" styleClass="h1 text-lilac"/>
+            </VBox>
+            
+            <VBox styleClass="stat-card" spacing="5">
+                <Label text="Monthly Revenue" styleClass="h3 text-dark"/>
+                <Label text="$84,320.75" styleClass="h1 text-lilac"/>
+            </VBox>
+        </HBox>
+    </VBox>
+    
+    <Button text="Back to Catalog" styleClass="btn btn-secondary" onAction="#navigateToCatalog"/>
+    
+    <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>
+    <Button text="Logout" onAction="#handleLogout" styleClass="btn btn-secondary"/>
+</VBox>

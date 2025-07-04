@@ -17,7 +17,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import java.io.IOException;
 import java.util.List;
 
-public class CatalogController {
+public class CatalogController extends BaseController  {
     @FXML private Label welcomeLabel;
     @FXML private FlowPane productsContainer;
     @FXML private ComboBox<String> categoryComboBox;
@@ -121,6 +121,18 @@ public class CatalogController {
     private void handleSearch() {
         filterProducts();
     }
+
+    @FXML
+    private void handleLogout() {
+        try {
+            Stage stage = (Stage) productsContainer.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/login.fxml"));
+            stage.setScene(new Scene(root, 800, 600));
+            stage.centerOnScreen();
+        } catch (IOException e) {
+            showError("Navigation Error", "Failed to load login view: " + e.getMessage());
+        }
+    }
     
     private void filterProducts() {
         String searchTerm = searchField.getText().toLowerCase();
@@ -180,19 +192,5 @@ public class CatalogController {
         }
     }
     
-    private void showError(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-    
-    private void showSuccess(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+
 }

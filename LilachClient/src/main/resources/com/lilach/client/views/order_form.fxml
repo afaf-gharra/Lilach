@@ -5,50 +5,48 @@
 
 <VBox xmlns="http://javafx.com/javafx/17" 
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.lilach.client.controllers.OrderController"
-      spacing="20" 
-      alignment="CENTER"
+      fx:controller="com.lilach.client.controllers.OrderHistoryController"
+      alignment="CENTER" 
+      spacing="20"
       styleClass="bg-primary"
-      prefWidth="800" 
-      prefHeight="700">
+      prefWidth="1200" 
+      prefHeight="800">
     
-    <Label text="Place Your Order" styleClass="h1 text-white"/>
+    <Label text="My Orders" styleClass="h1 text-white"/>
     
-    <VBox styleClass="card p-4" spacing="20">
-        <Label text="Delivery Information" styleClass="h2"/>
-        
-        <GridPane hgap="10" vgap="10">
-            <columnConstraints>
-                <ColumnConstraints prefWidth="150"/>
-                <ColumnConstraints prefWidth="250"/>
-            </columnConstraints>
-            
-            <Label text="Delivery Date:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-            <DatePicker fx:id="deliveryDatePicker" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-            
-            <Label text="Delivery Time (HH:mm):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <TextField fx:id="deliveryTimeField" promptText="14:00" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-            
-            <Label text="Delivery Address:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-            <TextArea fx:id="deliveryAddressArea" promptText="Enter full address" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-            
-            <Label text="Recipient Name:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-            <TextField fx:id="recipientNameField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-            
-            <Label text="Recipient Phone:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-            <TextField fx:id="recipientPhoneField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-            
-            <Label text="Greeting Message:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-            <TextArea fx:id="greetingMessageArea" promptText="Optional greeting card message" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
-        </GridPane>
-        
-        <Separator/>
-        
-        <Label text="Your Order" styleClass="h2"/>
-        <VBox fx:id="cartItemsContainer" spacing="5" style="-fx-padding: 0 0 10 0;"/>
-        <Label fx:id="totalPriceLabel" styleClass="h3"/>
-        
-        <Button fx:id="submitOrderButton" text="Place Order" onAction="#handleSubmitOrder" styleClass="btn btn-success"/>
+    <HBox alignment="CENTER" spacing="20">
+        <Button text="Back to Catalog" onAction="#handleBackToCatalog" styleClass="btn btn-primary"/>
+        <Button text="Create Complaint" onAction="#handleCreateComplaint" styleClass="btn btn-warning"/>
+    </HBox>
+    
+    <VBox styleClass="card p-4" spacing="15" prefWidth="1100">
+        <TableView fx:id="ordersTable" prefHeight="500">
+            <columns>
+                <TableColumn text="Order ID" prefWidth="100">
+                    <cellValueFactory><PropertyValueFactory property="id" /></cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Order Date" prefWidth="150">
+                    <cellValueFactory><PropertyValueFactory property="orderDate" /></cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Delivery Date" prefWidth="150">
+                    <cellValueFactory><PropertyValueFactory property="deliveryDate" /></cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Recipient" prefWidth="150">
+                    <cellValueFactory><PropertyValueFactory property="recipient" /></cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Total Price" prefWidth="100">
+                    <cellValueFactory><PropertyValueFactory property="totalPrice" /></cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Status" prefWidth="100">
+                    <cellValueFactory><PropertyValueFactory property="status" /></cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Actions" prefWidth="200">
+                    <cellFactory>
+                        <fx:factory type="com.lilach.client.controllers.OrderHistoryController$ActionButtonCellFactory" />
+                    </cellFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
     </VBox>
     
     <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>

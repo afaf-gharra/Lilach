@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.lilach.client.controllers.CustomArrangementController"
+      alignment="CENTER" 
+      spacing="20"
+      styleClass="bg-primary"
+      prefWidth="800" 
+      prefHeight="700">
+    
+    <Label text="Create Custom Arrangement" styleClass="h1 text-white"/>
+    
+    <VBox styleClass="card p-4" spacing="15" prefWidth="600">
+        <Label text="Design Your Custom Flower Arrangement" styleClass="h2 text-dark"/>
+        
+        <GridPane hgap="10" vgap="10">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="200"/>
+                <ColumnConstraints prefWidth="400"/>
+            </columnConstraints>
+            
+            <Label text="Arrangement Type:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="typeCombo" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-control">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String>Bouquet</String>
+                        <String>Vase Arrangement</String>
+                        <String>Flower Basket</String>
+                        <String>Wreath</String>
+                        <String>Centerpiece</String>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            
+            <Label text="Flower Types:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextArea fx:id="flowerTypesField" promptText="e.g., Roses, Lilies, Tulips" 
+                      GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-control"/>
+            
+            <Label text="Color Scheme:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="colorCombo" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-control">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String>Red</String>
+                        <String>Pink</String>
+                        <String>White</String>
+                        <String>Yellow</String>
+                        <String>Purple</String>
+                        <String>Mixed Colors</String>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            
+            <Label text="Price Range:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="priceCombo" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-control">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String>Budget ($30-50)</String>
+                        <String>Standard ($50-80)</String>
+                        <String>Premium ($80-120)</String>
+                        <String>Luxury ($120+)</String>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            
+            <Label text="Special Requests:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <TextArea fx:id="specialRequests" promptText="Any special instructions or requests" 
+                      GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="form-control"/>
+        </GridPane>
+        
+        <HBox spacing="20" alignment="CENTER">
+            <Button text="Cancel" onAction="#handleCancel" styleClass="btn btn-secondary"/>
+            <Button text="Add to Cart" onAction="#handleAddToCart" styleClass="btn btn-success"/>
+        </HBox>
+    </VBox>
+    
+    <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>
+</VBox>

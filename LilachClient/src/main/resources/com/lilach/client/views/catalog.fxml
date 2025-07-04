@@ -44,5 +44,5 @@
     </ScrollPane>
     
  
-
+    <Button text="Logout" onAction="#handleLogout" styleClass="btn btn-secondary"/>
 </VBox>

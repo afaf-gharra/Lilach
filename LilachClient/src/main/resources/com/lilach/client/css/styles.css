@@ -146,3 +146,82 @@
     -fx-border-color: #ced4da;
     -fx-pref-height: 40px;
 }
+
+/* Add these to your existing styles.css */
+.text-lilac {
+    -fx-text-fill: #6f42c1;
+}
+
+.text-dark {
+    -fx-text-fill: #333;
+}
+
+.btn-danger {
+    -fx-background-color: #dc3545;
+    -fx-text-fill: white;
+}
+
+.btn-danger:hover {
+    -fx-background-color: #c82333;
+}
+
+.btn-secondary {
+    -fx-background-color: #6c757d;
+    -fx-text-fill: white;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #5a6268;
+}
+
+/* Form control styles */
+.form-control {
+    -fx-padding: 10px 15px;
+    -fx-font-size: 14px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #ced4da;
+    -fx-pref-height: 40px;
+}
+
+/* Table styles */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5px;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #e0d6f0;
+}
+
+/* Dashboard styles */
+.stat-card {
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 10px;
+    -fx-padding: 15px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 0);
+    -fx-alignment: center;
+    -fx-pref-width: 300px;
+}
+
+.btn-dashboard {
+    -fx-padding: 15px 25px;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/* Role-specific colors */
+.btn-manager {
+    -fx-background-color: #17a2b8; /* Info color */
+    -fx-text-fill: white;
+}
+
+.btn-admin {
+    -fx-background-color: #6f42c1; /* Lilac color */
+    -fx-text-fill: white;
+}

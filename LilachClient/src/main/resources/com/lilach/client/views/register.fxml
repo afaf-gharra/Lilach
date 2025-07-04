@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns="http://javafx.com/javafx/17" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.lilach.client.controllers.RegisterController"
+      alignment="CENTER" 
+      spacing="20"
+      styleClass="bg-primary"
+      prefWidth="600" 
+      prefHeight="600"
+      stylesheets="@/com/lilach/client/css/styles.css">
+    
+    <Label text="Create Account" styleClass="h1 text-white"/>
+    
+    <VBox styleClass="card p-4" spacing="15">
+        <TextField fx:id="fullNameField" promptText="Full Name" styleClass="form-control"/>
+        <TextField fx:id="usernameField" promptText="Username" styleClass="form-control"/>
+        <PasswordField fx:id="passwordField" promptText="Password" styleClass="form-control"/>
+        <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password" styleClass="form-control"/>
+        <TextField fx:id="emailField" promptText="Email" styleClass="form-control"/>
+        <TextField fx:id="phoneField" promptText="Phone" styleClass="form-control"/>
+        <TextField fx:id="creditCardField" promptText="Credit Card" styleClass="form-control"/>
+    
+        
+        <CheckBox fx:id="termsCheckbox" text="I agree to terms and conditions" styleClass="text-dark"/>
+        
+        <Button fx:id="registerButton" text="Create Account" styleClass="btn btn-success">
+            <graphic>
+                <FontIcon iconLiteral="fas-user-plus"/>
+            </graphic>
+        </Button>
+        
+        <Hyperlink fx:id="loginLink" text="Already have an account? Login">
+            
+        </Hyperlink>
+    </VBox>
+    
+    <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>
+</VBox>
