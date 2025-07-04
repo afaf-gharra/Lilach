@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns="http://javafx.com/javafx/17" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.lilach.client.controllers.CatalogController"
+      spacing="20" 
+      alignment="CENTER"
+      styleClass="bg-primary"
+      prefWidth="1200" 
+      prefHeight="800">
+    
+    <!-- Header -->
+    <HBox alignment="CENTER" spacing="20">
+        <Label fx:id="welcomeLabel" styleClass="h1 text-white"/>
+        <HBox spacing="10">
+            <Button fx:id="viewCartButton" text="View Cart" styleClass="btn btn-info"/>
+            <Button fx:id="viewOrdersButton" text="My Orders" styleClass="btn btn-warning"/>
+        </HBox>
+    </HBox>
+    
+    <!-- Search and Filter Section -->
+    <HBox spacing="20" alignment="CENTER">
+        <ComboBox fx:id="categoryComboBox" styleClass="form-control" prefWidth="200"/>
+        
+        <TextField fx:id="searchField" promptText="Search products..." styleClass="form-control" prefWidth="300"/>
+        <Button fx:id="searchButton" styleClass="btn btn-primary"/>
+        
+        <Button fx:id="customArrangementButton" text="Create Custom Arrangement" styleClass="btn btn-success"/>
+    </HBox>
+    
+    <!-- Products Grid -->
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="transparent-scroll">
+        <FlowPane fx:id="productsContainer" 
+                  hgap="20" 
+                  vgap="20" 
+                  prefWrapLength="1100"
+                  alignment="CENTER"/>
+    </ScrollPane>
+    
+    <!-- Footer -->
+    <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>
+    
+    <stylesheets>
+        <URL value="@/com/lilach/client/css/styles.css" />
+    </stylesheets>
+</VBox>
