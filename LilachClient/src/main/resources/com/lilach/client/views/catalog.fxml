@@ -12,7 +12,8 @@
       alignment="CENTER"
       styleClass="bg-primary"
       prefWidth="1200" 
-      prefHeight="800">
+      prefHeight="800"
+      stylesheets="@/com/lilach/client/css/styles.css">
     
     <!-- Header -->
     <HBox alignment="CENTER" spacing="20">
@@ -42,10 +43,6 @@
                   alignment="CENTER"/>
     </ScrollPane>
     
-    <!-- Footer -->
-    <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>
-    
-    <stylesheets>
-        <URL value="@/com/lilach/client/css/styles.css" />
-    </stylesheets>
+ 
+
 </VBox>
