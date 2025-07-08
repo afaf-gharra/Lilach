@@ -2,7 +2,7 @@ package com.lilach.server;
 
 import io.javalin.Javalin;
 import com.lilach.server.controllers.*;
-
+//fffffff
 public class Main {
     public static void main(String[] args) {
         Javalin app = Javalin.create(config -> {
