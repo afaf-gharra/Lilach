@@ -12,7 +12,7 @@
             <artifactId>exec-maven-plugin</artifactId>
             <version>3.1.0</version>
             <configuration>
-                <mainClass>com.lilach.Main</mainClass> <!-- Replace with your actual main class -->
+                <mainClass>com.lilach.server.Main</mainClass> <!-- Replace with your actual main class -->
                 <commandlineArgs></commandlineArgs>
             </configuration>
             </plugin>
