@@ -124,14 +124,7 @@ public class CatalogController extends BaseController  {
 
     @FXML
     private void handleLogout() {
-        try {
-            Stage stage = (Stage) productsContainer.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/login.fxml"));
-            stage.setScene(new Scene(root, 800, 600));
-            stage.centerOnScreen();
-        } catch (IOException e) {
-            showError("Navigation Error", "Failed to load login view: " + e.getMessage());
-        }
+        logout();
     }
     
     private void filterProducts() {
@@ -152,7 +145,8 @@ public class CatalogController extends BaseController  {
     
     @FXML
     private void addToCart(ProductDTO product) {
-        // In a real app, this would add to a cart model
+
+
         showSuccess("Added to Cart", product.getName() + " added to your cart!");
     }
     
@@ -170,27 +164,29 @@ public class CatalogController extends BaseController  {
     
     @FXML
     private void handleViewCart() {
-        try {
-            Stage stage = (Stage) productsContainer.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/cart.fxml"));
-            stage.setScene(new Scene(root, 800, 600));
-            stage.centerOnScreen();
-        } catch (IOException e) {
-            showError("Navigation Error", "Failed to load cart view: " + e.getMessage());
-        }
+        navigateTo("/com/lilach/client/views/cart.fxml", "Shopping Cart");
     }
     
     @FXML
     private void handleViewOrders() {
-        try {
-            Stage stage = (Stage) productsContainer.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/order_history.fxml"));
-            stage.setScene(new Scene(root, 1000, 700));
-            stage.centerOnScreen();
-        } catch (IOException e) {
-            showError("Navigation Error", "Failed to load order history: " + e.getMessage());
-        }
+        navigateTo("/com/lilach/client/views/order_history.fxml", "My Orders");
     }
+
+   
+    
+
+    @FXML
+    private void handleCreateCustom() {
+        navigateTo("/com/lilach/client/views/custom_arrangement.fxml", "Create Custom Arrangement");
+    }
+
+    // @Override
+    // protected void addNavigationButtons() {
+    //     addNavButton("Cart", "fas-shopping-cart", this::handleViewCart);
+    //     addNavButton("Orders", "fas-history", this::handleViewOrders);
+    //     addNavButton("Custom", "fas-plus", this::handleCreateCustom);
+    // }
+
     
 
 }

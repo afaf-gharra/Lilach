@@ -6,22 +6,25 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 import javafx.util.Callback;
-
-import java.io.IOException;
 
 public class OrderHistoryController extends BaseController {
     @FXML private TableView<Order> ordersTable;
     
     private ObservableList<Order> orders = FXCollections.observableArrayList();
+    @FXML
+    private void handleViewCart() {
+        navigateTo("/com/lilach/client/views/cart.fxml", "Shopping Cart");
+    }
     
+    @FXML
+    private void handleViewOrders() {
+        navigateTo("/com/lilach/client/views/order_history.fxml", "My Orders");
+    }
+
     @FXML
     public void initialize() {
         // Setup table columns
@@ -68,24 +71,39 @@ public class OrderHistoryController extends BaseController {
     
     @FXML
     private void handleBackToCatalog() {
-        navigateToCatalog();
+        navigateToWithSize("/com/lilach/client/views/catalog.fxml", "Lilach Flower Shop Catalog", 1200, 800);
     }
-    
+
     @FXML
     private void handleCreateComplaint() {
-        navigateToComplaint();
+        navigateTo("/com/lilach/client/views/complaint.fxml", "Submit Complaint");
     }
+
+    @FXML
+    private void handleLogout() {
+        logout();
+    }
+
+    @FXML
     
 
-    
-    private void navigateToComplaint() {
-        try {
-            Stage stage = (Stage) ordersTable.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/complaint.fxml"));
-            stage.setScene(new Scene(root, 800, 600));
-            stage.centerOnScreen();
-        } catch (IOException e) {
-            showError("Navigation Error", "Failed to load complaint view: " + e.getMessage());
+    private void handleCancelOrder() {
+        Order selectedOrder = ordersTable.getSelectionModel().getSelectedItem();
+        if (selectedOrder != null && selectedOrder.getStatus().equals("Processing")) {
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Cancel Order");
+            confirm.setHeaderText("Cancel Order #" + selectedOrder.getId());
+            confirm.setContentText("Are you sure you want to cancel this order?");
+            
+            confirm.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    showSuccess("Order Cancelled", "Order #" + selectedOrder.getId() + " has been cancelled.");
+                    // In real app, update status in backend
+                    orders.remove(selectedOrder);
+                }
+            });
+        } else {
+            showError("Error", "You can only cancel orders that are still processing.");
         }
     }
 

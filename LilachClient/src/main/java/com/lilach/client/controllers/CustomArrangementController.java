@@ -22,13 +22,13 @@ public class CustomArrangementController extends BaseController  {
     private void handleAddToCart() {
         if (validateForm()) {
             showSuccess("Added to Cart", "Your custom arrangement has been added to cart!");
-            navigateToCatalog();
+            navigateToWithSize("/com/lilach/client/views/catalog.fxml", "Lilach Flower Shop Catalog", 1200, 800);        
         }
     }
     
     @FXML
     private void handleCancel() {
-        navigateToCatalog();
+        navigateToWithSize("/com/lilach/client/views/catalog.fxml", "Lilach Flower Shop Catalog", 1200, 800);
     }
     
     private boolean validateForm() {
@@ -39,6 +39,19 @@ public class CustomArrangementController extends BaseController  {
         return true;
     }
     
+    @FXML
+    private void handleLogout() {
+        logout();
+    }
+    @FXML
+    private void handleViewCart() {
+        navigateTo("/com/lilach/client/views/cart.fxml", "Shopping Cart");
+    }
     
+    @FXML
+    private void handleViewOrders() {
+        navigateTo("/com/lilach/client/views/order_history.fxml", "My Orders");
+    }
+
 
 }

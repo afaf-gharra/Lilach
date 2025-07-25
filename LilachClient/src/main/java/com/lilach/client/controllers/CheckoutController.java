@@ -42,7 +42,8 @@ public class CheckoutController extends BaseController  {
         if (validateForm()) {
             // In a real app, this would create the order
             showSuccess("Order Placed", "Your order has been placed successfully!");
-            navigateToOrderConfirmation();
+            navigateToWithSize("/com/lilach/client/views/catalog.fxml", "Lilach Flower Shop Catalog", 1200, 800);
+
         }
     }
     
@@ -65,11 +66,25 @@ public class CheckoutController extends BaseController  {
         }
         return true;
     }
-    
-    private void navigateToOrderConfirmation() {
-        // Would navigate to order confirmation page
-        System.out.println("Would navigate to confirmation page");
+
+
+
+
+    @FXML
+    private void handleLogout() {
+        logout();
     }
+
+    @FXML
+    private void handleViewCart() {
+        navigateTo("/com/lilach/client/views/cart.fxml", "Shopping Cart");
+    }
+    
+    @FXML
+    private void handleViewOrders() {
+        navigateTo("/com/lilach/client/views/order_history.fxml", "My Orders");
+    }
+
     
 
 }

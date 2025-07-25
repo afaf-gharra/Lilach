@@ -12,6 +12,16 @@
       prefWidth="1000" 
       prefHeight="700">
     
+     <HBox alignment="CENTER" spacing="20">
+        <Label fx:id="welcomeLabel" styleClass="h1 text-white"/>
+        <HBox spacing="10">
+            <Button fx:id="viewCartButton" onAction="#handleViewCart" text="View Cart" styleClass="btn btn-info"/>
+            <Button fx:id="viewOrdersButton" onAction="#handleViewOrders" text="My Orders" styleClass="btn btn-warning"/>
+            
+            
+        </HBox>
+    </HBox>
+
     <Label text="Checkout" styleClass="h1 text-white"/>
     
     <HBox alignment="CENTER" spacing="40">

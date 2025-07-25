@@ -49,7 +49,7 @@ public class RegisterController extends BaseController  {
             UserDTO createdUser = ApiService.register(newUser);
             if (createdUser != null) {
                 showSuccess("Account Created", "Your account has been created successfully!");
-                navigateToCatalog();
+                navigateToWithSize("/com/lilach/client/views/catalog.fxml", "Lilach Flower Shop Catalog", 1200, 800);
             } else {
                 showError("Registration Failed", "Failed to create account. Please try again.");
             }

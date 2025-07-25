@@ -3,14 +3,10 @@ package com.lilach.client.controllers;
 import com.lilach.client.models.UserDTO;
 import com.lilach.client.services.ApiService;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
@@ -51,47 +47,32 @@ public class LoginController extends BaseController {
     
     @FXML
     private void handleRegister() {
-        navigateToRegister();
+        navigateTo("/com/lilach/client/views/register.fxml", "Create Account");
     }
     
     private void redirectBasedOnRole(UserDTO user) {
         try {
-            Stage stage = (Stage) loginButton.getScene().getWindow();
-            Parent root;
-            
+ 
             switch (user.getRole()) {
                 case "STORE_MANAGER":
-                    root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/store_manager.fxml"));
-                    stage.setTitle("Store Manager Dashboard");
+                
+                    navigateTo("/com/lilach/client/views/store_manager_dashboard.fxml", "Store Manager Dashboard");
                     break;
                 case "NETWORK_ADMIN":
-                    root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/admin_dashboard.fxml"));
-                    stage.setTitle("Network Admin Dashboard");
+                    navigateTo("/com/lilach/client/views/network_admin_dashboard.fxml", "Network Admin Dashboard");
                     break;
                 case "CUSTOMER":
                 default:
-                    root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/catalog.fxml"));
-                    stage.setTitle("Lilach Flower Shop Catalog");
+                                        
+                    navigateTo("/com/lilach/client/views/catalog.fxml", "Lilach Flower Shop Catalog");
                     break;
             }
-            
-            stage.setScene(new Scene(root, 1200, 800));
-            stage.centerOnScreen();
-        } catch (IOException e) {
+        } catch (Exception e) {
             showAlert("Navigation Error", "Failed to load view: " + e.getMessage());
         }
     }
     
-    private void navigateToRegister() {
-        try {
-            Stage stage = (Stage) loginButton.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/register.fxml"));
-            stage.setScene(new Scene(root, 800, 600));
-            stage.centerOnScreen();
-        } catch (IOException e) {
-            showAlert("Navigation Error", "Failed to load register view: " + e.getMessage());
-        }
-    }
+   
     
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

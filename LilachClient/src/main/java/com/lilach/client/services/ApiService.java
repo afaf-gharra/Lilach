@@ -31,6 +31,10 @@ public class ApiService {
             return null;
         }
     }
+    public static void addToCart(ProductDTO product) {
+
+        System.out.println("Added to cart: " + product.getName());
+    }
 
     public static UserDTO register(UserDTO user) throws IOException {
         String json = mapper.writeValueAsString(user);

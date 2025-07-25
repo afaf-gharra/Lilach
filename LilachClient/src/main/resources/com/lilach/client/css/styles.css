@@ -225,3 +225,44 @@
     -fx-background-color: #6f42c1; /* Lilac color */
     -fx-text-fill: white;
 }
+
+
+/* Navigation buttons */
+.nav-button {
+    -fx-padding: 8px 15px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-min-width: 120px;
+}
+
+/* Specific button colors */
+.btn-cart {
+    -fx-background-color: #17a2b8; /* Teal */
+    -fx-text-fill: white;
+}
+
+.btn-orders {
+    -fx-background-color: #ffc107; /* Yellow */
+    -fx-text-fill: black;
+}
+
+.btn-logout {
+    -fx-background-color: #6c757d; /* Gray */
+    -fx-text-fill: white;
+}
+
+/* Hover effects */
+.btn-cart:hover {
+    -fx-background-color: #138496;
+}
+
+.btn-orders:hover {
+    -fx-background-color: #e0a800;
+}
+
+.btn-logout:hover {
+    -fx-background-color: #5a6268;
+}

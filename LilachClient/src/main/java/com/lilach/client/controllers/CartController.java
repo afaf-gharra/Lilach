@@ -6,17 +6,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
+
+import javafx.scene.control.*; 
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 
-import java.io.IOException;
 
-public class CartController {
+public class CartController extends BaseController {
     @FXML private TableView<CartItem> cartTable;
     @FXML private Label totalPriceLabel;
     
@@ -80,45 +76,8 @@ public class CartController {
         totalPriceLabel.setText(String.format("$%.2f", total));
     }
     
-    @FXML
-    private void handleContinueShopping() {
-        navigateToCatalog();
-    }
     
-    @FXML
-    private void handleCheckout() {
-        navigateToCheckout();
-    }
-    
-    private void navigateToCatalog() {
-        try {
-            Stage stage = (Stage) cartTable.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/catalog.fxml"));
-            stage.setScene(new Scene(root, 1200, 800));
-            stage.centerOnScreen();
-        } catch (IOException e) {
-            showError("Navigation Error", "Failed to load catalog view: " + e.getMessage());
-        }
-    }
-    
-    private void navigateToCheckout() {
-        try {
-            Stage stage = (Stage) cartTable.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/checkout.fxml"));
-            stage.setScene(new Scene(root, 1000, 700));
-            stage.centerOnScreen();
-        } catch (IOException e) {
-            showError("Navigation Error", "Failed to load checkout view: " + e.getMessage());
-        }
-    }
-    
-    private void showError(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+
     
     // Custom cell factory for remove button
     public class RemoveButtonCellFactory implements Callback<TableColumn<CartItem, Void>, TableCell<CartItem, Void>> {
@@ -148,6 +107,32 @@ public class CartController {
             };
         }
     }
+
+    @FXML
+    private void handleContinueShopping() {
+        navigateToWithSize("/com/lilach/client/views/catalog.fxml", "Lilach Flower Shop Catalog", 1200, 800);
+    }
+
+    @FXML
+    private void handleCheckout() {
+        navigateTo("/com/lilach/client/views/checkout.fxml", "Checkout");
+    }
+
+    @FXML
+    private void handleLogout() {
+        logout();
+    }
+
+    @FXML
+    private void handleViewCart() {
+        navigateTo("/com/lilach/client/views/cart.fxml", "Shopping Cart");
+    }
+    
+    @FXML
+    private void handleViewOrders() {
+        navigateTo("/com/lilach/client/views/order_history.fxml", "My Orders");
+    }
+
     
     // Cart item model
     public static class CartItem {
