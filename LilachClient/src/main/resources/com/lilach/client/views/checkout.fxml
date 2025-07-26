@@ -45,17 +45,17 @@
             
             <HBox spacing="10">
                 <Label text="Subtotal:" styleClass="h3 text-dark"/>
-                <Label fx:id="subtotalLabel" text="$0.00" styleClass="h3 text-dark"/>
+                <Label fx:id="subtotalLabel" text="0.00" styleClass="h3 text-dark"/>
             </HBox>
             
             <HBox spacing="10">
                 <Label text="Delivery Fee:" styleClass="h3 text-dark"/>
-                <Label text="$10.00" styleClass="h3 text-dark"/>
+                <Label text="10.00" styleClass="h3 text-dark"/>
             </HBox>
             
             <HBox spacing="10">
                 <Label text="Total:" styleClass="h2 text-lilac"/>
-                <Label fx:id="totalLabel" text="$0.00" styleClass="h2 text-lilac"/>
+                <Label fx:id="totalLabel" text="0.00" styleClass="h2 text-lilac"/>
             </HBox>
             
             <Button text="Place Order" onAction="#handlePlaceOrder" styleClass="btn btn-success" prefHeight="50"/>

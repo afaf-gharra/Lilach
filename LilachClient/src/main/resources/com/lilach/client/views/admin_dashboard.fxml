@@ -5,6 +5,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/17" 
       xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.lilach.client.controllers.AdminDashboardController"
       alignment="CENTER" 
       spacing="20"
       styleClass="bg-primary"
@@ -14,10 +15,7 @@
      <HBox alignment="CENTER" spacing="20">
         <Label fx:id="welcomeLabel" styleClass="h1 text-white"/>
         <HBox spacing="10">
-            <Button fx:id="viewCartButton" onAction="#handleViewCart" text="View Cart" styleClass="btn btn-info"/>
             <Button fx:id="viewOrdersButton" onAction="#handleViewOrders" text="My Orders" styleClass="btn btn-warning"/>
-            
-            
         </HBox>
     </HBox>
     
@@ -46,7 +44,7 @@
             
             <VBox styleClass="stat-card" spacing="5">
                 <Label text="Monthly Revenue" styleClass="h3 text-dark"/>
-                <Label text="$84,320.75" styleClass="h1 text-lilac"/>
+                <Label  styleClass="h1 text-lilac"/>
             </VBox>
         </HBox>
     </VBox>

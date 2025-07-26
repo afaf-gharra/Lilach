@@ -37,6 +37,6 @@
                     styleClass="btn btn-danger" disable="true"/>
         </VBox>
     </HBox>
-    
+    <Button text="Back to Catalog" styleClass="btn btn-secondary" onAction="#navigateToCatalog"/>
     <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>
 </VBox>

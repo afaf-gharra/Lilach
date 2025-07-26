@@ -5,6 +5,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/17" 
       xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.lilach.client.controllers.StoreManagerController"
       alignment="CENTER" 
       spacing="20"
       styleClass="bg-primary"
@@ -48,7 +49,7 @@
             
             <VBox styleClass="stat-card" spacing="5">
                 <Label text="Today's Revenue" styleClass="h3 text-dark"/>
-                <Label text="$1,245.50" styleClass="h1 text-lilac"/>
+                <Label text="1,245.50" styleClass="h1 text-lilac"/>
             </VBox>
         </HBox>
     </VBox>

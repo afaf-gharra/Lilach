@@ -2,6 +2,7 @@ package com.lilach.client.controllers;
 
 import com.lilach.client.Main;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,7 +16,25 @@ public abstract  class BaseController {
     
 
 
+    @FXML
+    private void handleLogout() {
+        logout();
+    }
+
+    @FXML
+    private void handleViewCart() {
+        navigateTo("/com/lilach/client/views/cart.fxml", "Shopping Cart");
+    }
     
+    @FXML
+    private void handleViewOrders() {
+        navigateTo("/com/lilach/client/views/order_history.fxml", "My Orders");
+    }
+
+    @FXML
+    private void navigateToCatalog() {
+        navigateTo("/com/lilach/client/views/catalog.fxml", "Catalog");
+    }
 
     protected void navigateTo(String fxmlPath, String title) {
         try {

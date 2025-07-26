@@ -56,10 +56,10 @@ public class LoginController extends BaseController {
             switch (user.getRole()) {
                 case "STORE_MANAGER":
                 
-                    navigateTo("/com/lilach/client/views/store_manager_dashboard.fxml", "Store Manager Dashboard");
+                    navigateTo("/com/lilach/client/views/store_manager.fxml", "Store Manager Dashboard");
                     break;
                 case "NETWORK_ADMIN":
-                    navigateTo("/com/lilach/client/views/network_admin_dashboard.fxml", "Network Admin Dashboard");
+                    navigateTo("/com/lilach/client/views/admin_dashboard.fxml", "Network Admin Dashboard");
                     break;
                 case "CUSTOMER":
                 default:

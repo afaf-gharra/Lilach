@@ -28,28 +28,17 @@
     <VBox styleClass="card p-4" spacing="15" prefWidth="800">
         <HBox alignment="CENTER_RIGHT" spacing="10">
             <Label text="Total:" styleClass="h3 text-dark"/>
-            <Label fx:id="totalPriceLabel" text="$0.00" styleClass="h2 text-lilac"/>
+            <Label fx:id="totalPriceLabel" text="0.00" styleClass="h2 text-lilac"/>
         </HBox>
         
         <TableView fx:id="cartTable" prefHeight="400">
             <columns>
-                <TableColumn text="Product" prefWidth="250">
-                    <cellValueFactory><PropertyValueFactory property="name" /></cellValueFactory>
-                </TableColumn>
-                <TableColumn text="Price" prefWidth="100">
-                    <cellValueFactory><PropertyValueFactory property="price" /></cellValueFactory>
-                </TableColumn>
-                <TableColumn text="Quantity" prefWidth="100">
-                    <cellValueFactory><PropertyValueFactory property="quantity" /></cellValueFactory>
-                </TableColumn>
-                <TableColumn text="Total" prefWidth="100">
-                    <cellValueFactory><PropertyValueFactory property="itemTotal" /></cellValueFactory>
-                </TableColumn>
-                <TableColumn text="Actions" prefWidth="150">
-                    <cellFactory>
-                        <fx:factory type="com.lilach.client.controllers.CartController$RemoveButtonCellFactory" />
-                    </cellFactory>
-                </TableColumn>
+                <TableColumn fx:id="name" text="name" prefWidth="250"/>
+                <TableColumn fx:id="price" text="price" prefWidth="250"/>
+                <TableColumn fx:id="quantity" text="quantity" prefWidth="250"/>
+                <TableColumn fx:id="itemTotal" text="itemTotal" prefWidth="250"/>
+                
+               <TableColumn fx:id="actionCol" text="Actions" prefWidth="150"/>
             </columns>
         </TableView>
         
@@ -57,6 +46,7 @@
             <Button text="Continue Shopping" onAction="#handleContinueShopping" styleClass="btn btn-primary"/>
             <Button text="Proceed to Checkout" onAction="#handleCheckout" styleClass="btn btn-success"/>
         </HBox>
+        <Button text="Back to Catalog" styleClass="btn btn-secondary" onAction="#navigateToCatalog"/>
     </VBox>
     
     <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>
