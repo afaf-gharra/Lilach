@@ -163,29 +163,38 @@ public class StoreManagerController extends BaseController {
     }
     
     private void loadOrders(Integer storeId) {
-            Integer managerId = LoginController.loggedInUser.getId();
-            
-            
-            try {
-                currentStore = ApiService.getStoreByManager(managerId);
-                if (currentStore == null) {
-                    showError("Store Error", "No store assigned to this manager");
-                    return;
-                }
-                
-                // Update window title with store name
-                Stage stage = (Stage) ordersTable.getScene().getWindow();
-                stage.setTitle("Store Manager - " + currentStore.getName());
-                
-                loadOrders(currentStore.getId());
-                loadProducts(currentStore.getId());
-                
-            } catch (IOException e) {
-                showError("Connection Error", "Failed to load store data: " + e.getMessage());
+        Integer ammangerstoreId = LoginController.loggedInUser.getStoreId();
+        
+        
+        try {
+            currentStore = ApiService.getStoreById(ammangerstoreId);
+            if (currentStore == null) {
+                showError("Store Error", "No store assigned to this manager");
+                return;
             }
-        }
+            
 
-        private void loadProducts(int storeId) {
+            
+            loadStoreOrders(currentStore.getId());
+            loadProducts(currentStore.getId());
+            
+        } catch (IOException e) {
+            showError("Connection Error", "Failed to load store data: " + e.getMessage());
+        }
+    }
+
+    private void loadStoreOrders(int storeId) {
+        try {
+            List<OrderDTO> storeOrders = ApiService.getStoreOrders(storeId);
+            orders.setAll(storeOrders);
+            ordersTable.setItems(orders);
+            filterOrders();
+        } catch (IOException e) {
+            showError("Connection Error", "Failed to load orders: " + e.getMessage());
+        }
+    }
+
+    private void loadProducts(int storeId) {
         try {
             List<ProductDTO> storeProducts = ApiService.getStoreProducts(storeId);
             products.setAll(storeProducts);

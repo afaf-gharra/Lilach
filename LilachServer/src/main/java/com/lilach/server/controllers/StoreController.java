@@ -14,7 +14,6 @@ public class StoreController {
     public static void registerRoutes(io.javalin.Javalin app) {
         app.get("/api/stores", StoreController::getAllStores);
         app.get("/api/stores/{id}", StoreController::getStoreById);
-        app.get("/api/stores/manager/{managerId}", StoreController::getStoreByManager);
         app.post("/api/stores", StoreController::createStore);
         app.put("/api/stores/{id}", StoreController::updateStore);
         app.delete("/api/stores/{id}", StoreController::deleteStore);
@@ -44,15 +43,7 @@ public class StoreController {
         }
     }
     
-    public static void getStoreByManager(Context ctx) {
-        try {
-            int managerId = Integer.parseInt(ctx.pathParam("managerId"));
-            Store store = StoreService.getStoreByManager(managerId);
-            ctx.json(store).status(HttpStatus.OK);
-        } catch (Exception e) {
-            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Error retrieving manager's stores: " + e.getMessage());
-        }
-    }
+
     
     public static void createStore(Context ctx) {
         try {

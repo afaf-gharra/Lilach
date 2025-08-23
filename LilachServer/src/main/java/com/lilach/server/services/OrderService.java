@@ -57,6 +57,16 @@ public class OrderService {
             return null;
         }
     }
+
+    //getStoreOrders
+    public static List<Order> getStoreOrders(int storeId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                "FROM Order WHERE store.id = :storeId ORDER BY orderDate DESC", Order.class)
+                .setParameter("storeId", storeId)
+                .list();
+        }
+    }
     
     private static double calculateCustomItemPrice(OrderItem item) {
         // Simplified custom pricing logic

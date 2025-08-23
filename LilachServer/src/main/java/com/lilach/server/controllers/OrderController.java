@@ -7,8 +7,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lilach.server.DTOs.OrderDTO;
 import com.lilach.server.models.Order;
+import com.lilach.server.models.Store;
 import com.lilach.server.models.User;
 import com.lilach.server.services.OrderService;
+import com.lilach.server.services.StoreService;
 import com.lilach.server.services.UserService;
 
 import io.javalin.http.Context;
@@ -26,17 +28,31 @@ public class OrderController {
         app.put("/api/orders/{id}/cancel", OrderController::cancelOrder);
         // app put status
         app.put("/api/orders/{id}/status", OrderController::updateOrderStatus);
+        // get store orders
+        app.get("/api/store/{storeId}/orders", OrderController::getStoreOrders);
     }
-     public static void createOrder(Context ctx) {
+
+    public static void getStoreOrders(Context ctx) {
+        try {
+            int storeId = Integer.parseInt(ctx.pathParam("storeId"));
+            List<Order> orders = OrderService.getStoreOrders(storeId);
+            ctx.json(orders).status(HttpStatus.OK);
+        } catch (Exception e) {
+            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Error retrieving store orders: " + e.getMessage());
+        }
+    }
+    public static void createOrder(Context ctx) {
         try {
 
             OrderDTO dto = mapper.readValue(ctx.body(), OrderDTO.class);
             int userId = dto.getUserId();
 
             User user = UserService.getUserById(userId);
-
+            Store store = StoreService.getStoreById(1);
+            
             Order order = mapper.readValue(ctx.body(), Order.class);
             order.setUser(user);
+            order.setStore(store);
             Order createdOrder = OrderService.createOrder(order);
             ctx.json(createdOrder).status(HttpStatus.CREATED);
         } catch (Exception e) {
@@ -71,7 +87,9 @@ public class OrderController {
     public static void updateOrderStatus(Context ctx) {
         try {
             int orderId = Integer.parseInt(ctx.pathParam("id"));
-            String status = ctx.body();
+            // get status form body
+            String status = mapper.readTree(ctx.body()).get("status").asText();
+            
             Order updatedOrder = OrderService.updateOrderStatus(orderId, status);
             if (updatedOrder != null) {
                 ctx.json(updatedOrder).status(HttpStatus.OK);

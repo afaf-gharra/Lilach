@@ -27,7 +27,7 @@ public class StoreService {
     
     public static List<Store> getAllStores() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query<Store> query = session.createQuery("FROM Store WHERE isActive = true", Store.class);
+            Query<Store> query = session.createQuery("FROM Store", Store.class);
             return query.list();
         }
     }
@@ -68,14 +68,4 @@ public class StoreService {
         }
     }
     
-    public static Store getStoreByManager(int managerId) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query<Store> query = session.createQuery(
-                "SELECT s FROM Store s JOIN s.managers m WHERE m.id = :managerId AND s.isActive = true", 
-                Store.class
-            );
-            query.setParameter("managerId", managerId);
-            return query.uniqueResult();
-        }
-    }
 }

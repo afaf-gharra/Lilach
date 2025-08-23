@@ -52,7 +52,7 @@ public class Order {
     private Store store;
     
     public enum OrderStatus {
-        PENDING, DELIVERED, CANCELLED
+        PENDING, PROCESSING, DELIVERED, CANCELLED
     }
 
     // Default constructor for JSON deserialization

@@ -12,14 +12,15 @@
       spacing="20" 
       style="-fx-background-color: linear-gradient(to bottom, #f9f7fe, #f0e6ff);"
       prefWidth="1200" 
-      prefHeight="800"
-      stylesheets="@/com/lilach/client/css/manager.css">
+      prefHeight="800">
     
     <!-- Header Section -->
     <HBox spacing="20" alignment="CENTER" style="-fx-background-color: #8a4fff; -fx-background-radius: 0 0 15 15; -fx-padding: 15;">
-        <ImageView fitWidth="40" fitHeight="40" preserveRatio="true">
-            <Image url="@/com/lilach/client/images/logo.png"/>
+        
+        <ImageView fitHeight="50" fitWidth="50">
+            <Image  url="@/com/lilach/client/images/logo.png" preserveRatio="true"/>
         </ImageView>
+
         <Label text="Lilach Flower Shop Manager" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;">
             <font>
                 <Font name="Arial Rounded MT Bold" size="24" />
@@ -27,18 +28,10 @@
         </Label>
         <Region HBox.hgrow="ALWAYS" />
         <Button text="Refresh Data" onAction="#handleRefresh" style="-fx-background-color: #6a30e3; -fx-text-fill: white; -fx-background-radius: 20;">
-            <graphic>
-                <ImageView fitWidth="16" fitHeight="16" preserveRatio="true">
-                    <!-- <Image url="@/images/refresh-icon.png" /> -->
-                </ImageView>
-            </graphic>
+            
         </Button>
         <Button text="Logout" onAction="#handleLogout" style="-fx-background-color: transparent; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 20; -fx-border-radius: 20;">
-            <graphic>
-                <ImageView fitWidth="16" fitHeight="16" preserveRatio="true">
-                    <!-- <Image url="@/images/logout-icon.png" /> -->
-                </ImageView>
-            </graphic>
+            
         </Button>
     </HBox>
     
@@ -46,11 +39,7 @@
     <TabPane tabClosingPolicy="UNAVAILABLE" style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);">
         <!-- Order Management Tab -->
         <Tab text="Order Management">
-            <graphic>
-                <ImageView fitWidth="20" fitHeight="20" preserveRatio="true">
-                    <!-- <Image url="@/images/order-icon.png" /> -->
-                </ImageView>
-            </graphic>
+            
             <VBox spacing="15" style="-fx-padding: 20; -fx-background-color: #fafafa;">
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="Filter by Status:" style="-fx-font-size: 16px; -fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
@@ -85,62 +74,70 @@
         
         <!-- Product Management Tab -->
         <Tab text="Product Management">
-            <graphic>
-                <ImageView fitWidth="20" fitHeight="20" preserveRatio="true">
-                    <!-- <Image url="@/images/product-icon.png" /> -->
-                </ImageView>
-            </graphic>
+            
             <VBox spacing="15" style="-fx-padding: 20; -fx-background-color: #fafafa;">
-                <Label text="Product Catalog" style="-fx-font-size: 16px; -fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
-                <TableView fx:id="productsTable" prefHeight="300" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #e0d6ff;">
-                    <columns>
-                        <TableColumn fx:id="productNameColumn" text="Name" prefWidth="200"/>
-                        <TableColumn fx:id="categoryColumn" text="Category" prefWidth="120"/>
-                        <TableColumn fx:id="priceColumn" text="Price" prefWidth="80"/>
-                        <TableColumn fx:id="stockColumn" text="Stock" prefWidth="80"/>
-                        <TableColumn fx:id="availableColumn" text="Available" prefWidth="80"/>
-                    </columns>
-                </TableView>
+                <Label text="Product Management" style="-fx-font-size: 20px; -fx-text-fill: #5a2db1; -fx-font-weight: bold; -fx-padding: 0 0 10 0;"/>
                 
-                <Separator style="-fx-background-color: #e0d6ff;"/>
-                
-                <Label text="Product Details" style="-fx-font-size: 16px; -fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
-                
-                <GridPane hgap="10" vgap="10">
-                    <columnConstraints>
-                        <ColumnConstraints prefWidth="120"/>
-                        <ColumnConstraints prefWidth="250"/>
-                    </columnConstraints>
+                <HBox spacing="20" alignment="TOP_CENTER">
+                    <!-- Left side: Product Catalog -->
+                    <VBox spacing="10" prefWidth="600">
+                        <Label text="Product Catalog" style="-fx-font-size: 16px; -fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
+                        <TableView fx:id="productsTable" prefHeight="500" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #e0d6ff;">
+                            <columns>
+                                <TableColumn fx:id="productNameColumn" text="Name" prefWidth="200"/>
+                                <TableColumn fx:id="categoryColumn" text="Category" prefWidth="120"/>
+                                <TableColumn fx:id="priceColumn" text="Price" prefWidth="80"/>
+                                <TableColumn fx:id="stockColumn" text="Stock" prefWidth="80"/>
+                                <TableColumn fx:id="availableColumn" text="Available" prefWidth="80"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
                     
-                    <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
-                    <TextField fx:id="productNameField" GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
-                    
-                    <Label text="Category:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
-                    <TextField fx:id="productCategoryField" GridPane.rowIndex="1" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
-                    
-                    <Label text="Price:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
-                    <TextField fx:id="productPriceField" GridPane.rowIndex="2" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
-                    
-                    <Label text="Stock:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
-                    <TextField fx:id="productStockField" GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
-                    
-                    <Label text="Color:" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
-                    <TextField fx:id="productColorField" GridPane.rowIndex="4" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
-                    
-                    <Label text="Image URL:" GridPane.rowIndex="5" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
-                    <TextField fx:id="productImageField" GridPane.rowIndex="5" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
-                    
-                    <Label text="Available:" GridPane.rowIndex="6" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
-                    <CheckBox fx:id="productAvailableCheckbox" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
-                </GridPane>
-                
-                <Label text="Description:" style="-fx-text-fill: #5a2db1;"/>
-                <TextArea fx:id="productDescriptionField" prefHeight="100" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
-                
-                <HBox spacing="10">
-                    <Button fx:id="addProductButton" text="Add Product" style="-fx-background-color: #4caf50; -fx-text-fill: white; -fx-background-radius: 20;"/>
-                    <Button fx:id="updateProductButton" text="Update Product" style="-fx-background-color: #8a4fff; -fx-text-fill: white; -fx-background-radius: 20;" disable="true"/>
-                    <Button fx:id="deleteProductButton" text="Delete Product" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-background-radius: 20;" disable="true"/>
+                    <!-- Right side: Product Details Form -->
+                    <VBox spacing="15" prefWidth="400" style="-fx-padding: 15; -fx-background-color: #f3efff; -fx-background-radius: 10;">
+                        <Label text="Product Details" style="-fx-font-size: 16px; -fx-text-fill: #5a2db1; -fx-font-weight: bold; -fx-padding: 0 0 10 0;"/>
+                        
+                        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-padding: 0;">
+                            <VBox spacing="12">
+                                <GridPane hgap="10" vgap="10">
+                                    <columnConstraints>
+                                        <ColumnConstraints prefWidth="100"/>
+                                        <ColumnConstraints prefWidth="250"/>
+                                    </columnConstraints>
+                                    
+                                    <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                                    <TextField fx:id="productNameField" GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                                    
+                                    <Label text="Category:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                                    <TextField fx:id="productCategoryField" GridPane.rowIndex="1" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                                    
+                                    <Label text="Price:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                                    <TextField fx:id="productPriceField" GridPane.rowIndex="2" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                                    
+                                    <Label text="Stock:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                                    <TextField fx:id="productStockField" GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                                    
+                                    <Label text="Color:" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                                    <TextField fx:id="productColorField" GridPane.rowIndex="4" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                                    
+                                    <Label text="Image URL:" GridPane.rowIndex="5" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                                    <TextField fx:id="productImageField" GridPane.rowIndex="5" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                                    
+                                    <Label text="Available:" GridPane.rowIndex="6" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                                    <CheckBox fx:id="productAvailableCheckbox" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+                                </GridPane>
+                                
+                                <Label text="Description:" style="-fx-text-fill: #5a2db1;"/>
+                                <TextArea fx:id="productDescriptionField" prefHeight="100" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                                
+                                <HBox spacing="10" alignment="CENTER">
+                                    <Button fx:id="addProductButton" text="Add Product" style="-fx-background-color: #4caf50; -fx-text-fill: white; -fx-background-radius: 20;"/>
+                                    <Button fx:id="updateProductButton" text="Update Product" style="-fx-background-color: #8a4fff; -fx-text-fill: white; -fx-background-radius: 20;" disable="true"/>
+                                    <Button fx:id="deleteProductButton" text="Delete Product" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-background-radius: 20;" disable="true"/>
+                                </HBox>
+                            </VBox>
+                        </ScrollPane>
+                    </VBox>
                 </HBox>
             </VBox>
         </Tab>

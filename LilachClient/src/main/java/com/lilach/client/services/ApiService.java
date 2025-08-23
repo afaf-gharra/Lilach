@@ -46,6 +46,28 @@ public class ApiService {
         System.out.println("Added to cart: " + product.getName());
     }
 
+    //getStoreOrders
+
+    public static List<OrderDTO> getStoreOrders(int storeId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "store/" + storeId + "/orders")
+            .get()
+            .build();
+
+        mapper.registerModule(new JavaTimeModule());
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+
+                return mapper.readValue(
+                    response.body().string(), 
+                    mapper.getTypeFactory().constructCollectionType(List.class, OrderDTO.class)
+                );
+            }
+            return List.of(); // Return empty list if no orders
+        }
+    }
+
     public static UserDTO register(UserDTO user) throws IOException {
         String json = mapper.writeValueAsString(user);
         RequestBody body = RequestBody.create(json, JSON);
@@ -78,6 +100,132 @@ public class ApiService {
                 return mapper.readValue(response.body().string(), OrderDTO.class);
             }
             return null;
+        }
+    }
+
+    // Store management methods
+    public static List<StoreDTO> getAllStores() throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "stores")
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(
+                    response.body().string(),
+                    mapper.getTypeFactory().constructCollectionType(List.class, StoreDTO.class)
+                );
+            }
+            return List.of();
+        }
+    }
+
+    public static StoreDTO createStore(StoreDTO store) throws IOException {
+        String json = mapper.writeValueAsString(store);
+        RequestBody body = RequestBody.create(json, JSON);
+        
+        Request request = new Request.Builder()
+            .url(BASE_URL + "stores")
+            .post(body)
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), StoreDTO.class);
+            }
+            return null;
+        }
+    }
+
+    public static StoreDTO updateStore(StoreDTO store) throws IOException {
+        String json = mapper.writeValueAsString(store);
+        RequestBody body = RequestBody.create(json, JSON);
+        
+        Request request = new Request.Builder()
+            .url(BASE_URL + "stores/" + store.getId())
+            .put(body)
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), StoreDTO.class);
+            }
+            return null;
+        }
+    }
+
+    public static boolean deleteStore(int storeId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "stores/" + storeId)
+            .delete()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        }
+    }
+
+    // User management methods
+    public static List<UserDTO> getAllUsers() throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "users")
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(
+                    response.body().string(),
+                    mapper.getTypeFactory().constructCollectionType(List.class, UserDTO.class)
+                );
+            }
+            return List.of();
+        }
+    }
+
+    public static UserDTO createUser(UserDTO user) throws IOException {
+        String json = mapper.writeValueAsString(user);
+        RequestBody body = RequestBody.create(json, JSON);
+        
+        Request request = new Request.Builder()
+            .url(BASE_URL + "users")
+            .post(body)
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), UserDTO.class);
+            }
+            return null;
+        }
+    }
+
+    public static UserDTO updateUser(UserDTO user) throws IOException {
+        String json = mapper.writeValueAsString(user);
+        RequestBody body = RequestBody.create(json, JSON);
+        
+        Request request = new Request.Builder()
+            .url(BASE_URL + "users/" + user.getId())
+            .put(body)
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), UserDTO.class);
+            }
+            return null;
+        }
+    }
+
+    public static boolean deleteUser(int userId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "users/" + userId)
+            .delete()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
         }
     }
 
@@ -342,9 +490,9 @@ public class ApiService {
    
 
     // Add store-related API methods
-    public static StoreDTO getStoreByManager(int managerId) throws IOException {
+    public static StoreDTO getStoreById(int storeId) throws IOException {
         Request request = new Request.Builder()
-            .url(BASE_URL + "stores/manager/" + managerId)
+            .url(BASE_URL + "stores/" + storeId)
             .get()
             .build();
         
