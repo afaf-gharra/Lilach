@@ -2,29 +2,68 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid?>
 
-<VBox xmlns="http://javafx.com/javafx/17" 
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.lilach.client.controllers.LoginController"
-      spacing="20" 
-      alignment="CENTER"
-      styleClass="bg-primary"
-      prefWidth="1200" 
-      prefHeight="800"
-      stylesheets="@/com/lilach/client/css/styles.css">
+<StackPane xmlns="http://javafx.com/javafx/17" 
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.lilach.client.controllers.LoginController"
+           prefWidth="1200" 
+           prefHeight="800"
+           stylesheets="@/com/lilach/client/css/styles.css">
     
-    <Label text="Lilach Flower Shop" styleClass="h1 text-white"/>
+    <!-- Background with floral pattern -->
+    <Pane styleClass="bg-floral-pattern"/>
     
-    <VBox styleClass="card p-4" spacing="10">
-        <TextField fx:id="usernameField" promptText="Username" styleClass="form-control"/>
-        <PasswordField fx:id="passwordField" promptText="Password" styleClass="form-control"/>
+    <!-- Main content container -->
+    <HBox styleClass="login-container" spacing="0">
         
-        <HBox spacing="10">
-            <Button fx:id="loginButton" text="Login" onAction="#handleLogin" styleClass="btn btn-success" prefWidth="100"/>
-            <Button fx:id="registerButton" text="Register" onAction="#handleRegister" styleClass="btn btn-primary" prefWidth="100"/>
-        </HBox>
-    </VBox>
-    
-    <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>
-</VBox>
+        <!-- Left side - Branding/Image section -->
+        <VBox styleClass="brand-section" spacing="20" alignment="CENTER">
+            <ImageView fitWidth="180" fitHeight="180" preserveRatio="true">
+                <Image url="@/com/lilach/client/images/logo.png"/>
+            </ImageView>
+            <Label text="Lilach Flower Shop" styleClass="brand-title"/>
+            <Label text="Bringing beauty to your everyday life" styleClass="brand-subtitle" 
+                   wrapText="true" textAlignment="CENTER"/>
+        </VBox>
+        
+        <!-- Right side - Login form -->
+        <VBox styleClass="login-form" spacing="25" alignment="CENTER">
+            <VBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Welcome Back" styleClass="h1"/>
+                <Label text="Sign in to your account" styleClass="text-muted"/>
+            </VBox>
+            
+            <VBox styleClass="form-fields" spacing="15">
+                <TextField fx:id="usernameField" promptText="Username" styleClass="modern-input">
+                    <padding>
+                        <Insets left="10" right="10" top="15" bottom="15"/>
+                    </padding>
+                </TextField>
+                
+                <PasswordField fx:id="passwordField" promptText="Password" styleClass="modern-input">
+                    <padding>
+                        <Insets left="10" right="10" top="15" bottom="15"/>
+                    </padding>
+                </PasswordField>
+                
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <CheckBox text="Remember me" styleClass="remember-checkbox"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Forgot Password?" styleClass="text-button"/>
+                </HBox>
+                
+                <HBox spacing="10">
+                    <Button fx:id="loginButton" text="Login" onAction="#handleLogin" styleClass="primary-button" prefWidth="100"/>
+                    <Button fx:id="registerButton" text="Register" onAction="#handleRegister" styleClass="secondary-button" prefWidth="100"/>
+                </HBox>
+            </VBox>
+            
+            <Label text="© 2025 Lilach Flower Shop" styleClass="copyright"/>
+        </VBox>
+    </HBox>
+</StackPane>

@@ -32,6 +32,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.CUSTOMER;
 
+    // Add to User class
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
+
     public enum AccountType {
         STORE, CHAIN, MEMBER
     }
@@ -67,4 +72,6 @@ public class User {
     public void setActive(boolean isActive) { this.isActive = isActive; }
     public UserRole getRole() { return role; }
     public void setRole(UserRole role) { this.role = role; }
+    public Store getStore() { return store; }
+    public void setStore(Store store) { this.store = store; }
 }

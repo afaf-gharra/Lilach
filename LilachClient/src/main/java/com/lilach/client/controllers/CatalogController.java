@@ -86,15 +86,15 @@ public class CatalogController extends BaseController  {
         // Product image
         ImageView imageView = new ImageView();
         try {
-            Image image = new Image(product.getImageUrl(), true);
-            imageView.setImage(image);
+            //Image image = new Image(product.getImageUrl(), true);
+           // imageView.setImage(image);
             imageView.setFitWidth(180);
             imageView.setFitHeight(180);
             imageView.setPreserveRatio(true);
             imageView.setImage(new Image(getClass().getResourceAsStream("/com/lilach/client/images/logo.png")));
 
         } catch (Exception e) {
-            imageView.setImage(new Image(getClass().getResourceAsStream("/com/lilach/client/images/logo.png")));
+            //imageView.setImage(new Image(getClass().getResourceAsStream("/com/lilach/client/images/logo.png")));
         }
         
         // Product details

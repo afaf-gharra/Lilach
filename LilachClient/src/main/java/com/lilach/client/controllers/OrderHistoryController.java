@@ -1,6 +1,8 @@
 package com.lilach.client.controllers;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.lilach.client.models.OrderDTO;
@@ -150,7 +152,9 @@ public class OrderHistoryController extends BaseController {
         public String getDeliveryDate() { return deliveryDate.get(); }
         public String getRecipient() { return recipient.get(); }
         public double getTotalPrice() { return totalPrice.get(); }
-        public String getStatus() { return status.get(); }
+        public String getStatus() { 
+            return status.get(); 
+        }
     }
     
     // Custom cell factory for action buttons
@@ -186,7 +190,8 @@ public class OrderHistoryController extends BaseController {
                     } else {
                         setGraphic(pane);
                         Order order = getTableView().getItems().get(getIndex());
-                        cancelBtn.setDisable(!order.getStatus().equals("Processing"));
+                        String status =order.getStatus();
+                        cancelBtn.setDisable(status.equals( "CANCELLED" )|| LocalDateTime.parse(order.getOrderDate()).isBefore(LocalDateTime.now().minusDays(1)));
                     }
                 }
             };
@@ -215,8 +220,14 @@ public class OrderHistoryController extends BaseController {
         
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
+                try {
+                    ApiService.cancelOrder(order.getId());
+                    orders.remove(order);
+                } catch (IOException e) {
+                    System.out.println("Failed to cancel order: " + e.getMessage());
+                    e.printStackTrace();
+                }
                 showSuccess("Order Cancelled", "Order #" + order.getId() + " has been cancelled.");
-                // In real app, update status in backend
             }
         });
     }

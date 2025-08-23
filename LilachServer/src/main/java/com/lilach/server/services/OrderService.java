@@ -41,6 +41,22 @@ public class OrderService {
             return order;
         }
     }
+
+    //updateOrderStatus
+    public static Order updateOrderStatus(int orderId, String status) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            
+            Order order = session.get(Order.class, orderId);
+            if (order != null) {
+                order.setStatus(Order.OrderStatus.valueOf(status));
+                session.update(order);
+                transaction.commit();
+                return order;
+            }
+            return null;
+        }
+    }
     
     private static double calculateCustomItemPrice(OrderItem item) {
         // Simplified custom pricing logic
@@ -66,7 +82,7 @@ public class OrderService {
             Transaction transaction = session.beginTransaction();
             
             Order order = session.get(Order.class, orderId);
-            if (order != null && canCancelOrder(order)) {
+            if (order != null) {
                 order.setStatus(Order.OrderStatus.CANCELLED);
                 session.update(order);
                 transaction.commit();
@@ -76,11 +92,5 @@ public class OrderService {
         }
     }
     
-    private static boolean canCancelOrder(Order order) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime deliveryTime = order.getDeliveryDate();
-        
-        // Can cancel if more than 3 hours before delivery
-        return deliveryTime.minusHours(3).isAfter(now);
-    }
+
 }

@@ -17,6 +17,9 @@ public class Product {
     private String imageUrl;
     private int stock = 0;
     private boolean isAvailable = true;
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
 
     // Getters and setters
     public int getId() { return id; }
@@ -37,4 +40,6 @@ public class Product {
     public void setStock(int stock) { this.stock = stock; }
     public boolean isAvailable() { return isAvailable; }
     public void setAvailable(boolean available) { isAvailable = available; }
+    public Store getStore() { return store; }
+    public void setStore(Store store) { this.store = store; }
 }

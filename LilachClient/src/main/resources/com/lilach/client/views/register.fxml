@@ -2,43 +2,98 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.collections.FXCollections?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid?>
 
-<VBox xmlns="http://javafx.com/javafx/17" 
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.lilach.client.controllers.RegisterController"
-      spacing="20" 
-      alignment="CENTER"
-      styleClass="bg-primary"
-      prefWidth="1200" 
-      prefHeight="800"
-      stylesheets="@/com/lilach/client/css/styles.css">
+<StackPane xmlns="http://javafx.com/javafx/17" 
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.lilach.client.controllers.RegisterController"
+           prefWidth="1200" 
+           prefHeight="800"
+           stylesheets="@/com/lilach/client/css/styles.css">
     
-    <Label text="Create Account" styleClass="h1 text-white"/>
+    <!-- Background with floral pattern -->
+    <Pane styleClass="bg-floral-pattern"/>
     
-    <VBox styleClass="card p-4" spacing="15">
-        <TextField fx:id="fullNameField" promptText="Full Name" styleClass="form-control"/>
-        <TextField fx:id="usernameField" promptText="Username" styleClass="form-control"/>
-        <PasswordField fx:id="passwordField" promptText="Password" styleClass="form-control"/>
-        <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password" styleClass="form-control"/>
-        <TextField fx:id="emailField" promptText="Email" styleClass="form-control"/>
-        <TextField fx:id="phoneField" promptText="Phone" styleClass="form-control"/>
-        <TextField fx:id="creditCardField" promptText="Credit Card" styleClass="form-control"/>
-    
+    <!-- Main content container -->
+    <HBox styleClass="register-container" spacing="0">
         
-        <CheckBox fx:id="termsCheckbox" text="I agree to terms and conditions" styleClass="text-dark"/>
+        <!-- Left side - Branding/Image section -->
+        <VBox styleClass="brand-section" spacing="20" alignment="CENTER">
+            <ImageView fitWidth="180" fitHeight="180" preserveRatio="true">
+                <Image url="@/com/lilach/client/images/logo.png"/>
+            </ImageView>
+            <Label text="Lilach Flower Shop" styleClass="brand-title"/>
+            <Label text="Join our community of flower lovers" styleClass="brand-subtitle" 
+                   wrapText="true" textAlignment="CENTER"/>
+        </VBox>
         
-        <Button fx:id="registerButton" text="Create Account" styleClass="btn btn-success">
-            <graphic>
-                <FontIcon iconLiteral="fas-user-plus"/>
-            </graphic>
-        </Button>
-        
-        <Hyperlink fx:id="loginLink" text="Already have an account? Login">
-            
-        </Hyperlink>
-    </VBox>
-    
-    <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>
-</VBox>
+        <!-- Right side - Registration form -->
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll">
+            <VBox styleClass="register-form" spacing="20" alignment="CENTER">
+                <VBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Create Account" styleClass="h1"/>
+                    <Label text="Join us to start your floral journey" styleClass="text-muted"/>
+                </VBox>
+                
+                <GridPane styleClass="form-grid" hgap="15" vgap="15">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
+                    
+                    <!-- Row 1 -->
+                    <Label text="Full Name *" styleClass="input-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <TextField fx:id="fullNameField" promptText="Your full name" styleClass="modern-input" 
+                               GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    
+                    <Label text="Username *" styleClass="input-label" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                    <TextField fx:id="usernameField" promptText="Choose a username" styleClass="modern-input" 
+                               GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                    
+                    <!-- Row 2 -->
+                    <Label text="Password *" styleClass="input-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <PasswordField fx:id="passwordField" promptText="Create a password" styleClass="modern-input" 
+                                   GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                    
+                    <Label text="Confirm Password *" styleClass="input-label" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                    <PasswordField fx:id="confirmPasswordField" promptText="Confirm your password" styleClass="modern-input" 
+                                   GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                    
+                    <!-- Row 3 -->
+                    <Label text="Email *" styleClass="input-label" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                    <TextField fx:id="emailField" promptText="Your email address" styleClass="modern-input" 
+                               GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                    
+                    <Label text="Phone" styleClass="input-label" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                    <TextField fx:id="phoneField" promptText="Your phone number" styleClass="modern-input" 
+                               GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                    
+                    <!-- Row 4 -->
+                    <Label text="Credit Card" styleClass="input-label" GridPane.rowIndex="6" GridPane.columnIndex="0" 
+                           GridPane.columnSpan="2"/>
+                    <TextField fx:id="creditCardField" promptText="Card number (optional)" styleClass="modern-input" 
+                               GridPane.rowIndex="7" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+                </GridPane>
+                
+                <CheckBox fx:id="termsCheckbox" text="I agree to terms and conditions" styleClass="terms-checkbox"/>
+                
+                <Button fx:id="registerButton" text="Create Account" styleClass="primary-button">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-user-plus" iconSize="14"/>
+                    </graphic>
+                </Button>
+                
+                <HBox spacing="5" alignment="CENTER">
+                    <Label text="Already have an account?" styleClass="text-muted"/>
+                    <Hyperlink fx:id="loginLink" text="Login here" styleClass="text-link"/>
+                </HBox>
+                
+                <Label text="© 2025 Lilach Flower Shop" styleClass="copyright"/>
+            </VBox>
+        </ScrollPane>
+    </HBox>
+</StackPane>

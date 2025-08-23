@@ -16,6 +16,15 @@ public class UserDTO {
     private String phone;
     private String creditCard;
     private String role; // Assuming role is a string, adjust as necessary
+
+    private Integer storeId;
+    private StoreDTO store;
+
+    public Integer getStoreId() { return storeId; }
+    public void setStoreId(Integer storeId) { this.storeId = storeId; }
+
+    public StoreDTO getStore() { return store; }
+    public void setStore(StoreDTO store) { this.store = store; }
    
 
     // Default constructor for JSON deserialization

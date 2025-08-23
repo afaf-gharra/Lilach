@@ -12,6 +12,7 @@ public class ProductDTO {
     private String color;
     private String imageUrl;
     private boolean available;
+    private int stock;
 
     // Getters and setters
     public int getId() { return id; }
@@ -30,4 +31,9 @@ public class ProductDTO {
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     public boolean isAvailable() { return available; }
     public void setAvailable(boolean available) { this.available = available; }
+    public int getStock() { return stock; }
+    public void setStock(int int1) {
+        this.stock = int1;
+        
+    }
 }

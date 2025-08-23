@@ -47,6 +47,10 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderItem> items;
     
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
+    
     public enum OrderStatus {
         PENDING, DELIVERED, CANCELLED
     }
@@ -87,4 +91,7 @@ public class Order {
     
     public List<OrderItem> getItems() { return items; }
     public void setItems(List<OrderItem> items) { this.items = items; }
+
+    public Store getStore() { return store; }
+    public void setStore(Store store) { this.store = store; }
 }

@@ -1,4 +1,4 @@
-package com.lilach.server.models;
+package com.lilach.server.DTOs;
 
 public class CartItemDTO {
     private int userId;

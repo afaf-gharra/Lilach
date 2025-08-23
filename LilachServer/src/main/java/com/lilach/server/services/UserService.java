@@ -1,5 +1,6 @@
 package com.lilach.server.services;
 
+import com.lilach.server.models.Store;
 import com.lilach.server.models.User;
 import com.lilach.server.utils.HibernateUtil;
 import org.hibernate.Session;
@@ -31,6 +32,32 @@ public class UserService {
             return count != null && count > 0;
         }
     }
+
+// Add store assignment method to UserService
+    public static boolean assignStoreToManager(int userId, int storeId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            
+            User user = session.get(User.class, userId);
+            Store store = session.get(Store.class, storeId);
+            
+            if (user != null && store != null) {
+                user.setStore(store);
+                session.update(user);
+                transaction.commit();
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public static Store getStoreByManager(int managerId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            User manager = session.get(User.class, managerId);
+            return manager != null ? manager.getStore() : null;
+        }
+    }
+
 
     public static User createUser(User user) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {

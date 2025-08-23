@@ -2,60 +2,152 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <VBox xmlns="http://javafx.com/javafx/17" 
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.lilach.client.controllers.StoreManagerController"
       spacing="20" 
-      alignment="CENTER"
-      styleClass="bg-primary"
+      style="-fx-background-color: linear-gradient(to bottom, #f9f7fe, #f0e6ff);"
       prefWidth="1200" 
       prefHeight="800"
-      stylesheets="@/com/lilach/client/css/styles.css">
+      stylesheets="@/com/lilach/client/css/manager.css">
     
-     <HBox alignment="CENTER" spacing="20">
-        <Label fx:id="welcomeLabel" styleClass="h1 text-white"/>
-        <HBox spacing="10">
-            <Button fx:id="viewCartButton" onAction="#handleViewCart" text="View Cart" styleClass="btn btn-info"/>
-            <Button fx:id="viewOrdersButton" onAction="#handleViewOrders" text="My Orders" styleClass="btn btn-warning"/>
-            
-            
-        </HBox>
+    <!-- Header Section -->
+    <HBox spacing="20" alignment="CENTER" style="-fx-background-color: #8a4fff; -fx-background-radius: 0 0 15 15; -fx-padding: 15;">
+        <ImageView fitWidth="40" fitHeight="40" preserveRatio="true">
+            <Image url="@/com/lilach/client/images/logo.png"/>
+        </ImageView>
+        <Label text="Lilach Flower Shop Manager" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="24" />
+            </font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="Refresh Data" onAction="#handleRefresh" style="-fx-background-color: #6a30e3; -fx-text-fill: white; -fx-background-radius: 20;">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16" preserveRatio="true">
+                    <!-- <Image url="@/images/refresh-icon.png" /> -->
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button text="Logout" onAction="#handleLogout" style="-fx-background-color: transparent; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 20; -fx-border-radius: 20;">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16" preserveRatio="true">
+                    <!-- <Image url="@/images/logout-icon.png" /> -->
+                </ImageView>
+            </graphic>
+        </Button>
     </HBox>
-
-    <Label text="Store Manager Dashboard" styleClass="h1 text-white"/>
     
-
-
-    <HBox spacing="20" alignment="CENTER">
-        <Button text="Manage Inventory" styleClass="btn btn-info" prefWidth="200" prefHeight="80"/>
-        <Button text="View Orders" styleClass="btn btn-warning" prefWidth="200" prefHeight="80"/>
-        <Button text="Handle Complaints" styleClass="btn btn-danger" prefWidth="200" prefHeight="80"/>
-        <Button text="Generate Reports" styleClass="btn btn-success" prefWidth="200" prefHeight="80"/>
-    </HBox>
-    
-    <VBox styleClass="card p-4" spacing="15" prefWidth="1100">
-        <Label text="Today's Statistics" styleClass="h2 text-dark"/>
+    <!-- Main Content Area -->
+    <TabPane tabClosingPolicy="UNAVAILABLE" style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+        <!-- Order Management Tab -->
+        <Tab text="Order Management">
+            <graphic>
+                <ImageView fitWidth="20" fitHeight="20" preserveRatio="true">
+                    <!-- <Image url="@/images/order-icon.png" /> -->
+                </ImageView>
+            </graphic>
+            <VBox spacing="15" style="-fx-padding: 20; -fx-background-color: #fafafa;">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Filter by Status:" style="-fx-font-size: 16px; -fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
+                    <ComboBox fx:id="statusFilterCombo" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-pref-width: 150; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                </HBox>
+                
+                <TableView fx:id="ordersTable" prefHeight="300" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #e0d6ff;">
+                    <columns>
+                        <TableColumn fx:id="orderIdColumn" text="Order ID" prefWidth="80"/>
+                        <TableColumn fx:id="customerNameColumn" text="Customer" prefWidth="150"/>
+                        <TableColumn fx:id="orderDateColumn" text="Order Date" prefWidth="150"/>
+                        <TableColumn fx:id="deliveryDateColumn" text="Delivery Date" prefWidth="150"/>
+                        <TableColumn fx:id="totalColumn" text="Total" prefWidth="100"/>
+                        <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                    </columns>
+                </TableView>
+                
+                <HBox spacing="20">
+                    <VBox spacing="10" prefWidth="600">
+                        <Label text="Order Details:" style="-fx-font-size: 16px; -fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
+                        <TextArea fx:id="orderDetailsArea" prefHeight="200" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #e0d6ff; -fx-background-color: white;" editable="false"/>
+                    </VBox>
+                    
+                    <VBox spacing="10" prefWidth="300">
+                        <Label text="Update Status:" style="-fx-font-size: 16px; -fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
+                        <ComboBox fx:id="statusUpdateCombo" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                        <Button fx:id="updateStatusButton" text="Update Status" style="-fx-background-color: #8a4fff; -fx-text-fill: white; -fx-background-radius: 20;"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </Tab>
         
-        <HBox spacing="20">
-            <VBox styleClass="stat-card" spacing="5">
-                <Label text="Pending Orders" styleClass="h3 text-dark"/>
-                <Label text="12" styleClass="h1 text-lilac"/>
+        <!-- Product Management Tab -->
+        <Tab text="Product Management">
+            <graphic>
+                <ImageView fitWidth="20" fitHeight="20" preserveRatio="true">
+                    <!-- <Image url="@/images/product-icon.png" /> -->
+                </ImageView>
+            </graphic>
+            <VBox spacing="15" style="-fx-padding: 20; -fx-background-color: #fafafa;">
+                <Label text="Product Catalog" style="-fx-font-size: 16px; -fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
+                <TableView fx:id="productsTable" prefHeight="300" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #e0d6ff;">
+                    <columns>
+                        <TableColumn fx:id="productNameColumn" text="Name" prefWidth="200"/>
+                        <TableColumn fx:id="categoryColumn" text="Category" prefWidth="120"/>
+                        <TableColumn fx:id="priceColumn" text="Price" prefWidth="80"/>
+                        <TableColumn fx:id="stockColumn" text="Stock" prefWidth="80"/>
+                        <TableColumn fx:id="availableColumn" text="Available" prefWidth="80"/>
+                    </columns>
+                </TableView>
+                
+                <Separator style="-fx-background-color: #e0d6ff;"/>
+                
+                <Label text="Product Details" style="-fx-font-size: 16px; -fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
+                
+                <GridPane hgap="10" vgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints prefWidth="120"/>
+                        <ColumnConstraints prefWidth="250"/>
+                    </columnConstraints>
+                    
+                    <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                    <TextField fx:id="productNameField" GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                    
+                    <Label text="Category:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                    <TextField fx:id="productCategoryField" GridPane.rowIndex="1" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                    
+                    <Label text="Price:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                    <TextField fx:id="productPriceField" GridPane.rowIndex="2" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                    
+                    <Label text="Stock:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                    <TextField fx:id="productStockField" GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                    
+                    <Label text="Color:" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                    <TextField fx:id="productColorField" GridPane.rowIndex="4" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                    
+                    <Label text="Image URL:" GridPane.rowIndex="5" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                    <TextField fx:id="productImageField" GridPane.rowIndex="5" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                    
+                    <Label text="Available:" GridPane.rowIndex="6" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                    <CheckBox fx:id="productAvailableCheckbox" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+                </GridPane>
+                
+                <Label text="Description:" style="-fx-text-fill: #5a2db1;"/>
+                <TextArea fx:id="productDescriptionField" prefHeight="100" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                
+                <HBox spacing="10">
+                    <Button fx:id="addProductButton" text="Add Product" style="-fx-background-color: #4caf50; -fx-text-fill: white; -fx-background-radius: 20;"/>
+                    <Button fx:id="updateProductButton" text="Update Product" style="-fx-background-color: #8a4fff; -fx-text-fill: white; -fx-background-radius: 20;" disable="true"/>
+                    <Button fx:id="deleteProductButton" text="Delete Product" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-background-radius: 20;" disable="true"/>
+                </HBox>
             </VBox>
-            
-            <VBox styleClass="stat-card" spacing="5">
-                <Label text="New Complaints" styleClass="h3 text-dark"/>
-                <Label text="3" styleClass="h1 text-lilac"/>
-            </VBox>
-            
-            <VBox styleClass="stat-card" spacing="5">
-                <Label text="Today's Revenue" styleClass="h3 text-dark"/>
-                <Label text="1,245.50" styleClass="h1 text-lilac"/>
-            </VBox>
-        </HBox>
-    </VBox>
+        </Tab>
+    </TabPane>
     
-    <Button text="Back to Catalog" styleClass="btn btn-secondary" onAction="#navigateToCatalog"/>
-    
-    <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>
+    <!-- Footer -->
+    <HBox alignment="CENTER" style="-fx-background-color: #8a4fff; -fx-background-radius: 15 15 0 0; -fx-padding: 10;">
+        <Label text="© 2025 Lilach Flower Shop" style="-fx-text-fill: white;"/>
+    </HBox>
 </VBox>

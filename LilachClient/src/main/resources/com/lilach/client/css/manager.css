@@ -1,0 +1,161 @@
+/* Root styles with floral theme colors */
+.root {
+    -fx-primary: #8a4fff;
+    -fx-secondary: #ff6b6b;
+    -fx-accent: #4ecdc4;
+    -fx-light: #f9f7fe;
+    -fx-dark: #5a2db1;
+}
+
+/* Background styles */
+.bg-primary {
+    -fx-background-color: linear-gradient(to bottom, #f9f7fe, #f0e6ff);
+}
+
+/* Button styles */
+.btn {
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-padding: 8 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+.btn:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 3);
+}
+
+.btn-info {
+    -fx-background-color: #6a30e3;
+    -fx-text-fill: white;
+}
+
+.btn-secondary {
+    -fx-background-color: transparent;
+    -fx-border-color: white;
+    -fx-text-fill: white;
+}
+
+.btn-primary {
+    -fx-background-color: #8a4fff;
+    -fx-text-fill: white;
+}
+
+.btn-success {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+}
+
+.btn-danger {
+    -fx-background-color: #f44336;
+    -fx-text-fill: white;
+}
+
+/* Text styles */
+.text-white {
+    -fx-text-fill: white;
+}
+
+.h1 {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.h3 {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #5a2db1;
+}
+
+.h4 {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #5a2db1;
+}
+
+/* Form controls */
+.form-control {
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-background-color: white;
+    -fx-border-color: #e0d6ff;
+    -fx-padding: 8 12;
+}
+
+.form-control:focused {
+    -fx-border-color: #8a4fff;
+    -fx-effect: dropshadow(gaussian, rgba(138, 79, 255, 0.3), 10, 0, 0, 0);
+}
+
+/* Card style for containers */
+.card {
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);
+    -fx-background-color: #fafafa;
+}
+
+/* Table styles */
+.table-view {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #e0d6ff;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #8a4fff;
+    -fx-background-radius: 10 10 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-cell {
+    -fx-padding: 8 12;
+}
+
+.table-row-cell:even {
+    -fx-background-color: #f9f7fe;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: white;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #e0d6ff;
+}
+
+/* Tab pane styles */
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #8a4fff;
+    -fx-background-radius: 15 15 0 0;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #e0d6ff;
+    -fx-background-radius: 10 10 0 0;
+    -fx-padding: 8 16;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: white;
+}
+
+.tab-pane .tab .tab-label {
+    -fx-text-fill: #5a2db1;
+    -fx-font-weight: bold;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: #8a4fff;
+}
+
+/* Separator style */
+.separator {
+    -fx-background-color: #e0d6ff;
+}

@@ -1,6 +1,7 @@
 package com.lilach.server.services;
 
 import com.lilach.server.models.Product;
+import com.lilach.server.models.Store;
 import com.lilach.server.utils.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -71,6 +72,48 @@ public class ProductService {
                 return product;
             }
             return null;
+        }
+    }
+    // Add store-specific methods to ProductService
+    public static List<Product> getProductsByStore(int storeId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Product> query = session.createQuery(
+                "FROM Product WHERE store.id = :storeId AND isAvailable = true", 
+                Product.class
+            );
+            query.setParameter("storeId", storeId);
+            return query.list();
+        }
+    }
+
+    public static Product createProductForStore(Product product, int storeId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Store store = session.get(Store.class, storeId);
+            if (store == null) {
+                throw new IllegalArgumentException("Store not found with ID: " + storeId);
+            }
+            
+            product.setStore(store);
+            
+            Transaction transaction = session.beginTransaction();
+            session.persist(product);
+            transaction.commit();
+            return product;
+        }
+    }
+
+    public static boolean updateProductStock(int productId, int newStock) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Product product = session.get(Product.class, productId);
+            
+            if (product != null) {
+                product.setStock(newStock);
+                session.update(product);
+                transaction.commit();
+                return true;
+            }
+            return false;
         }
     }
 

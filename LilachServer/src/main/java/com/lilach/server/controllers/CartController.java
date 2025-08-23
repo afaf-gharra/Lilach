@@ -1,7 +1,8 @@
 package com.lilach.server.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lilach.server.models.CartItemDTO;
+import com.lilach.server.DTOs.CartItemDTO;
+
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 

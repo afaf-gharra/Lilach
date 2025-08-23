@@ -24,7 +24,47 @@ public class ProductController {
         app.post("/api/products", ProductController::createProduct);
         app.put("/api/products/{id}", ProductController::updateProduct);
         app.delete("/api/products/{id}", ProductController::deleteProduct);
+        app.get("/api/stores/{storeId}/products", ProductController::getProductsByStore);
+        app.post("/api/stores/{storeId}/products", ProductController::createProductForStore);
+        app.put("/api/products/{id}/stock", ProductController::updateProductStock);
 
+    }
+
+    public static void getProductsByStore(Context ctx) {
+        try {
+            int storeId = Integer.parseInt(ctx.pathParam("storeId"));
+            List<Product> products = ProductService.getProductsByStore(storeId);
+            ctx.json(products).status(HttpStatus.OK);
+        } catch (Exception e) {
+            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Error retrieving products for store: " + e.getMessage());
+        }
+    }
+
+    public static void createProductForStore(Context ctx) {
+        try {
+            int storeId = Integer.parseInt(ctx.pathParam("storeId"));
+            Product product = mapper.readValue(ctx.body(), Product.class);
+            Product createdProduct = ProductService.createProductForStore(product, storeId);
+            ctx.json(createdProduct).status(HttpStatus.CREATED);
+        } catch (Exception e) {
+            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Error creating product: " + e.getMessage());
+        }
+    }
+
+    public static void updateProductStock(Context ctx) {
+        try {
+            int productId = Integer.parseInt(ctx.pathParam("id"));
+            int newStock = Integer.parseInt(ctx.body());
+            
+            boolean updated = ProductService.updateProductStock(productId, newStock);
+            if (updated) {
+                ctx.status(HttpStatus.OK).json("Stock updated successfully");
+            } else {
+                ctx.status(HttpStatus.NOT_FOUND).json("Product not found");
+            }
+        } catch (Exception e) {
+            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Error updating stock: " + e.getMessage());
+        }
     }
     
 

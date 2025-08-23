@@ -7,6 +7,7 @@ import com.lilach.client.controllers.OrderHistoryController.Order;
 import com.lilach.client.models.ComplaintDTO;
 import com.lilach.client.models.OrderDTO;
 import com.lilach.client.models.ProductDTO;
+import com.lilach.client.models.StoreDTO;
 import com.lilach.client.models.UserDTO;
 import okhttp3.*;
 import java.io.IOException;
@@ -61,6 +62,24 @@ public class ApiService {
             return null;
         }
     }
+    //update order status
+
+    public static OrderDTO updateOrderStatus(int orderId, String status) throws IOException {
+        String json = String.format("{\"status\":\"%s\"}", status);
+        RequestBody body = RequestBody.create(json, JSON);
+        
+        Request request = new Request.Builder()
+            .url(BASE_URL + "orders/" + orderId + "/status")
+            .put(body)
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), OrderDTO.class);
+            }
+            return null;
+        }
+    }
 
     public static UserDTO getUserById(int userId) throws IOException {
         Request request = new Request.Builder()
@@ -71,6 +90,24 @@ public class ApiService {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful() && response.body() != null) {
                 return mapper.readValue(response.body().string(), UserDTO.class);
+            }
+            return null;
+        }
+    }
+
+    //create product
+    public static ProductDTO createProduct(ProductDTO product) throws IOException {
+        String json = mapper.writeValueAsString(product);
+        RequestBody body = RequestBody.create(json, JSON);
+        
+        Request request = new Request.Builder()
+            .url(BASE_URL + "products")
+            .post(body)
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), ProductDTO.class);
             }
             return null;
         }
@@ -90,6 +127,26 @@ public class ApiService {
                 );
             }
             return List.of(); // Return empty list if no orders
+        }
+    }
+
+
+    // edit product
+
+    public static ProductDTO editProduct(ProductDTO product) throws IOException {
+        String json = mapper.writeValueAsString(product);
+        RequestBody body = RequestBody.create(json, JSON);
+        
+        Request request = new Request.Builder()
+            .url(BASE_URL + "products/" + product.getId())
+            .put(body)
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), ProductDTO.class);
+            }
+            return null;
         }
     }
 
@@ -128,6 +185,23 @@ public class ApiService {
             return null;
         }
     }
+
+    //delete product
+
+    public static String deleteProduct(int productId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "products/" + productId)
+            .delete()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return response.body().string();
+            }
+            return null;
+        }
+    }
+
 
     public static List<ProductDTO> getAllProducts() throws IOException {
         Request request = new Request.Builder()
@@ -264,6 +338,53 @@ public class ApiService {
             return null;
         }
     }
+
+   
+
+    // Add store-related API methods
+    public static StoreDTO getStoreByManager(int managerId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "stores/manager/" + managerId)
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), StoreDTO.class);
+            }
+            return null;
+        }
+    }
+
+    public static List<ProductDTO> getStoreProducts(int storeId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "stores/" + storeId + "/products")
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(
+                    response.body().string(),
+                    mapper.getTypeFactory().constructCollectionType(List.class, ProductDTO.class)
+                );
+            }
+            return List.of();
+        }
+    }
+
+    public static boolean updateProductStock(int productId, int newStock) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "products/" + productId + "/stock")
+            .put(RequestBody.create(String.valueOf(newStock), JSON))
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        }
+    }
+
+
 
     public static List<OrderDTO> getUserOrders(int userId) throws IOException {
         Request request = new Request.Builder()

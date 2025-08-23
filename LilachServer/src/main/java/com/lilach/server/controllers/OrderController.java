@@ -24,6 +24,8 @@ public class OrderController {
         app.post("/api/orders", OrderController::createOrder);
         app.get("/api/orders/user/{userId}", OrderController::getUserOrders);
         app.put("/api/orders/{id}/cancel", OrderController::cancelOrder);
+        // app put status
+        app.put("/api/orders/{id}/status", OrderController::updateOrderStatus);
     }
      public static void createOrder(Context ctx) {
         try {
@@ -63,6 +65,21 @@ public class OrderController {
             }
         } catch (Exception e) {
             ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Error cancelling order: " + e.getMessage());
+        }
+    }
+
+    public static void updateOrderStatus(Context ctx) {
+        try {
+            int orderId = Integer.parseInt(ctx.pathParam("id"));
+            String status = ctx.body();
+            Order updatedOrder = OrderService.updateOrderStatus(orderId, status);
+            if (updatedOrder != null) {
+                ctx.json(updatedOrder).status(HttpStatus.OK);
+            } else {
+                ctx.status(HttpStatus.BAD_REQUEST).json("Cannot update order status");
+            }
+        } catch (Exception e) {
+            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Error updating order status: " + e.getMessage());
         }
     }
 }
