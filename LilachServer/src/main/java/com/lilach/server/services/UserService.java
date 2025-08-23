@@ -41,4 +41,10 @@ public class UserService {
         }
     }
 
+    public static User getUserById(int userId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(User.class, userId);
+        }
+    }
+
 }

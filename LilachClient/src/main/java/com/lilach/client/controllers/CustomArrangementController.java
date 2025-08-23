@@ -21,7 +21,7 @@ public class CustomArrangementController extends BaseController  {
     @FXML
     private void handleAddToCart() {
         if (validateForm()) {
-            showSuccess("Added to Cart", "Your custom arrangement has been added to cart!");
+            showSuccess("Added to Cartasdsd", "Your custom arrangement has been added to cart!");
             navigateToWithSize("/com/lilach/client/views/catalog.fxml", "Lilach Flower Shop Catalog", 1200, 800);        
         }
     }

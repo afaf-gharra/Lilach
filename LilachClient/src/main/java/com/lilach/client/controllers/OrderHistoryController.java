@@ -1,5 +1,11 @@
 package com.lilach.client.controllers;
 
+import java.io.IOException;
+import java.util.List;
+
+import com.lilach.client.models.OrderDTO;
+import com.lilach.client.services.ApiService;
+
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -26,7 +32,7 @@ public class OrderHistoryController extends BaseController {
     }
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         // Setup table columns
         TableColumn<Order, Integer> idCol = new TableColumn<>("Order ID");
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -62,9 +68,20 @@ public class OrderHistoryController extends BaseController {
         
         ordersTable.getColumns().addAll(idCol, orderDateCol, deliveryDateCol, recipientCol, totalCol, statusCol, actionCol);
         
-        // Add sample orders
-        orders.add(new Order(1, "2025-07-01", "2025-07-02", "Jane Smith", 125.00, "Delivered"));
-        orders.add(new Order(2, "2025-07-10", "2025-07-12", "John Doe", 95.00, "Processing"));
+        //get current user orders - in real app, fetch from backend
+
+        List<OrderDTO> ordersDTOs = ApiService.getUserOrders(LoginController.loggedInUser.getId());
+        for (OrderDTO dto : ordersDTOs) {
+            orders.add(new Order(
+                dto.getId(),
+                dto.getOrderDate().toString(),
+                dto.getDeliveryDate().toString(),
+                dto.getRecipientName()+ " (" + dto.getRecipientPhone() + ")",
+                dto.getTotalPrice(),
+                dto.getStatus()
+            ));
+        }
+        
         
         ordersTable.setItems(orders);
     }
@@ -99,6 +116,7 @@ public class OrderHistoryController extends BaseController {
                 if (response == ButtonType.OK) {
                     showSuccess("Order Cancelled", "Order #" + selectedOrder.getId() + " has been cancelled.");
                     // In real app, update status in backend
+
                     orders.remove(selectedOrder);
                 }
             });

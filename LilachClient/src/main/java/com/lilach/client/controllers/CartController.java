@@ -1,8 +1,8 @@
 package com.lilach.client.controllers;
 
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import com.lilach.client.services.CartItem;
+import com.lilach.client.services.CartService;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -43,7 +43,6 @@ public class CartController extends BaseController {
         qtyCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         
         TableColumn<CartItem, Double> totalCol = new TableColumn<>("Total");
-        totalCol.setCellValueFactory(new PropertyValueFactory<>("itemTotal"));
         totalCol.setCellFactory(col -> new TableCell<CartItem, Double>() {
             @Override
             protected void updateItem(Double total, boolean empty) {
@@ -61,21 +60,21 @@ public class CartController extends BaseController {
         
         cartTable.getColumns().addAll(nameCol, priceCol, qtyCol, totalCol, actionCol);
         
-        // Add sample items
-        cartItems.add(new CartItem("Red Roses Bouquet", 45.00, 1));
-        cartItems.add(new CartItem("Custom Flower Arrangement", 80.00, 1));
+        // Load cart items from CartService
+        cartItems = CartService.getInstance().getCartItems();
         
+
         cartTable.setItems(cartItems);
         calculateTotal();
     }
     
+
     private void calculateTotal() {
         total = cartItems.stream()
-                .mapToDouble(CartItem::getItemTotal)
-                .sum();
-        totalPriceLabel.setText(String.format("$%.2f", total));
+            .mapToDouble(item -> item.getPrice() * item.getQuantity())
+            .sum();
+        totalPriceLabel.setText(String.format("Total: $%.2f", total));
     }
-    
     
 
     
@@ -133,25 +132,6 @@ public class CartController extends BaseController {
         navigateTo("/com/lilach/client/views/order_history.fxml", "My Orders");
     }
 
+ 
     
-    // Cart item model
-    public static class CartItem {
-        private final SimpleStringProperty name;
-        private final SimpleDoubleProperty price;
-        private final SimpleIntegerProperty quantity;
-        private final SimpleDoubleProperty itemTotal;
-        
-        public CartItem(String name, double price, int quantity) {
-            this.name = new SimpleStringProperty(name);
-            this.price = new SimpleDoubleProperty(price);
-            this.quantity = new SimpleIntegerProperty(quantity);
-            this.itemTotal = new SimpleDoubleProperty(price * quantity);
-        }
-        
-        // Getters
-        public String getName() { return name.get(); }
-        public double getPrice() { return price.get(); }
-        public int getQuantity() { return quantity.get(); }
-        public double getItemTotal() { return itemTotal.get(); }
-    }
 }

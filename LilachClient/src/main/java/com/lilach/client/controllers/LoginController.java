@@ -12,6 +12,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import java.io.IOException;
 
 public class LoginController extends BaseController {
+    public static UserDTO loggedInUser;
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private Button loginButton;
@@ -36,6 +37,7 @@ public class LoginController extends BaseController {
         try {
             UserDTO user = ApiService.login(username, password);
             if (user != null) {
+                loggedInUser = user;
                 redirectBasedOnRole(user);
             } else {
                 showAlert("Login Failed", "Invalid credentials");

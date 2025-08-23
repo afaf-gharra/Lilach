@@ -8,11 +8,11 @@
 <VBox xmlns="http://javafx.com/javafx/17" 
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.lilach.client.controllers.RegisterController"
-      alignment="CENTER" 
-      spacing="20"
+      spacing="20" 
+      alignment="CENTER"
       styleClass="bg-primary"
-      prefWidth="600" 
-      prefHeight="600"
+      prefWidth="1200" 
+      prefHeight="800"
       stylesheets="@/com/lilach/client/css/styles.css">
     
     <Label text="Create Account" styleClass="h1 text-white"/>

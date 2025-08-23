@@ -1,4 +1,4 @@
-package com.lilach.client.models;
+package com.lilach.server.DTOs;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

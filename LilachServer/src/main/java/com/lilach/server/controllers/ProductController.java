@@ -1,6 +1,8 @@
 package com.lilach.server.controllers;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.lilach.server.models.Product;
 import com.lilach.server.services.ProductService;
 import io.javalin.http.Context;
@@ -11,7 +13,11 @@ import java.util.List;
 public class ProductController {
     private static final ObjectMapper mapper = new ObjectMapper();
     
+    
     public static void registerRoutes(io.javalin.Javalin app) {
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        
         app.get("/api/products", ProductController::getAllProducts);
         app.get("/api/products/category/{category}", ProductController::getProductsByCategory);
         app.get("/api/products/search", ProductController::searchProducts);

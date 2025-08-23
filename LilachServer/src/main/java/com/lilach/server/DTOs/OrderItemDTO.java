@@ -1,49 +1,25 @@
-package com.lilach.server.models;
+package com.lilach.server.DTOs;
 
-import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
-@Table(name = "order_items")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OrderItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class OrderItemDTO {
     private int id;
-    
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    @JsonIgnore // Prevent circular reference
-    private Order order;
-    
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-    
-    @Column(name = "custom_type")
+    private Integer productId;
     private String customType;
-    
-    @Column(name = "custom_price_range")
     private String customPriceRange;
-    
-    @Column(name = "custom_color")
     private String customColor;
-    
     private int quantity;
 
-    // Default constructor for JSON
-    public OrderItem() {}
+    // Default constructor
+    public OrderItemDTO() {}
 
     // Getters and setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     
-    public Order getOrder() { return order; }
-    public void setOrder(Order order) { this.order = order; }
-    
-    public Product getProduct() { return product; }
-    public void setProduct(Product product) { this.product = product; }
+    public Integer getProductId() { return productId; }
+    public void setProductId(Integer productId) { this.productId = productId; }
     
     public String getCustomType() { return customType; }
     public void setCustomType(String customType) { this.customType = customType; }

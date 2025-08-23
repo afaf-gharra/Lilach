@@ -7,11 +7,12 @@
 <VBox xmlns="http://javafx.com/javafx/17" 
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.lilach.client.controllers.CartController"
-      alignment="CENTER" 
-      spacing="20"
+      spacing="20" 
+      alignment="CENTER"
       styleClass="bg-primary"
-      prefWidth="1000" 
-      prefHeight="700">
+      prefWidth="1200" 
+      prefHeight="800"
+      stylesheets="@/com/lilach/client/css/styles.css">
     
     <HBox alignment="CENTER" spacing="20">
         <Label fx:id="welcomeLabel" styleClass="h1 text-white"/>
@@ -27,26 +28,17 @@
     
     <VBox styleClass="card p-4" spacing="15" prefWidth="800">
         <HBox alignment="CENTER_RIGHT" spacing="10">
-            <Label text="Total:" styleClass="h3 text-dark"/>
+            <Label text="" styleClass="h3 text-dark"/>
             <Label fx:id="totalPriceLabel" text="0.00" styleClass="h2 text-lilac"/>
         </HBox>
         
-        <TableView fx:id="cartTable" prefHeight="400">
-            <columns>
-                <TableColumn fx:id="name" text="name" prefWidth="250"/>
-                <TableColumn fx:id="price" text="price" prefWidth="250"/>
-                <TableColumn fx:id="quantity" text="quantity" prefWidth="250"/>
-                <TableColumn fx:id="itemTotal" text="itemTotal" prefWidth="250"/>
-                
-               <TableColumn fx:id="actionCol" text="Actions" prefWidth="150"/>
-            </columns>
+        <TableView fx:id="cartTable" prefHeight="500">
         </TableView>
         
         <HBox spacing="20" alignment="CENTER">
             <Button text="Continue Shopping" onAction="#handleContinueShopping" styleClass="btn btn-primary"/>
-            <Button text="Proceed to Checkout" onAction="#handleCheckout" styleClass="btn btn-success"/>
+            <Button text="Proceed to Checkout" onAction="#handleCheckout" styleClass="btn btn-success "/>
         </HBox>
-        <Button text="Back to Catalog" styleClass="btn btn-secondary" onAction="#navigateToCatalog"/>
     </VBox>
     
     <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>

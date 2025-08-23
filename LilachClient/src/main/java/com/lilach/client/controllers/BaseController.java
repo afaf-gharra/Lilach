@@ -45,6 +45,7 @@ public abstract  class BaseController {
             stage.centerOnScreen();
         } catch (Exception e) {
             showError("Navigation Error", "Failed to load view: " + e.getMessage());
+            System.err.println("Navigation error to " + fxmlPath + ": " + e.getMessage());
         }
     }
     

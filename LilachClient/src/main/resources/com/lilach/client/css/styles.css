@@ -3,10 +3,17 @@
     -fx-font-family: 'Segoe UI', Arial, sans-serif;
 }
 
+
 .bg-primary {
-    -fx-background-color: #6f42c1; /* Lilac color */
+    -fx-background-color: linear-gradient(to bottom right, 
+        #8e91a0 0%,     /* Soft blue */
+        #528ba8 100%    /* Deep purple */
+    );
+    -fx-background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    -fx-background-repeat: repeat;
     -fx-background-radius: 0;
     -fx-padding: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 15, 0.3, 0, 4);
 }
 
 /* Card styling */
@@ -265,4 +272,63 @@
 
 .btn-logout:hover {
     -fx-background-color: #5a6268;
+}
+
+/* Cart specific styles */
+.cart-table {
+    -fx-background-color: white;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5px;
+}
+
+.cart-table .table-row-cell {
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.cart-table .table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.cart-table .table-row-cell:selected {
+    -fx-background-color: #e0d6f0;
+}
+
+/* Spinner styling */
+.spinner {
+    -fx-background-color: white;
+    -fx-border-color: #ced4da;
+    -fx-border-radius: 3px;
+}
+
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+    -fx-background-color: #6f42c1;
+    -fx-background-radius: 0;
+}
+
+.spinner .increment-arrow-button:hover,
+.spinner .decrement-arrow-button:hover {
+    -fx-background-color: #5a32a3;
+}
+
+.spinner .text-field {
+    -fx-alignment: center;
+}
+
+/* Product card enhancements */
+.product-card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(111, 66, 193, 0.2), 10, 0, 0, 0);
+    -fx-translate-y: -2px;
+    -fx-cursor: hand;
+}
+
+/* Button styles */
+.btn-warning {
+    -fx-background-color: #ffc107;
+    -fx-text-fill: black;
+}
+
+.btn-warning:hover {
+    -fx-background-color: #e0a800;
 }

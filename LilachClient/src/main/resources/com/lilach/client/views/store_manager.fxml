@@ -5,12 +5,13 @@
 
 <VBox xmlns="http://javafx.com/javafx/17" 
       xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="com.lilach.client.controllers.StoreManagerController"
-      alignment="CENTER" 
-      spacing="20"
+      fx:controller="com.lilach.client.controllers.StoreManagerController"
+      spacing="20" 
+      alignment="CENTER"
       styleClass="bg-primary"
       prefWidth="1200" 
-      prefHeight="800">
+      prefHeight="800"
+      stylesheets="@/com/lilach/client/css/styles.css">
     
      <HBox alignment="CENTER" spacing="20">
         <Label fx:id="welcomeLabel" styleClass="h1 text-white"/>

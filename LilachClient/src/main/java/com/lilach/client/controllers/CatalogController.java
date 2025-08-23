@@ -2,6 +2,9 @@ package com.lilach.client.controllers;
 
 import com.lilach.client.models.ProductDTO;
 import com.lilach.client.services.ApiService;
+import com.lilach.client.services.CartItem;
+import com.lilach.client.services.CartService;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -88,8 +91,10 @@ public class CatalogController extends BaseController  {
             imageView.setFitWidth(180);
             imageView.setFitHeight(180);
             imageView.setPreserveRatio(true);
+            imageView.setImage(new Image(getClass().getResourceAsStream("/com/lilach/client/images/logo.png")));
+
         } catch (Exception e) {
-            imageView.setImage(new Image(getClass().getResourceAsStream("/com/lilach/client/images/default-flower.png")));
+            imageView.setImage(new Image(getClass().getResourceAsStream("/com/lilach/client/images/logo.png")));
         }
         
         // Product details
@@ -145,6 +150,17 @@ public class CatalogController extends BaseController  {
     
     @FXML
     private void addToCart(ProductDTO product) {
+        
+        CartItem item = new CartItem(
+            product.getId(),
+            product.getName(),
+            product.getPrice(),
+            1,
+            product.getImageUrl()
+        );
+        
+        CartService.getInstance().addItem(item);
+
 
 
         showSuccess("Added to Cart", product.getName() + " added to your cart!");
