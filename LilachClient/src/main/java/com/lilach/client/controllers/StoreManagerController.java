@@ -9,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -334,7 +333,13 @@ public class StoreManagerController extends BaseController {
             showError("Connection Error", "Failed to update order: " + e.getMessage());
         }
     }
-    
+
+    // Add a new tab or button for complaints management
+    @FXML
+    private void handleViewComplaints() {
+        navigateTo("/com/lilach/client/views/complaints_manager.fxml", "Complaints Management");
+    }
+        
     private void selectProduct(ProductDTO product) {
         selectedProduct = product;
         if (product == null) {
@@ -486,5 +491,10 @@ public class StoreManagerController extends BaseController {
     @FXML
     private void handleLogout() {
         logout();
+    }
+
+    @FXML
+    private void handleComplaints() {
+        navigateTo("/com/lilach/client/views/complaints_manager.fxml", "Complaints Form");
     }
 }

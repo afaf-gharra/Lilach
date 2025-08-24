@@ -1,7 +1,6 @@
 package com.lilach.client.controllers;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -94,18 +93,11 @@ public class OrderHistoryController extends BaseController {
     }
 
     @FXML
-    private void handleCreateComplaint() {
-        navigateTo("/com/lilach/client/views/complaint.fxml", "Submit Complaint");
-    }
-
-    @FXML
     private void handleLogout() {
         logout();
     }
 
     @FXML
-    
-
     private void handleCancelOrder() {
         Order selectedOrder = ordersTable.getSelectionModel().getSelectedItem();
         if (selectedOrder != null && selectedOrder.getStatus().equals("Processing")) {
@@ -210,6 +202,25 @@ public class OrderHistoryController extends BaseController {
             "Status: " + order.getStatus()
         );
         alert.showAndWait();
+    }
+
+
+
+    // Add a new tab or button for complaints management
+    @FXML
+    private void handleViewComplaints() {
+        navigateTo("/com/lilach/client/views/complaints_manager.fxml", "Complaints Management");
+    }
+
+    @FXML
+    private void handleCreateComplaint() {
+        Order selectedOrder = ordersTable.getSelectionModel().getSelectedItem();
+        if (selectedOrder == null) {
+            showError("Selection Error", "Please select an order to create a complaint");
+            return;
+        }
+        
+        navigateTo("/com/lilach/client/views/complaint.fxml", "Submit Complaint");
     }
     
     private void cancelOrder(Order order) {

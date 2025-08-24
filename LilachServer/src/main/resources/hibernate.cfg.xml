@@ -32,5 +32,6 @@
         <mapping class="com.lilach.server.models.OrderItem"/>
         <mapping class="com.lilach.server.models.Complaint"/>
         <mapping class="com.lilach.server.models.Store"/>
+        <mapping class="com.lilach.server.models.Complaint"/>
     </session-factory>
 </hibernate-configuration>

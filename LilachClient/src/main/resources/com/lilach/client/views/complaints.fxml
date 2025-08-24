@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns="http://javafx.com/javafx/17" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.lilach.client.controllers.ComplaintController"
+      alignment="CENTER" 
+      spacing="20"
+      styleClass="bg-primary"
+      prefWidth="800" 
+      prefHeight="700"
+      stylesheets="@/com/lilach/client/css/styles.css">
+    
+    <Label text="Submit Complaint" styleClass="h1 text-white"/>
+    
+    <VBox styleClass="card p-4" spacing="15" prefWidth="600">
+        <Label text="We're sorry to hear you're not satisfied. Please tell us about your issue." styleClass="h2 text-dark"/>
+        
+        <GridPane hgap="10" vgap="10">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="150"/>
+                <ColumnConstraints prefWidth="400"/>
+            </columnConstraints>
+            
+            <Label text="Order Number:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="orderCombo" promptText="Select your order" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-control"/>
+            
+            <Label text="Complaint Type:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="complaintTypeCombo" promptText="Select complaint type" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-control">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String>Late Delivery</String>
+                        <String>Wrong Item</String>
+                        <String>Damaged Goods</String>
+                        <String>Quality Issues</String>
+                        <String>Service Issues</String>
+                        <String>Other</String>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            
+            <Label text="Complaint Details:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextArea fx:id="complaintDetails" promptText="Please describe your issue in detail..." 
+                      GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-control" prefHeight="150"/>
+            
+            <Label text="Desired Resolution:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="resolutionCombo" promptText="What would you like us to do?" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-control">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String>Refund</String>
+                        <String>Replacement</String>
+                        <String>Credit</String>
+                        <String>Apology</String>
+                        <String>Other</String>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            
+            <Label text="Contact Preference:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <HBox spacing="10" GridPane.rowIndex="4" GridPane.columnIndex="1">
+                <CheckBox fx:id="contactEmail" text="Email" selected="true"/>
+                <CheckBox fx:id="contactPhone" text="Phone"/>
+            </HBox>
+        </GridPane>
+        
+        <HBox spacing="20" alignment="CENTER">
+            <Button fx:id="backButton" text="Back to Orders" onAction="#handleBack" styleClass="btn btn-secondary"/>
+            <Button fx:id="submitButton" text="Submit Complaint" onAction="#handleSubmit" styleClass="btn btn-success">
+                <graphic>
+                    <FontIcon iconLiteral="fas-paper-plane"/>
+                </graphic>
+            </Button>
+        </HBox>
+    </VBox>
+    
+    <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>
+</VBox>

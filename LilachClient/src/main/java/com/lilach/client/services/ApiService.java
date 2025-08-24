@@ -46,6 +46,23 @@ public class ApiService {
         System.out.println("Added to cart: " + product.getName());
     }
 
+//getOrderById
+
+    public static OrderDTO getOrderById(int orderId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "orders/" + orderId)
+            .get()
+            .build();
+            mapper.registerModule(new JavaTimeModule());
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), OrderDTO.class);
+            }
+            return null;
+        }
+    }
+
     //getStoreOrders
 
     public static List<OrderDTO> getStoreOrders(int storeId) throws IOException {
@@ -98,6 +115,74 @@ public class ApiService {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful() && response.body() != null) {
                 return mapper.readValue(response.body().string(), OrderDTO.class);
+            }
+            return null;
+        }
+    }
+
+    // Complaint methods
+    public static ComplaintDTO createComplaint(ComplaintDTO complaint) throws IOException {
+        String json = mapper.writeValueAsString(complaint);
+        RequestBody body = RequestBody.create(json, JSON);
+        
+        Request request = new Request.Builder()
+            .url(BASE_URL + "complaints")
+            .post(body)
+            .build();
+
+            mapper.registerModule(new JavaTimeModule());
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), ComplaintDTO.class);
+            }
+            return null;
+        }
+    }
+
+    public static List<ComplaintDTO> getStoreComplaints(int storeId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "stores/" + storeId + "/complaints")
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(
+                    response.body().string(),
+                    mapper.getTypeFactory().constructCollectionType(List.class, ComplaintDTO.class)
+                );
+            }
+            return List.of();
+        }
+    }
+
+    public static ComplaintDTO updateComplaint(ComplaintDTO complaint) throws IOException {
+        String json = mapper.writeValueAsString(complaint);
+        RequestBody body = RequestBody.create(json, JSON);
+        
+        Request request = new Request.Builder()
+            .url(BASE_URL + "complaints/" + complaint.getId())
+            .put(body)
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), ComplaintDTO.class);
+            }
+            return null;
+        }
+    }
+
+    public static ComplaintDTO getComplaintById(int complaintId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "complaints/" + complaintId)
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), ComplaintDTO.class);
             }
             return null;
         }
@@ -314,23 +399,6 @@ public class ApiService {
                 );
             }
             return List.of(); // Return empty list if no products
-        }
-    }
-
-    public static ComplaintDTO createComplaint(ComplaintDTO complaint) throws IOException {
-        String json = mapper.writeValueAsString(complaint);
-        RequestBody body = RequestBody.create(json, JSON);
-        
-        Request request = new Request.Builder()
-            .url(BASE_URL + "complaints")
-            .post(body)
-            .build();
-        
-        try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful() && response.body() != null) {
-                return mapper.readValue(response.body().string(), ComplaintDTO.class);
-            }
-            return null;
         }
     }
 

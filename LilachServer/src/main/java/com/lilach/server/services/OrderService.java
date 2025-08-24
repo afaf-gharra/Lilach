@@ -42,6 +42,12 @@ public class OrderService {
         }
     }
 
+    public static Order getOrderById(int orderId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Order.class, orderId);
+        }
+    }
+
     //updateOrderStatus
     public static Order updateOrderStatus(int orderId, String status) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns="http://javafx.com/javafx/17" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.lilach.client.controllers.ComplaintsManagerController"
+      spacing="20" 
+      styleClass="bg-primary"
+      prefWidth="1200" 
+      prefHeight="800"
+      stylesheets="@/com/lilach/client/css/styles.css">
+    
+    <Label text="Complaints Management" styleClass="h1 text-white"/>
+    
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Refresh" onAction="#handleRefresh" styleClass="btn btn-info">
+            <graphic>
+                <FontIcon iconLiteral="fas-sync-alt"/>
+            </graphic>
+        </Button>
+        <Label text="Filter by Status:" styleClass="text-white"/>
+        <ComboBox fx:id="statusFilterCombo" styleClass="form-control" prefWidth="150"/>
+    </HBox>
+    
+    <VBox styleClass="card p-4" spacing="15">
+        <TableView fx:id="complaintsTable" prefHeight="400">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
+                <TableColumn fx:id="orderIdColumn" text="Order ID" prefWidth="80"/>
+                <TableColumn fx:id="customerColumn" text="Customer" prefWidth="150"/>
+                <TableColumn fx:id="typeColumn" text="Type" prefWidth="120"/>
+                <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                <TableColumn fx:id="createdColumn" text="Created" prefWidth="150"/>
+                <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="200"/>
+            </columns>
+        </TableView>
+        
+        <SplitPane dividerPositions="0.6">
+            <!-- Complaint Details -->
+            <VBox spacing="10">
+                <Label text="Complaint Details" styleClass="h3"/>
+                <TextArea fx:id="complaintDetails" editable="false" styleClass="form-control" prefHeight="150"/>
+                
+                <Label text="Resolution Notes" styleClass="h3"/>
+                <TextArea fx:id="resolutionNotes" promptText="Enter resolution notes..." styleClass="form-control" prefHeight="100"/>
+                
+                <HBox spacing="10">
+                    <Label text="Compensation:" styleClass="h4"/>
+                    <TextField fx:id="compensationField" promptText="0.00" styleClass="form-control" prefWidth="100"/>
+                    <Label text="Status:" styleClass="h4"/>
+                    <ComboBox fx:id="statusCombo" styleClass="form-control" prefWidth="120"/>
+                </HBox>
+            </VBox>
+            
+            <!-- Customer Information -->
+            <VBox spacing="10">
+                <Label text="Customer Information" styleClass="h3"/>
+                <TextArea fx:id="customerInfo" editable="false" styleClass="form-control" prefHeight="100"/>
+                
+                <Label text="Order Details" styleClass="h3"/>
+                <TextArea fx:id="orderDetails" editable="false" styleClass="form-control" prefHeight="100"/>
+                
+                <Label text="Contact Preferences" styleClass="h3"/>
+                <TextArea fx:id="contactInfo" editable="false" styleClass="form-control" prefHeight="60"/>
+                
+                <Button fx:id="resolveButton" text="Resolve Complaint" styleClass="btn btn-success" prefWidth="200">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-check-circle"/>
+                    </graphic>
+                </Button>
+            </VBox>
+        </SplitPane>
+    </VBox>
+    
+    <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>
+</VBox>

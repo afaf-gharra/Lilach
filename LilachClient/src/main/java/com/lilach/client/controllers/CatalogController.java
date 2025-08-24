@@ -196,6 +196,12 @@ public class CatalogController extends BaseController  {
         navigateTo("/com/lilach/client/views/custom_arrangement.fxml", "Create Custom Arrangement");
     }
 
+
+    @FXML
+    private void handleComplaints() {
+        navigateTo("/com/lilach/client/views/complaints.fxml", "Complaints Form");
+    }
+
     // @Override
     // protected void addNavigationButtons() {
     //     addNavButton("Cart", "fas-shopping-cart", this::handleViewCart);
