@@ -10,7 +10,7 @@
             "request": "launch",
             "mainClass": "com.lilach.client.Main",
             "vmArgs": [
-                "--module-path=C:/javafx/javafx-sdk-21.0.7/lib",
+                "--module-path=C:/Users/phares/aaaaaaaaaa/javafx-sdk-24/lib",
                 "--add-modules=javafx.controls,javafx.fxml"
             ],
             "projectName": "LilachClient",
