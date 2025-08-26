@@ -80,7 +80,7 @@ public class ComplaintController extends BaseController {
     }
     
     private void loadUserOrders() {
-        Integer userId = LoginController.loggedInUser.getId();
+        Integer userId = getLoggedInUser().getId();
         try {
             // Load user's recent orders (implement this in ApiService)
             var orders = ApiService.getUserOrders(userId);
@@ -164,7 +164,7 @@ public class ComplaintController extends BaseController {
         complaint.setDesiredResolution(resolutionCombo.getValue());
         complaint.setContactEmail(contactEmail.isSelected());
         complaint.setContactPhone(contactPhone.isSelected());
-        complaint.setUserId(LoginController.loggedInUser.getId());
+        complaint.setUserId(getLoggedInUser().getId());
         complaint.setStatus("OPEN");
         complaint.setCreatedAt(LocalDateTime.now());
         return complaint;

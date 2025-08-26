@@ -57,7 +57,7 @@ public class CheckoutController extends BaseController  {
         if (validateForm()) {
             try {
                 OrderDTO order = createOrderFromForm();
-                OrderDTO createdOrder = ApiService.createOrder(order);
+                OrderDTO createdOrder = ApiService.createOrder(order, getLoggedInUser().getId());
                 
                 if (createdOrder != null) {
                     // Clear cart after successful order

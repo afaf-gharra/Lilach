@@ -157,6 +157,25 @@ public class ApiService {
         }
     }
 
+    // Add store-related methods
+    public static List<StoreDTO> getAllStores() throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "stores")
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(
+                    response.body().string(),
+                    mapper.getTypeFactory().constructCollectionType(List.class, StoreDTO.class)
+                );
+            }
+            return List.of();
+        }
+    }
+
+
     public static ComplaintDTO updateComplaint(ComplaintDTO complaint) throws IOException {
         String json = mapper.writeValueAsString(complaint);
         RequestBody body = RequestBody.create(json, JSON);
@@ -189,22 +208,7 @@ public class ApiService {
     }
 
     // Store management methods
-    public static List<StoreDTO> getAllStores() throws IOException {
-        Request request = new Request.Builder()
-            .url(BASE_URL + "stores")
-            .get()
-            .build();
-        
-        try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful() && response.body() != null) {
-                return mapper.readValue(
-                    response.body().string(),
-                    mapper.getTypeFactory().constructCollectionType(List.class, StoreDTO.class)
-                );
-            }
-            return List.of();
-        }
-    }
+
 
     public static StoreDTO createStore(StoreDTO store) throws IOException {
         String json = mapper.writeValueAsString(store);
@@ -535,9 +539,9 @@ public class ApiService {
             return null;
         }
     }
-    public static OrderDTO createOrder(OrderDTO order) throws IOException {
+    public static OrderDTO createOrder(OrderDTO order, int userId) throws IOException {
         mapper.registerModule(new JavaTimeModule());
-        order.setUserId(LoginController.loggedInUser.getId());
+        order.setUserId(userId);
         String json = mapper.writeValueAsString(order);
 
         RequestBody body = RequestBody.create(json, JSON);

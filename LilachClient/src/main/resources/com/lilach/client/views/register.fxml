@@ -45,7 +45,7 @@
                         <ColumnConstraints percentWidth="50"/>
                     </columnConstraints>
                     
-                    <!-- Row 1 -->
+                    <!-- Row 1 - Full Name & Username -->
                     <Label text="Full Name *" styleClass="input-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
                     <TextField fx:id="fullNameField" promptText="Your full name" styleClass="modern-input" 
                                GridPane.rowIndex="1" GridPane.columnIndex="0"/>
@@ -54,7 +54,7 @@
                     <TextField fx:id="usernameField" promptText="Choose a username" styleClass="modern-input" 
                                GridPane.rowIndex="1" GridPane.columnIndex="1"/>
                     
-                    <!-- Row 2 -->
+                    <!-- Row 2 - Password & Confirm Password -->
                     <Label text="Password *" styleClass="input-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
                     <PasswordField fx:id="passwordField" promptText="Create a password" styleClass="modern-input" 
                                    GridPane.rowIndex="3" GridPane.columnIndex="0"/>
@@ -63,35 +63,81 @@
                     <PasswordField fx:id="confirmPasswordField" promptText="Confirm your password" styleClass="modern-input" 
                                    GridPane.rowIndex="3" GridPane.columnIndex="1"/>
                     
-                    <!-- Row 3 -->
+                    <!-- Row 3 - Email & Phone -->
                     <Label text="Email *" styleClass="input-label" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
                     <TextField fx:id="emailField" promptText="Your email address" styleClass="modern-input" 
                                GridPane.rowIndex="5" GridPane.columnIndex="0"/>
                     
-                    <Label text="Phone" styleClass="input-label" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-                    <TextField fx:id="phoneField" promptText="Your phone number" styleClass="modern-input" 
+                    <Label text="Phone *" styleClass="input-label" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                    <TextField fx:id="phoneField" promptText="05XXXXXXXX (10 digits)" styleClass="modern-input" 
                                GridPane.rowIndex="5" GridPane.columnIndex="1"/>
                     
-                    <!-- Row 4 -->
-                    <Label text="Credit Card" styleClass="input-label" GridPane.rowIndex="6" GridPane.columnIndex="0" 
-                           GridPane.columnSpan="2"/>
-                    <TextField fx:id="creditCardField" promptText="Card number (optional)" styleClass="modern-input" 
-                               GridPane.rowIndex="7" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+                    <!-- Row 4 - Preferred Store Section -->
+                    <Label text="Preferred Store *" styleClass="input-label" GridPane.rowIndex="6" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+                    <Label text="Choose the store you'd like to shop from" styleClass="text-muted" wrapText="true" 
+                           GridPane.rowIndex="7" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+                    <ComboBox fx:id="storeCombo" promptText="Select your preferred store" styleClass="modern-input" 
+                              GridPane.rowIndex="8" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+                    
+                    <!-- Row 5 - Payment Information Header -->
+                    <Label text="Payment Information *" styleClass="h3 text-dark" GridPane.rowIndex="9" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+                    
+                    <!-- Row 6 - Credit Card -->
+                    <Label text="Credit Card Number *" styleClass="input-label" GridPane.rowIndex="10" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+                    <TextField fx:id="creditCardField" promptText="Card number (required)" styleClass="modern-input" 
+                               GridPane.rowIndex="11" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+                    
+                    <!-- Row 7 - Expiry & CVV -->
+                    <Label text="Expiry Date *" styleClass="input-label" GridPane.rowIndex="12" GridPane.columnIndex="0"/>
+                    <TextField fx:id="expiryDateField" promptText="MMYY" styleClass="modern-input" 
+                               GridPane.rowIndex="13" GridPane.columnIndex="0"/>
+                    
+                    <Label text="CVV *" styleClass="input-label" GridPane.rowIndex="12" GridPane.columnIndex="1"/>
+                    <TextField fx:id="cvvField" promptText="CVV" styleClass="modern-input" 
+                               GridPane.rowIndex="13" GridPane.columnIndex="1"/>
+                    
+                    <!-- Row 8 - Membership Subscription Header -->
+                    <Label text="Membership Subscription" styleClass="h3 text-dark" GridPane.rowIndex="14" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+                    
+                    <!-- Row 9 - Subscription Checkbox -->
+                    <HBox spacing="10" alignment="CENTER_LEFT" GridPane.rowIndex="15" GridPane.columnIndex="0" GridPane.columnSpan="2">
+                        <CheckBox fx:id="subscriptionCheckbox"/>
+                        <Label text="Subscribe to Lilach Premium Membership ($20/month)" styleClass="input-label"/>
+                    </HBox>
+                    
+                    <!-- Row 10 - Subscription Benefits -->
+                    <VBox spacing="5" GridPane.rowIndex="16" GridPane.columnIndex="0" GridPane.columnSpan="2">
+                        <Label text="• 10% discount on all orders" styleClass="text-muted"/>
+                        <Label text="• Free delivery on orders over $50" styleClass="text-muted"/>
+                        <Label text="• Exclusive access to premium flowers" styleClass="text-muted"/>
+                        <Label text="• Priority customer support" styleClass="text-muted"/>
+                    </VBox>
+                    
+                    <!-- Row 11 - Terms and Conditions -->
+                    <HBox spacing="10" alignment="CENTER_LEFT" GridPane.rowIndex="17" GridPane.columnIndex="0" GridPane.columnSpan="2">
+                        <CheckBox fx:id="termsCheckbox" styleClass="terms-checkbox"/>
+                        <Label text="I agree to terms and conditions *" styleClass="input-label"/>
+                    </HBox>
+                    
+                    <!-- Row 12 - Terms Link -->
+                    <Hyperlink text="View terms and conditions" styleClass="text-link" 
+                               GridPane.rowIndex="18" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
                 </GridPane>
                 
-                <CheckBox fx:id="termsCheckbox" text="I agree to terms and conditions" styleClass="terms-checkbox"/>
-                
+                <!-- Register Button -->
                 <Button fx:id="registerButton" text="Create Account" styleClass="primary-button">
                     <graphic>
                         <FontIcon iconLiteral="fas-user-plus" iconSize="14"/>
                     </graphic>
                 </Button>
                 
+                <!-- Login Link -->
                 <HBox spacing="5" alignment="CENTER">
                     <Label text="Already have an account?" styleClass="text-muted"/>
                     <Hyperlink fx:id="loginLink" text="Login here" styleClass="text-link"/>
                 </HBox>
                 
+                <!-- Footer -->
                 <Label text="© 2025 Lilach Flower Shop" styleClass="copyright"/>
             </VBox>
         </ScrollPane>

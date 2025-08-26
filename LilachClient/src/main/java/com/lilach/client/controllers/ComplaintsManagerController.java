@@ -106,7 +106,7 @@ public class ComplaintsManagerController extends BaseController {
     }
     
     private void loadComplaints() {
-        Integer storeId = LoginController.loggedInUser.getStoreId();
+        Integer storeId = getLoggedInUser().getStoreId();
 
         try {
             // Load complaints for the manager's store

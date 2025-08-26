@@ -61,7 +61,14 @@ public class CatalogController extends BaseController  {
     
     private void loadProducts() {
         try {
-            allProducts = ApiService.getProducts();
+            if(loggedInUser == null)
+            {
+                allProducts = ApiService.getAllProducts();
+            }
+            else
+            {
+                allProducts = ApiService.getStoreProducts(getLoggedInUser().getStoreId());
+            }
             displayProducts(allProducts);
         } catch (IOException e) {
             showError("Connection Error", "Failed to load products: " + e.getMessage());
@@ -171,7 +178,7 @@ public class CatalogController extends BaseController  {
         try {
             Stage stage = (Stage) productsContainer.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/custom_arrangement.fxml"));
-            stage.setScene(new Scene(root, 800, 600));
+            stage.setScene(new Scene(root, 1200, 800));
             stage.centerOnScreen();
         } catch (IOException e) {
             showError("Navigation Error", "Failed to load custom arrangement view: " + e.getMessage());

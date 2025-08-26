@@ -156,13 +156,13 @@ public class StoreManagerController extends BaseController {
     }
     
     private void loadStoreData() {
-        Integer storeId = LoginController.loggedInUser.getStoreId();
+        Integer storeId = getLoggedInUser().getStoreId();
         loadOrders(storeId);
         loadProducts(storeId);
     }
     
     private void loadOrders(Integer storeId) {
-        Integer ammangerstoreId = LoginController.loggedInUser.getStoreId();
+        Integer ammangerstoreId = getLoggedInUser().getStoreId();
         
         
         try {

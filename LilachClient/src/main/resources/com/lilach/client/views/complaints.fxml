@@ -30,16 +30,7 @@
             
             <Label text="Complaint Type:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
             <ComboBox fx:id="complaintTypeCombo" promptText="Select complaint type" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-control">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String>Late Delivery</String>
-                        <String>Wrong Item</String>
-                        <String>Damaged Goods</String>
-                        <String>Quality Issues</String>
-                        <String>Service Issues</String>
-                        <String>Other</String>
-                    </FXCollections>
-                </items>
+                
             </ComboBox>
             
             <Label text="Complaint Details:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
@@ -48,15 +39,7 @@
             
             <Label text="Desired Resolution:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
             <ComboBox fx:id="resolutionCombo" promptText="What would you like us to do?" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-control">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String>Refund</String>
-                        <String>Replacement</String>
-                        <String>Credit</String>
-                        <String>Apology</String>
-                        <String>Other</String>
-                    </FXCollections>
-                </items>
+                
             </ComboBox>
             
             <Label text="Contact Preference:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
