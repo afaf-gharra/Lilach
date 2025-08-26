@@ -7,6 +7,7 @@ import com.lilach.client.controllers.OrderHistoryController.Order;
 import com.lilach.client.models.ComplaintDTO;
 import com.lilach.client.models.OrderDTO;
 import com.lilach.client.models.ProductDTO;
+import com.lilach.client.models.ReportDTO;
 import com.lilach.client.models.StoreDTO;
 import com.lilach.client.models.UserDTO;
 import okhttp3.*;
@@ -556,6 +557,55 @@ public class ApiService {
                 return mapper.readValue(response.body().string(), OrderDTO.class);
             }
             return null;
+        }
+    }
+
+    //report
+    // Report methods
+    public static ReportDTO getYearlyReport(int storeId, int year) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "stores/" + storeId + "/reports/yearly/" + year)
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), ReportDTO.class);
+            }
+            return null;
+        }
+    }
+
+    public static ReportDTO getQuarterlyReport(int storeId, int year, int quarter) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "stores/" + storeId + "/reports/quarterly/" + year + "/" + quarter)
+            .get()
+            .build();
+
+        mapper.registerModule(new JavaTimeModule());
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), ReportDTO.class);
+            }
+            return null;
+        }
+    }
+
+    public static List<Integer> getAvailableYears(int storeId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "stores/" + storeId + "/reports/years")
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(
+                    response.body().string(),
+                    mapper.getTypeFactory().constructCollectionType(List.class, Integer.class)
+                );
+            }
+            return List.of();
         }
     }
 

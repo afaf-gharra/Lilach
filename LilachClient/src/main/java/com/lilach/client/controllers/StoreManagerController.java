@@ -497,4 +497,9 @@ public class StoreManagerController extends BaseController {
     private void handleComplaints() {
         navigateTo("/com/lilach/client/views/complaints_manager.fxml", "Complaints Form");
     }
+
+    @FXML
+    private void handleReports() {
+        navigateTo("/com/lilach/client/views/reports.fxml", "Reports");
+    }
 }

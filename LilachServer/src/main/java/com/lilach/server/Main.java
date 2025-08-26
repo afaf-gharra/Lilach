@@ -24,6 +24,7 @@ public class Main {
         StoreController.registerRoutes(app);
         UserController.registerRoutes(app);
         ComplaintController.registerRoutes(app);
+        ReportController.registerRoutes(app);
         
         System.out.println("Server running on http://localhost:8080");
     }

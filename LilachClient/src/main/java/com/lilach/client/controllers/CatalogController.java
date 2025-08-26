@@ -29,12 +29,23 @@ public class CatalogController extends BaseController  {
     @FXML private Button customArrangementButton;
     @FXML private Button viewCartButton;
     @FXML private Button viewOrdersButton;
+    @FXML private Button loginbutton;
     
     private List<ProductDTO> allProducts;
     
     @FXML
     public void initialize() {
         welcomeLabel.setText("Welcome to Lilach Flower Shop!");
+        if(loggedInUser != null) {
+            welcomeLabel.setText("Welcome, " + loggedInUser.getUsername() + "!");
+            loginbutton.setText("Logout");
+            loginbutton.setOnAction(e -> handleLogout());
+        }
+        else {
+            loginbutton.setText("Login");
+            loginbutton.setOnAction(e -> navigateToLogin());
+        }
+
         setupCategoryFilter();
         loadProducts();
         setupButtonIcons();
@@ -178,7 +189,7 @@ public class CatalogController extends BaseController  {
         try {
             Stage stage = (Stage) productsContainer.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/custom_arrangement.fxml"));
-            stage.setScene(new Scene(root, 1200, 800));
+            stage.setScene(new Scene(root, 1600, 900));
             stage.centerOnScreen();
         } catch (IOException e) {
             showError("Navigation Error", "Failed to load custom arrangement view: " + e.getMessage());

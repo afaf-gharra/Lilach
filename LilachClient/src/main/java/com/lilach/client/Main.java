@@ -14,7 +14,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
         Parent root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/catalog.fxml"));
-        Scene scene = new Scene(root, 1200, 800);
+        Scene scene = new Scene(root, 1600, 900);
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         scene.getStylesheets().add(getClass().getResource("/com/lilach/client/css/styles.css").toExternalForm());
         

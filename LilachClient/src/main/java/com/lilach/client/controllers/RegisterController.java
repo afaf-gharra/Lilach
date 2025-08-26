@@ -222,9 +222,6 @@ public class RegisterController extends BaseController {
         return user;
     }
     
-    private void navigateToLogin() {
-        navigateTo("/com/lilach/client/views/login.fxml", "Login");
-    }
     
     private void navigateToCatalog() {
         navigateToWithSize("/com/lilach/client/views/catalog.fxml", "Lilach Flower Shop Catalog", 1200, 800);

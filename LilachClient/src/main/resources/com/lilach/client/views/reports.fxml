@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns="http://javafx.com/javafx/17" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.lilach.client.controllers.ReportsController"
+      spacing="20" 
+      styleClass="bg-primary"
+      prefWidth="1000" 
+      prefHeight="700"
+      stylesheets="@/com/lilach/client/css/styles.css">
+    
+    <Label text="Store Reports" styleClass="h1 text-white"/>
+    
+    <HBox spacing="20" alignment="CENTER">
+        <ComboBox fx:id="reportTypeCombo" promptText="Select Report Type" styleClass="form-control" prefWidth="150">
+
+        </ComboBox>
+        
+        <ComboBox fx:id="yearCombo" promptText="Select Year" styleClass="form-control" prefWidth="120"/>
+        <ComboBox fx:id="quarterCombo" promptText="Select Quarter" styleClass="form-control" prefWidth="120" disable="true">
+ 
+        </ComboBox>
+        
+        <Button text="Generate Report" onAction="#handleGenerateReport" styleClass="btn btn-success">
+            <graphic>
+                <FontIcon iconLiteral="fas-chart-bar"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <VBox styleClass="card p-4" spacing="15">
+        <Label fx:id="reportTitle" text="Select report parameters to generate" styleClass="h2 text-dark"/>
+        
+        <HBox spacing="30">
+            <!-- Financial Summary -->
+            <VBox spacing="10" styleClass="report-section">
+                <Label text="Financial Summary" styleClass="h3 text-lilac"/>
+                <Label fx:id="totalRevenue" text="Total Revenue: $0.00" styleClass="report-item"/>
+                <Label fx:id="totalProfit" text="Total Profit: $0.00" styleClass="report-item"/>
+                <Label fx:id="avgOrderValue" text="Avg Order Value: $0.00" styleClass="report-item"/>
+            </VBox>
+            
+            <!-- Order Summary -->
+            <VBox spacing="10" styleClass="report-section">
+                <Label text="Order Summary" styleClass="h3 text-lilac"/>
+                <Label fx:id="totalOrders" text="Total Orders: 0" styleClass="report-item"/>
+                <Label fx:id="completedOrders" text="Completed Orders: 0" styleClass="report-item"/>
+                <Label fx:id="completionRate" text="Completion Rate: 0%" styleClass="report-item"/>
+            </VBox>
+            
+            <!-- Complaint Summary -->
+            <VBox spacing="10" styleClass="report-section">
+                <Label text="Complaint Summary" styleClass="h3 text-lilac"/>
+                <Label fx:id="totalComplaints" text="Total Complaints: 0" styleClass="report-item"/>
+                <Label fx:id="resolvedComplaints" text="Resolved: 0" styleClass="report-item"/>
+                <Label fx:id="resolutionRate" text="Resolution Rate: 0%" styleClass="report-item"/>
+            </VBox>
+        </HBox>
+        
+        <!-- Top Products -->
+        <VBox spacing="10" styleClass="report-section">
+            <Label text="Top Products" styleClass="h3 text-lilac"/>
+            <ListView fx:id="topProductsList" prefHeight="100" styleClass="report-list"/>
+        </VBox>
+        
+        <Button text="Export to PDF" onAction="#handleExport" styleClass="btn btn-info">
+            <graphic>
+                <FontIcon iconLiteral="fas-file-pdf"/>
+            </graphic>
+        </Button>
+    </VBox>
+    
+    <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>
+</VBox>

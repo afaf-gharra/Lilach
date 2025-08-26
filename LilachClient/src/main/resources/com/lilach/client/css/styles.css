@@ -414,9 +414,9 @@
 /* Root variables for floral color scheme */
 /* Root variables for floral color scheme */
 .root {
-    -primary-color: #e84393;       /* Vibrant pink (like roses) */
-    -primary-light: #fd79a8;      /* Lighter pink */
-    -primary-dark: #c44569;       /* Darker pink */
+    -primary-color: #deabde;       /* Vibrant pink (like roses) */
+    -primary-light: #8d5881;      /* Lighter pink */
+    -primary-dark: #a58aa2;       /* Darker pink */
     -secondary-color: #a29bfe;    /* Soft lavender */
     -accent-color: #00b894;       /* Leaf green */
     -background-color: #f9f9f9;
@@ -1197,4 +1197,35 @@
 
 .form-control:valid {
     -fx-border-color: #28a745;
+}
+
+
+/* Report styles */
+.report-section {
+    -fx-padding: 15px;
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 5px;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 5px;
+}
+
+.report-item {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #495057;
+}
+
+.report-list {
+    -fx-background-color: white;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 3px;
+}
+
+.report-list .list-cell {
+    -fx-padding: 5px;
+    -fx-border-color: transparent;
+}
+
+.report-list .list-cell:even {
+    -fx-background-color: #f8f9fa;
 }

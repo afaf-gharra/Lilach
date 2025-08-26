@@ -16,7 +16,7 @@ import java.io.IOException;
 public abstract  class BaseController {
     
 
-    public UserDTO loggedInUser;
+    public static UserDTO loggedInUser;
     @FXML
     private void handleLogout() {
         logout();
@@ -41,7 +41,7 @@ public abstract  class BaseController {
         if (loggedInUser == null) {
             showError("Authentication Required", "Please log in to continue.");
             navigateTo("/com/lilach/client/views/login.fxml", "Login");
-            
+            return null;
         }
         return loggedInUser;
     }
@@ -50,7 +50,7 @@ public abstract  class BaseController {
         try {
             Stage stage = Main.getPrimaryStage();
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-            stage.setScene(new Scene(root, 1200, 800));
+            stage.setScene(new Scene(root, 1600, 900));
             stage.setTitle(title);
             stage.centerOnScreen();
         } catch (Exception e) {
@@ -87,12 +87,18 @@ public abstract  class BaseController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    //logout
+
+    protected void navigateToLogin() {
+        navigateTo("/com/lilach/client/views/login.fxml", "Login");
+    }
     
     protected void logout() {
         try {
             Stage stage = Main.getPrimaryStage();
             Parent root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/login.fxml"));
-            stage.setScene(new Scene(root, 1200, 800));
+            stage.setScene(new Scene(root, 1600, 900));
             stage.setTitle("Lilach Flower Shop Login");
             stage.centerOnScreen();
         } catch (IOException e) {
