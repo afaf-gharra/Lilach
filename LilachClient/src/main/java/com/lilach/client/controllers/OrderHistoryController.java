@@ -71,7 +71,7 @@ public class OrderHistoryController extends BaseController {
         
         //get current user orders - in real app, fetch from backend
 
-        List<OrderDTO> ordersDTOs = ApiService.getUserOrders(LoginController.loggedInUser.getId());
+        List<OrderDTO> ordersDTOs = ApiService.getUserOrders(getLoggedInUser().getId());
         for (OrderDTO dto : ordersDTOs) {
             orders.add(new Order(
                 dto.getId(),

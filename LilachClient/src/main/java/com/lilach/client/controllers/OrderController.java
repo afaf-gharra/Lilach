@@ -55,7 +55,7 @@ public class OrderController extends BaseController {
                 order.setGreetingMessage(greetingMessageArea.getText());
                 order.setTotalPrice(totalPrice);
                 
-                OrderDTO createdOrder = ApiService.createOrder(order);
+                OrderDTO createdOrder = ApiService.createOrder(order, getLoggedInUser().getId());
                 if (createdOrder != null) {
                     showSuccess("Order Created", "Your order has been placed successfully!");
                     // Clear form
