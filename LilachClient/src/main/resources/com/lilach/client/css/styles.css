@@ -1154,3 +1154,47 @@
 .text-dark {
     -fx-text-fill: #343a40;
 }
+
+/* Registration form specific styles */
+.subscription-box {
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 5px;
+    -fx-padding: 15px;
+    -fx-border-color: #e9ecef;
+    -fx-border-radius: 5px;
+}
+
+.subscription-box:hover {
+    -fx-background-color: #e3f2fd;
+    -fx-border-color: #2196f3;
+}
+
+.btn-large {
+    -fx-padding: 15px 30px;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.text-muted {
+    -fx-text-fill: #6c757d;
+    -fx-font-size: 0.9em;
+}
+
+.text-primary {
+    -fx-text-fill: #007bff;
+    -fx-cursor: hand;
+}
+
+.text-primary:hover {
+    -fx-text-fill: #0056b3;
+}
+
+/* Form validation styles */
+.form-control:error {
+    -fx-border-color: #dc3545;
+    -fx-border-width: 2px;
+}
+
+.form-control:valid {
+    -fx-border-color: #28a745;
+}

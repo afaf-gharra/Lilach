@@ -19,12 +19,12 @@
     <HBox alignment="CENTER" spacing="20" styleClass="header-section">
         <Label fx:id="welcomeLabel" styleClass="h1 text-white"/>
         <HBox spacing="10">
-            <Button fx:id="viewCartButton" onAction="#handleViewCart" text="View Cart" styleClass="secondary-button">
+            <Button fx:id="viewCartButton" onAction="#handleViewCart" text="View Cart" styleClass="primary-button">
                 <graphic>
                     <FontIcon iconLiteral="fas-shopping-cart" iconSize="14"/>
                 </graphic>
             </Button>
-            <Button fx:id="viewCatalogButton" onAction="#navigateToCatalog" text="Back to Catalog" styleClass="secondary-button">
+            <Button fx:id="viewCatalogButton" onAction="#navigateToCatalog" text="Back to Catalog" styleClass="primary-button">
                 <graphic>
                     <FontIcon iconLiteral="fas-store" iconSize="14"/>
                 </graphic>

@@ -12,7 +12,6 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import java.io.IOException;
 
 public class LoginController extends BaseController {
-    public static UserDTO loggedInUser;
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private Button loginButton;
@@ -23,7 +22,7 @@ public class LoginController extends BaseController {
         loginButton.setGraphic(new FontIcon("fas-sign-in-alt"));
         registerButton.setGraphic(new FontIcon("fas-user-plus"));
     }
-    
+
     @FXML
     private void handleLogin() {
         String username = usernameField.getText();

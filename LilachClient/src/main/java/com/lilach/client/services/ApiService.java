@@ -46,6 +46,23 @@ public class ApiService {
         System.out.println("Added to cart: " + product.getName());
     }
 
+//getOrderById
+
+    public static OrderDTO getOrderById(int orderId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "orders/" + orderId)
+            .get()
+            .build();
+            mapper.registerModule(new JavaTimeModule());
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), OrderDTO.class);
+            }
+            return null;
+        }
+    }
+
     //getStoreOrders
 
     public static List<OrderDTO> getStoreOrders(int storeId) throws IOException {
@@ -103,7 +120,44 @@ public class ApiService {
         }
     }
 
-    // Store management methods
+    // Complaint methods
+    public static ComplaintDTO createComplaint(ComplaintDTO complaint) throws IOException {
+        String json = mapper.writeValueAsString(complaint);
+        RequestBody body = RequestBody.create(json, JSON);
+        
+        Request request = new Request.Builder()
+            .url(BASE_URL + "complaints")
+            .post(body)
+            .build();
+
+            mapper.registerModule(new JavaTimeModule());
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), ComplaintDTO.class);
+            }
+            return null;
+        }
+    }
+
+    public static List<ComplaintDTO> getStoreComplaints(int storeId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "stores/" + storeId + "/complaints")
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(
+                    response.body().string(),
+                    mapper.getTypeFactory().constructCollectionType(List.class, ComplaintDTO.class)
+                );
+            }
+            return List.of();
+        }
+    }
+
+    // Add store-related methods
     public static List<StoreDTO> getAllStores() throws IOException {
         Request request = new Request.Builder()
             .url(BASE_URL + "stores")
@@ -120,6 +174,41 @@ public class ApiService {
             return List.of();
         }
     }
+
+
+    public static ComplaintDTO updateComplaint(ComplaintDTO complaint) throws IOException {
+        String json = mapper.writeValueAsString(complaint);
+        RequestBody body = RequestBody.create(json, JSON);
+        
+        Request request = new Request.Builder()
+            .url(BASE_URL + "complaints/" + complaint.getId())
+            .put(body)
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), ComplaintDTO.class);
+            }
+            return null;
+        }
+    }
+
+    public static ComplaintDTO getComplaintById(int complaintId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "complaints/" + complaintId)
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), ComplaintDTO.class);
+            }
+            return null;
+        }
+    }
+
+    // Store management methods
+
 
     public static StoreDTO createStore(StoreDTO store) throws IOException {
         String json = mapper.writeValueAsString(store);
@@ -317,23 +406,6 @@ public class ApiService {
         }
     }
 
-    public static ComplaintDTO createComplaint(ComplaintDTO complaint) throws IOException {
-        String json = mapper.writeValueAsString(complaint);
-        RequestBody body = RequestBody.create(json, JSON);
-        
-        Request request = new Request.Builder()
-            .url(BASE_URL + "complaints")
-            .post(body)
-            .build();
-        
-        try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful() && response.body() != null) {
-                return mapper.readValue(response.body().string(), ComplaintDTO.class);
-            }
-            return null;
-        }
-    }
-
     //delete product
 
     public static String deleteProduct(int productId) throws IOException {
@@ -467,9 +539,9 @@ public class ApiService {
             return null;
         }
     }
-    public static OrderDTO createOrder(OrderDTO order) throws IOException {
+    public static OrderDTO createOrder(OrderDTO order, int userId) throws IOException {
         mapper.registerModule(new JavaTimeModule());
-        order.setUserId(LoginController.loggedInUser.getId());
+        order.setUserId(userId);
         String json = mapper.writeValueAsString(order);
 
         RequestBody body = RequestBody.create(json, JSON);

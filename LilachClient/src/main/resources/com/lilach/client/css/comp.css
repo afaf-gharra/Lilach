@@ -1,0 +1,150 @@
+/* Complaints Specific Styles */
+.details-panel {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 15px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5px;
+}
+
+.resolution-panel {
+    -fx-background-color: #e8f4f8;
+    -fx-padding: 15px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #b8d8e8;
+    -fx-border-radius: 5px;
+}
+
+.notes-panel {
+    -fx-background-color: #fff3cd;
+    -fx-padding: 15px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #ffeaa7;
+    -fx-border-radius: 5px;
+}
+
+.notes-list {
+    -fx-background-color: white;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 3px;
+}
+
+.detail-label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #495057;
+}
+
+.detail-value {
+    -fx-text-fill: #6c757d;
+}
+
+.details-grid {
+    -fx-padding: 10px;
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-color: #eee;
+    -fx-border-radius: 5px;
+}
+
+/* Status Badges */
+.status-open {
+    -fx-text-fill: #856404;
+    -fx-background-color: #fff3cd;
+    -fx-padding: 3px 8px;
+    -fx-background-radius: 10px;
+    -fx-font-weight: bold;
+}
+
+.status-in-progress {
+    -fx-text-fill: #004085;
+    -fx-background-color: #cce5ff;
+    -fx-padding: 3px 8px;
+    -fx-background-radius: 10px;
+    -fx-font-weight: bold;
+}
+
+.status-resolved {
+    -fx-text-fill: #155724;
+    -fx-background-color: #d4edda;
+    -fx-padding: 3px 8px;
+    -fx-background-radius: 10px;
+    -fx-font-weight: bold;
+}
+
+.status-closed {
+    -fx-text-fill: #721c24;
+    -fx-background-color: #f8d7da;
+    -fx-padding: 3px 8px;
+    -fx-background-radius: 10px;
+    -fx-font-weight: bold;
+}
+
+/* Urgency Badges */
+.urgency-high {
+    -fx-text-fill: #721c24;
+    -fx-background-color: #f8d7da;
+    -fx-padding: 3px 8px;
+    -fx-background-radius: 10px;
+    -fx-font-weight: bold;
+}
+
+.urgency-medium {
+    -fx-text-fill: #856404;
+    -fx-background-color: #fff3cd;
+    -fx-padding: 3px 8px;
+    -fx-background-radius: 10px;
+    -fx-font-weight: bold;
+}
+
+.urgency-low {
+    -fx-text-fill: #004085;
+    -fx-background-color: #cce5ff;
+    -fx-padding: 3px 8px;
+    -fx-background-radius: 10px;
+    -fx-font-weight: bold;
+}
+
+/* Form Elements */
+.radio-button {
+    -fx-padding: 5px;
+}
+
+.checkbox {
+    -fx-padding: 5px;
+}
+
+.form-label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #495057;
+}
+
+.text-italic {
+    -fx-font-style: italic;
+}
+
+/* Button Variations */
+.btn-warning {
+    -fx-background-color: #ffc107;
+    -fx-text-fill: #212529;
+}
+
+.btn-warning:hover {
+    -fx-background-color: #e0a800;
+}
+
+/* Text Colors */
+.text-warning {
+    -fx-text-fill: #ffc107;
+}
+
+.text-danger {
+    -fx-text-fill: #dc3545;
+}
+
+.text-success {
+    -fx-text-fill: #28a745;
+}
+
+.text-info {
+    -fx-text-fill: #17a2b8;
+}

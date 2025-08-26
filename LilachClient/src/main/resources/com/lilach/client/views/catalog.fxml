@@ -20,12 +20,18 @@
     <HBox alignment="CENTER" spacing="20" styleClass="header-section">
         <Label fx:id="welcomeLabel" styleClass="h1 text-white"/>
         <HBox spacing="10">
+            
+            <Button text="Complaints" onAction="#handleComplaints" styleClass="primary-button">
+                <graphic>
+                    <FontIcon iconLiteral="fas-comments" iconSize="14"/>
+                </graphic>
+            </Button>
             <Button fx:id="viewCartButton" onAction="#handleViewCart" text="View Cart" styleClass="primary-button">
                 <graphic>
                     <FontIcon iconLiteral="fas-shopping-cart" iconSize="14"/>
                 </graphic>
             </Button>
-            <Button fx:id="viewOrdersButton" onAction="#handleViewOrders" text="My Orders" styleClass="secondary-button">
+            <Button fx:id="viewOrdersButton" onAction="#handleViewOrders" text="My Orders" styleClass="primary-button">
                 <graphic>
                     <FontIcon iconLiteral="fas-clipboard-list" iconSize="14"/>
                 </graphic>
@@ -38,7 +44,7 @@
         <ComboBox fx:id="categoryComboBox" promptText="Select Category" styleClass="modern-input" prefWidth="200"/>
         
         <TextField fx:id="searchField" promptText="Search products..." styleClass="modern-input" prefWidth="300"/>
-        <Button fx:id="searchButton" text="Search" styleClass="primary-button">
+        <Button fx:id="searchButton" text="Search" onAction="#handleCreateCustomArrangement" styleClass="primary-button">
             <graphic>
                 <FontIcon iconLiteral="fas-search" iconSize="14"/>
             </graphic>

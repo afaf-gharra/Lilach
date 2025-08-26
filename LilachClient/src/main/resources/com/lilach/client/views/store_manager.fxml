@@ -27,6 +27,9 @@
             </font>
         </Label>
         <Region HBox.hgrow="ALWAYS" />
+        <Button text="Complaints" onAction="#handleComplaints" style="-fx-background-color: #6a30e3; -fx-text-fill: white; -fx-background-radius: 20;">
+            
+        </Button>
         <Button text="Refresh Data" onAction="#handleRefresh" style="-fx-background-color: #6a30e3; -fx-text-fill: white; -fx-background-radius: 20;">
             
         </Button>

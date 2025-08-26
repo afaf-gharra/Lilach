@@ -58,8 +58,8 @@
                 </HBox>
                 
                 <HBox spacing="10">
-                    <Button fx:id="loginButton" text="Login" onAction="#handleLogin" styleClass="primary-button" prefWidth="100"/>
-                    <Button fx:id="registerButton" text="Register" onAction="#handleRegister" styleClass="secondary-button" prefWidth="100"/>
+                    <Button fx:id="loginButton" text="Login" onAction="#handleLogin" styleClass="primary-button" prefWidth="150"/>
+                    <Button fx:id="registerButton" text="Register" onAction="#handleRegister" styleClass="primary-button" prefWidth="150"/>
                 </HBox>
             </VBox>
             
