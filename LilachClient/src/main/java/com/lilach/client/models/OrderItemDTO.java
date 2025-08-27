@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderItemDTO {
     private int id;
-    private Integer productId;
+    private ProductDTO product;  // Change from productId to ProductDTO
     private String customType;
     private String customPriceRange;
     private String customColor;
@@ -18,8 +18,8 @@ public class OrderItemDTO {
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     
-    public Integer getProductId() { return productId; }
-    public void setProductId(Integer productId) { this.productId = productId; }
+    public ProductDTO getProduct() { return product; }
+    public void setProduct(ProductDTO product) { this.product = product; }
     
     public String getCustomType() { return customType; }
     public void setCustomType(String customType) { this.customType = customType; }

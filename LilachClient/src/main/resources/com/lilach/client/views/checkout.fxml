@@ -11,8 +11,8 @@
       spacing="20" 
       alignment="CENTER"
       styleClass="bg-floral-pattern"
-      prefWidth="1200" 
-      prefHeight="800"
+      prefWidth="1600" 
+      prefHeight="900"
       stylesheets="@/com/lilach/client/css/styles.css">
     
     <!-- Header -->

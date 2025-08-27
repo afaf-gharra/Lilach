@@ -2,6 +2,8 @@ package com.lilach.server.DTOs;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.lilach.server.models.OrderItem;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -60,4 +62,5 @@ public class OrderDTO {
     
     public List<OrderItemDTO> getItems() { return items; }
     public void setItems(List<OrderItemDTO> items) { this.items = items; }
+
 }

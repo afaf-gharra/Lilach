@@ -9,8 +9,8 @@
       spacing="20" 
       alignment="CENTER"
       styleClass="bg-primary"
-      prefWidth="1200" 
-      prefHeight="800"
+      prefWidth="1600" 
+      prefHeight="900"
       stylesheets="@/com/lilach/client/css/styles.css">
     
      <HBox alignment="CENTER" spacing="20">
@@ -36,15 +36,6 @@
             
             <Label text="Arrangement Type:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
             <ComboBox fx:id="typeCombo" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-control">
-                <items>
-                    <ObservableList fx:factory="observableArrayList">
-                        <String>Bouquet</String>
-                        <String>Vase Arrangement</String>
-                        <String>Flower Basket</String>
-                        <String>Wreath</String>
-                        <String>Centerpiece</String>
-                    </ObservableList>
-                </items>
             </ComboBox>
             
             <Label text="Flower Types:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
@@ -53,28 +44,10 @@
             
             <Label text="Color Scheme:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
             <ComboBox fx:id="colorCombo" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-control">
-                <items>
-                    <ObservableList fx:factory="observableArrayList">
-                        <String>Red</String>
-                        <String>Pink</String>
-                        <String>White</String>
-                        <String>Yellow</String>
-                        <String>Purple</String>
-                        <String>Mixed Colors</String>
-                    </ObservableList>
-                </items>
             </ComboBox>
             
             <Label text="Price Range:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
             <ComboBox fx:id="priceCombo" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-control">
-                <items>
-                    <ObservableList fx:factory="observableArrayList">
-                        <String>Budget ($30-50)</String>
-                        <String>Standard ($50-80)</String>
-                        <String>Premium ($80-120)</String>
-                        <String>Luxury ($120+)</String>
-                    </ObservableList>
-                </items>
             </ComboBox>
             
             <Label text="Special Requests:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>

@@ -1,6 +1,7 @@
 package com.lilach.client.controllers;
 
 import com.lilach.client.models.OrderDTO;
+import com.lilach.client.models.OrderItemDTO;
 import com.lilach.client.models.ProductDTO;
 import com.lilach.client.models.StoreDTO;
 import com.lilach.client.services.ApiService;
@@ -99,7 +100,14 @@ public class StoreManagerController extends BaseController {
         
         // Order selection listener
         ordersTable.getSelectionModel().selectedItemProperty().addListener(
-            (obs, oldSelection, newSelection) -> showOrderDetails(newSelection));
+            (obs, oldSelection, newSelection) -> {
+                try {
+                    showOrderDetails(newSelection);
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            });
         
         // Update status button
         updateStatusButton.setOnAction(e -> updateOrderStatus());
@@ -260,7 +268,7 @@ public class StoreManagerController extends BaseController {
         }
     }
     
-    private void showOrderDetails(OrderDTO order) {
+    private void showOrderDetails(OrderDTO order) throws IOException {
         selectedOrder = order;
         if (order == null) {
             orderDetailsArea.setText("");
@@ -286,16 +294,21 @@ public class StoreManagerController extends BaseController {
         details.append("Items:\n");
         if (order.getItems() != null) {
             for (int i = 0; i < order.getItems().size(); i++) {
-                var item = order.getItems().get(i);
+                OrderItemDTO item = order.getItems().get(i);
+                ProductDTO product = item.getProduct();
                 details.append(i + 1).append(". ");
-                if (item.getProductId() != null) {
-                    details.append("Product ID: ").append(item.getProductId());
-                } else {
-                    details.append("Custom: ").append(item.getCustomType());
-                    if (item.getCustomColor() != null) {
-                        details.append(" (").append(item.getCustomColor()).append(")");
-                    }
-                }
+                details.append(null != product ? product.getName() : "Unknown Product").append(" - ");
+                details.append(null != product ? String.format("$%.2f", product.getPrice()) : "Price N/A").append(" - ");
+                details.append(null != product ? product.getCategory() : "Category N/A").append(" - ");
+
+                // if (item.getProductId() != null) {
+                //     details.append("Product ID: ").append(item.getProductId());
+                // } else {
+                //     details.append("Custom: ").append(item.getCustomType());
+                //     if (item.getCustomColor() != null) {
+                //         details.append(" (").append(item.getCustomColor()).append(")");
+                //     }
+                // }
                 details.append(" - Qty: ").append(item.getQuantity()).append("\n");
             }
         }

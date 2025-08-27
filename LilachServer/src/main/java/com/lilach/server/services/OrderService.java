@@ -68,9 +68,18 @@ public class OrderService {
     public static List<Order> getStoreOrders(int storeId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
-                "FROM Order WHERE store.id = :storeId ORDER BY orderDate DESC", Order.class)
+                "SELECT DISTINCT o FROM Order o " +
+                "LEFT JOIN FETCH o.user " +
+                "LEFT JOIN FETCH o.store " +
+                "LEFT JOIN FETCH o.items i " +
+                "LEFT JOIN FETCH i.product " +  // This is the crucial fix
+                "WHERE o.store.id = :storeId ORDER BY o.orderDate DESC", Order.class)
                 .setParameter("storeId", storeId)
                 .list();
+        } catch (Exception e) {
+            System.err.println("Error in getStoreOrders: " + e.getMessage());
+            e.printStackTrace();
+            return List.of();
         }
     }
     

@@ -12,8 +12,8 @@
       spacing="20" 
       alignment="CENTER"
       styleClass="bg-floral-pattern"
-      prefWidth="1200" 
-      prefHeight="800"
+      prefWidth="1600" 
+      prefHeight="900"
       stylesheets="@/com/lilach/client/css/styles.css">
     
     <!-- Header -->
@@ -45,13 +45,13 @@
         <ComboBox fx:id="categoryComboBox" promptText="Select Category" styleClass="modern-input" prefWidth="200"/>
         
         <TextField fx:id="searchField" promptText="Search products..." styleClass="modern-input" prefWidth="300"/>
-        <Button fx:id="searchButton" text="Search" onAction="#handleCreateCustomArrangement" styleClass="primary-button">
+        <Button fx:id="searchButton" text="Search" onAction="#filterProducts" styleClass="primary-button">
             <graphic>
                 <FontIcon iconLiteral="fas-search" iconSize="14"/>
             </graphic>
         </Button>
         
-        <Button fx:id="customArrangementButton" text="Create Custom Arrangement" styleClass="accent-button">
+        <Button fx:id="customArrangementButton" onAction="#handleCreateCustomArrangement" text="Create Custom Arrangement" styleClass="accent-button">
             <graphic>
                 <FontIcon iconLiteral="fas-plus-circle" iconSize="14"/>
             </graphic>

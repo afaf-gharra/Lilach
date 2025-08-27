@@ -11,8 +11,8 @@
       fx:controller="com.lilach.client.controllers.StoreManagerController"
       spacing="20" 
       style="-fx-background-color: linear-gradient(to bottom, #f9f7fe, #f0e6ff);"
-      prefWidth="1200" 
-      prefHeight="800">
+      prefWidth="1600" 
+      prefHeight="900">
     
     <!-- Header Section -->
     <HBox spacing="20" alignment="CENTER" style="-fx-background-color: #8a4fff; -fx-background-radius: 0 0 15 15; -fx-padding: 15;">

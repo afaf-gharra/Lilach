@@ -15,7 +15,7 @@ public class Product {
     private double price;
     private String color;
     private String imageUrl;
-    private int stock = 0;
+    private int stock;
     private boolean isAvailable = true;
     @ManyToOne
     @JoinColumn(name = "store_id")

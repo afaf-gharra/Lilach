@@ -74,15 +74,22 @@ public class ApiService {
 
         mapper.registerModule(new JavaTimeModule());
         
-        try (Response response = client.newCall(request).execute()) {
+       try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful() && response.body() != null) {
-
+                String responseBody = response.body().string();
+                System.out.println("Response: " + responseBody); // Debug output
                 return mapper.readValue(
-                    response.body().string(), 
+                    responseBody, 
                     mapper.getTypeFactory().constructCollectionType(List.class, OrderDTO.class)
                 );
+            } else {
+
+                System.out.println("Error: " + response.code() + " - " + response.message());
             }
-            return List.of(); // Return empty list if no orders
+            return List.of();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
         }
     }
 
@@ -438,6 +445,20 @@ public class ApiService {
                 );
             }
             return List.of(); // Return empty list if no products
+        }
+    }
+
+    public static ProductDTO getProductById(int productId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "products/" + productId)
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), ProductDTO.class);
+            }
+            return null;
         }
     }
 

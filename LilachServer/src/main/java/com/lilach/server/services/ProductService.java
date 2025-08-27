@@ -65,6 +65,7 @@ public class ProductService {
                 if (updates.getPrice() > 0) product.setPrice(updates.getPrice());
                 if (updates.getColor() != null) product.setColor(updates.getColor());
                 if (updates.getImageUrl() != null) product.setImageUrl(updates.getImageUrl());
+                if (updates.getStock() >= 0) product.setStock(updates.getStock());
                 product.setAvailable(updates.isAvailable());
                 
                 session.update(product);
@@ -127,6 +128,12 @@ public class ProductService {
                 return true;
             }
             return false;
+        }
+    }
+
+    public static Product getProductById(int productId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(Product.class, productId);
         }
     }
 }

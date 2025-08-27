@@ -11,8 +11,8 @@
 <StackPane xmlns="http://javafx.com/javafx/17" 
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.lilach.client.controllers.LoginController"
-           prefWidth="1200" 
-           prefHeight="800"
+           prefWidth="1600" 
+           prefHeight="900"
            stylesheets="@/com/lilach/client/css/styles.css">
     
     <!-- Background with floral pattern -->

@@ -150,6 +150,7 @@ public class CatalogController extends BaseController  {
         logout();
     }
     
+    @FXML
     private void filterProducts() {
         String searchTerm = searchField.getText().toLowerCase();
         String selectedCategory = categoryComboBox.getValue();

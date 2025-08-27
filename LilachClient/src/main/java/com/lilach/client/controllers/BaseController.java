@@ -3,6 +3,7 @@ package com.lilach.client.controllers;
 import com.lilach.client.Main;
 import com.lilach.client.models.UserDTO;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -38,14 +39,15 @@ public abstract  class BaseController {
     }
 
     public UserDTO getLoggedInUser() {
-        if (loggedInUser == null) {
+    if (loggedInUser == null) {
+        Platform.runLater(() -> {
             showError("Authentication Required", "Please log in to continue.");
             navigateTo("/com/lilach/client/views/login.fxml", "Login");
-            return null;
-        }
-        return loggedInUser;
+        });
+        return null;
     }
-
+    return loggedInUser;
+}
     protected void navigateTo(String fxmlPath, String title) {
         try {
             Stage stage = Main.getPrimaryStage();
@@ -55,7 +57,7 @@ public abstract  class BaseController {
             stage.centerOnScreen();
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Navigation Error", "Failed to load view: " + e.toString());
+           // showError("Navigation Error", "Failed to load view: " + e.toString());
             System.err.println("Navigation error to " + fxmlPath + ": " + e.toString());
         }
     }
@@ -64,7 +66,7 @@ public abstract  class BaseController {
         try {
             Stage stage = Main.getPrimaryStage();
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-            stage.setScene(new Scene(root, width, height));
+            stage.setScene(new Scene(root, 1600, 900));
             stage.setTitle(title);
             stage.centerOnScreen();
         } catch (IOException e) {

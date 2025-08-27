@@ -56,4 +56,13 @@ public class OrderItem {
     
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
+
+    public void setPrice(double d) {
+        
+        this.product.setPrice(d);
+    }
+
+    public double getPrice() {
+        return this.product.getPrice();
+    }
 }

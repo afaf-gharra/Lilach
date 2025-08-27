@@ -1,5 +1,6 @@
 package com.lilach.server.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -7,9 +8,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lilach.server.DTOs.OrderDTO;
 import com.lilach.server.models.Order;
+import com.lilach.server.models.OrderItem;
+import com.lilach.server.models.Product;
 import com.lilach.server.models.Store;
 import com.lilach.server.models.User;
 import com.lilach.server.services.OrderService;
+import com.lilach.server.services.ProductService;
 import com.lilach.server.services.StoreService;
 import com.lilach.server.services.UserService;
 
@@ -45,14 +49,46 @@ public class OrderController {
         try {
 
             OrderDTO dto = mapper.readValue(ctx.body(), OrderDTO.class);
-            int userId = dto.getUserId();
-
-            User user = UserService.getUserById(userId);
-            Store store = StoreService.getStoreById(1);
-            
             Order order = mapper.readValue(ctx.body(), Order.class);
+            //convert list orderitemdto to list orderitem dto
+
+            List<OrderItem> items = new ArrayList<>();
+            for (var itemDto : dto.getItems()) {
+                Product product = ProductService.getProductById(itemDto.getProductId());
+                if (product == null) {
+                    ctx.status(HttpStatus.BAD_REQUEST).json("Invalid product ID: " + itemDto.getProductId());
+                    return;
+                }
+                if (product.getStock() < itemDto.getQuantity()) {
+                    ctx.status(HttpStatus.BAD_REQUEST).json("Insufficient stock for product ID: " + itemDto.getProductId());
+                    return;
+                }
+                // Reduce stock
+                product.setStock(product.getStock() - itemDto.getQuantity());
+                ProductService.updateProduct(product.getId(), product);
+                
+                OrderItem orderItem = new OrderItem();
+                orderItem.setProduct(product);
+                orderItem.setQuantity(itemDto.getQuantity());
+                orderItem.setPrice(product.getPrice() * itemDto.getQuantity());
+                orderItem.setOrder(order); // Set the back-reference to Order
+                items.add(orderItem);
+            }
+            order.setItems(items);
+            // Set user
+            User user = UserService.getUserById(dto.getUserId());
+            if (user == null) {
+                ctx.status(HttpStatus.BAD_REQUEST).json("Invalid user ID: " + dto.getUserId());
+                return;
+            }
             order.setUser(user);
-            order.setStore(store);
+   
+            // Calculate total price
+            double totalPrice = items.stream().mapToDouble(item -> item.getPrice()).sum();
+
+
+            order.setTotalPrice(totalPrice);
+            order.setStatus(Order.OrderStatus.PENDING);
             Order createdOrder = OrderService.createOrder(order);
             ctx.json(createdOrder).status(HttpStatus.CREATED);
         } catch (Exception e) {
