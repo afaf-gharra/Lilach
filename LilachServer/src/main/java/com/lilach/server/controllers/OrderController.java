@@ -81,6 +81,8 @@ public class OrderController {
                 ctx.status(HttpStatus.BAD_REQUEST).json("Invalid user ID: " + dto.getUserId());
                 return;
             }
+            Store s = StoreService.getStoreById(user.getStoreId());
+            order.setStore(s);
             order.setUser(user);
    
             // Calculate total price
