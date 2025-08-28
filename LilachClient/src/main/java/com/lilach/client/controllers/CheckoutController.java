@@ -13,6 +13,7 @@ import java.util.List;
 
 import com.lilach.client.models.OrderDTO;
 import com.lilach.client.models.OrderItemDTO;
+import com.lilach.client.models.ProductDTO;
 import com.lilach.client.services.ApiService;
 import com.lilach.client.services.CartItem;
 import com.lilach.client.services.CartService;
@@ -78,7 +79,7 @@ public class CheckoutController extends BaseController  {
         OrderDTO order = new OrderDTO();
         
         // Set user ID (would come from logged-in user)
-        order.setUserId(1);
+        order.setUserId(loggedInUser.getId());
         
 
         // Set delivery information
@@ -95,12 +96,12 @@ public class CheckoutController extends BaseController  {
         
         // Convert cart items to order items
         List<OrderItemDTO> orderItems = new ArrayList<>();
-        CartService.getInstance().getCartItems().forEach(cartItem -> {
+        for (CartItem orderItemDTO : CartService.getInstance().getCartItems()) {
             OrderItemDTO orderItem = new OrderItemDTO();
-            orderItem.setProductId(cartItem.getId());
-            orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setProduct(orderItem.getProduct());
+            orderItem.setQuantity(orderItemDTO.getQuantity());
             orderItems.add(orderItem);
-        });
+        }
         
         order.setItems(orderItems);
         

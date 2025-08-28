@@ -53,14 +53,14 @@ public class OrderController {
             //convert list orderitemdto to list orderitem dto
 
             List<OrderItem> items = new ArrayList<>();
-            for (var itemDto : dto.getItems()) {
-                Product product = ProductService.getProductById(itemDto.getProductId());
+            for (var itemDto : order.getItems()) {
+                Product product = ProductService.getProductById(itemDto.getProduct().getId());
                 if (product == null) {
-                    ctx.status(HttpStatus.BAD_REQUEST).json("Invalid product ID: " + itemDto.getProductId());
+                    ctx.status(HttpStatus.BAD_REQUEST).json("Invalid product ID: " + itemDto.getProduct().getId());
                     return;
                 }
                 if (product.getStock() < itemDto.getQuantity()) {
-                    ctx.status(HttpStatus.BAD_REQUEST).json("Insufficient stock for product ID: " + itemDto.getProductId());
+                    ctx.status(HttpStatus.BAD_REQUEST).json("Insufficient stock for product ID: " + itemDto.getProduct().getId());
                     return;
                 }
                 // Reduce stock

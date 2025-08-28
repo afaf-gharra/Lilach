@@ -32,4 +32,8 @@ public class OrderItemDTO {
     
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
+
+    public void setProductId(int id2) {
+        product.setId(id2);
+    }
 }
