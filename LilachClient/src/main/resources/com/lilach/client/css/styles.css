@@ -1227,3 +1227,329 @@
 .report-list .list-cell:even {
     -fx-background-color: #f8f9fa;
 }
+
+/* Custom Arrangement Page Specific Styles */
+
+/* ComboBox Styles */
+.combo-box {
+    -fx-background-color: -input-background;
+    -fx-background-radius: 6;
+    -fx-border-color: -input-border;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: -primary-color;
+    -fx-background-radius: 0 6 6 0;
+}
+
+.combo-box .arrow-button:hover {
+    -fx-background-color: -primary-light;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: -input-background;
+    -fx-padding: 8 12;
+}
+
+.combo-box .list-view {
+    -fx-background-color: -input-background;
+    -fx-background-radius: 6;
+    -fx-border-color: -input-border;
+    -fx-border-radius: 6;
+}
+
+.combo-box .list-view .list-cell:filled:hover {
+    -fx-background-color: derive(-primary-light, 80%);
+}
+
+.combo-box .list-view .list-cell:filled:selected {
+    -fx-background-color: -primary-light;
+    -fx-text-fill: white;
+}
+
+/* Text Area specific styles for custom arrangement */
+.text-area.modern-input {
+    -fx-pref-row-count: 3;
+    -fx-padding: 8 12;
+}
+
+.text-area.modern-input .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-area.modern-input .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.text-area.modern-input .scroll-pane .content {
+    -fx-background-color: transparent;
+}
+
+/* Form grid layout improvements */
+.grid-pane {
+    -fx-padding: 10;
+}
+
+/* Price range indicators */
+.price-indicator {
+    -fx-font-size: 12px;
+    -fx-text-fill: -text-muted;
+    -fx-font-style: italic;
+}
+
+/* Color scheme preview (optional) */
+.color-preview {
+    -fx-pref-width: 20;
+    -fx-pref-height: 20;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: -input-border;
+    -fx-border-width: 1;
+}
+
+/* Responsive adjustments for larger form */
+@media (max-width: 1200px) {
+    .card-container {
+        -fx-pref-width: 600;
+    }
+    
+    .grid-pane {
+        -fx-hgap: 10;
+        -fx-vgap: 10;
+    }
+}
+
+/* Complaint Page Specific Styles */
+
+/* Checkbox Styles */
+.modern-checkbox {
+    -fx-text-fill: -text-color;
+    -fx-font-size: 14px;
+}
+
+.modern-checkbox .box {
+    -fx-background-color: -input-background;
+    -fx-border-color: -input-border;
+    -fx-border-radius: 3;
+    -fx-border-width: 1;
+    -fx-padding: 2;
+}
+
+.modern-checkbox:selected .box {
+    -fx-background-color: -primary-color;
+    -fx-border-color: -primary-dark;
+}
+
+.modern-checkbox .mark {
+    -fx-shape: "M 4 8 L 7 11 L 12 6";
+    -fx-scale-shape: false;
+    -fx-stroke: white;
+    -fx-stroke-width: 2;
+}
+
+/* Complaint-specific text area styling */
+.complaint-text-area {
+    -fx-pref-row-count: 5;
+    -fx-padding: 12;
+}
+
+/* Resolution options styling */
+.resolution-option {
+    -fx-padding: 8 12;
+    -fx-border-color: transparent;
+}
+
+.resolution-option:hover {
+    -fx-background-color: derive(-primary-light, 90%);
+}
+
+/* Contact preference section */
+.contact-preference {
+    -fx-spacing: 15;
+    -fx-padding: 10;
+    -fx-border-color: -input-border;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-background-color: derive(-input-background, 5%);
+}
+
+/* Status message styling */
+.status-message {
+    -fx-padding: 10;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+}
+
+.status-success {
+    -fx-background-color: #d4edda;
+    -fx-text-fill: #155724;
+    -fx-border-color: #c3e6cb;
+}
+
+.status-error {
+    -fx-background-color: #f8d7da;
+    -fx-text-fill: #721c24;
+    -fx-border-color: #f5c6cb;
+}
+
+.status-warning {
+    -fx-background-color: #fff3cd;
+    -fx-text-fill: #856404;
+    -fx-border-color: #ffeaa7;
+}
+
+/* Required field indicator */
+.required-field::after {
+    -fx-text-fill: #e74c3c;
+    -fx-content: " *";
+}
+
+/* Form section headers */
+.section-header {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -primary-color;
+    -fx-padding: 10 0 5 0;
+    -fx-border-color: -input-border;
+    -fx-border-width: 0 0 1 0;
+}
+/* Complaints Management Page Specific Styles */
+
+/* Filter section */
+.filter-section {
+    -fx-padding: 10 0 20 0;
+}
+
+/* Split Pane Styles */
+.details-split-pane {
+    -fx-background-color: transparent;
+}
+
+.details-split-pane .split-pane-divider {
+    -fx-background-color: -input-border;
+    -fx-padding: 0 2 0 2;
+}
+
+/* Details panel sections */
+.details-panel {
+    -fx-padding: 15;
+    -fx-spacing: 15;
+    -fx-background-color: derive(-input-background, 5%);
+    -fx-background-radius: 6;
+}
+
+/* Status badges for table */
+.status-badge {
+    -fx-padding: 3 8;
+    -fx-background-radius: 10;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.status-pending {
+    -fx-background-color: #f39c12;
+    -fx-text-fill: white;
+}
+
+.status-in-progress {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+}
+
+.status-resolved {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+}
+
+.status-rejected {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+}
+
+/* Action buttons in table */
+.table-action-button {
+    -fx-background-color: -primary-color;
+    -fx-text-fill: white;
+    -fx-background-radius: 12;
+    -fx-padding: 5 10;
+    -fx-font-size: 11px;
+    -fx-cursor: hand;
+    -fx-margin: 2;
+}
+
+.table-action-button:hover {
+    -fx-background-color: -primary-light;
+}
+
+.view-details-button {
+    -fx-background-color: #3498db;
+}
+
+.view-details-button:hover {
+    -fx-background-color: derive(#3498db, 10%);
+}
+
+.resolve-button {
+    -fx-background-color: #27ae60;
+}
+
+.resolve-button:hover {
+    -fx-background-color: derive(#27ae60, 10%);
+}
+
+/* Compensation field styling */
+.compensation-field {
+    -fx-alignment: CENTER_RIGHT;
+}
+
+/* Read-only text areas */
+.read-only-text {
+    -fx-background-color: derive(-input-background, 3%);
+    -fx-border-color: derive(-input-border, 10%);
+}
+
+/* Status filter combo */
+.status-filter-combo {
+    -fx-pref-width: 150;
+}
+
+/* Responsive adjustments for management interface */
+@media (max-width: 1400px) {
+    .details-split-pane {
+        -fx-orientation: vertical;
+    }
+    
+    .details-split-pane .split-pane-divider {
+        -fx-padding: 2 0 2 0;
+    }
+}
+
+/* Priority indicators */
+.priority-high {
+    -fx-text-fill: #e74c3c;
+    -fx-font-weight: bold;
+}
+
+.priority-medium {
+    -fx-text-fill: #f39c12;
+    -fx-font-weight: bold;
+}
+
+.priority-low {
+    -fx-text-fill: #27ae60;
+    -fx-font-weight: bold;
+}
+
+/* Management controls */
+.management-controls {
+    -fx-spacing: 15;
+    -fx-padding: 15;
+    -fx-background-color: derive(-input-background, 2%);
+    -fx-background-radius: 6;
+    -fx-border-color: -input-border;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}

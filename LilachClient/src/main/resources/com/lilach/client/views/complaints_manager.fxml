@@ -2,31 +2,38 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <VBox xmlns="http://javafx.com/javafx/17" 
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.lilach.client.controllers.ComplaintsManagerController"
       spacing="20" 
-      styleClass="bg-primary"
+      styleClass="bg-floral-pattern"
       prefWidth="1600" 
       prefHeight="900"
       stylesheets="@/com/lilach/client/css/styles.css">
     
-    <Label text="Complaints Management" styleClass="h1 text-white"/>
-    
-    <HBox spacing="20" alignment="CENTER">
-        <Button text="Refresh" onAction="#handleRefresh" styleClass="btn btn-info">
-            <graphic>
-                <FontIcon iconLiteral="fas-sync-alt"/>
-            </graphic>
-        </Button>
-        <Label text="Filter by Status:" styleClass="text-white"/>
-        <ComboBox fx:id="statusFilterCombo" styleClass="form-control" prefWidth="150"/>
+    <!-- Header -->
+    <HBox alignment="CENTER" spacing="20" styleClass="header-section">
+        <Label text="Complaints Management" styleClass="h1 text-white"/>
     </HBox>
     
-    <VBox styleClass="card p-4" spacing="15">
-        <TableView fx:id="complaintsTable" prefHeight="400">
+    <!-- Filter Controls -->
+    <HBox spacing="20" alignment="CENTER" styleClass="filter-section">
+        <Button text="Refresh" onAction="#handleRefresh" styleClass="secondary-button">
+            <graphic>
+                <FontIcon iconLiteral="fas-sync-alt" iconSize="14"/>
+            </graphic>
+        </Button>
+        <Label text="Filter by Status:" styleClass="input-label text-white"/>
+        <ComboBox fx:id="statusFilterCombo" styleClass="modern-input" prefWidth="150"/>
+    </HBox>
+    
+    <!-- Main Content -->
+    <VBox styleClass="card-container" spacing="20">
+        <!-- Complaints Table -->
+        <TableView fx:id="complaintsTable" prefHeight="400" styleClass="modern-table">
             <columns>
                 <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
                 <TableColumn fx:id="orderIdColumn" text="Order ID" prefWidth="80"/>
@@ -38,42 +45,44 @@
             </columns>
         </TableView>
         
-        <SplitPane dividerPositions="0.6">
+        <!-- Details Panel -->
+        <SplitPane dividerPositions="0.6" styleClass="details-split-pane">
             <!-- Complaint Details -->
-            <VBox spacing="10">
-                <Label text="Complaint Details" styleClass="h3"/>
-                <TextArea fx:id="complaintDetails" editable="false" styleClass="form-control" prefHeight="150"/>
+            <VBox spacing="15">
+                <Label text="Complaint Details" styleClass="h3 text-dark"/>
+                <TextArea fx:id="complaintDetails" editable="false" styleClass="modern-input" prefHeight="150"/>
                 
-                <Label text="Resolution Notes" styleClass="h3"/>
-                <TextArea fx:id="resolutionNotes" promptText="Enter resolution notes..." styleClass="form-control" prefHeight="100"/>
+                <Label text="Resolution Notes" styleClass="h3 text-dark"/>
+                <TextArea fx:id="resolutionNotes" promptText="Enter resolution notes..." styleClass="modern-input" prefHeight="100"/>
                 
-                <HBox spacing="10">
-                    <Label text="Compensation:" styleClass="h4"/>
-                    <TextField fx:id="compensationField" promptText="0.00" styleClass="form-control" prefWidth="100"/>
-                    <Label text="Status:" styleClass="h4"/>
-                    <ComboBox fx:id="statusCombo" styleClass="form-control" prefWidth="120"/>
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <Label text="Compensation:" styleClass="input-label"/>
+                    <TextField fx:id="compensationField" promptText="0.00" styleClass="modern-input" prefWidth="100"/>
+                    <Label text="Status:" styleClass="input-label"/>
+                    <ComboBox fx:id="statusCombo" styleClass="modern-input" prefWidth="120"/>
                 </HBox>
             </VBox>
             
             <!-- Customer Information -->
-            <VBox spacing="10">
-                <Label text="Customer Information" styleClass="h3"/>
-                <TextArea fx:id="customerInfo" editable="false" styleClass="form-control" prefHeight="100"/>
+            <VBox spacing="15">
+                <Label text="Customer Information" styleClass="h3 text-dark"/>
+                <TextArea fx:id="customerInfo" editable="false" styleClass="modern-input" prefHeight="100"/>
                 
-                <Label text="Order Details" styleClass="h3"/>
-                <TextArea fx:id="orderDetails" editable="false" styleClass="form-control" prefHeight="100"/>
+                <Label text="Order Details" styleClass="h3 text-dark"/>
+                <TextArea fx:id="orderDetails" editable="false" styleClass="modern-input" prefHeight="100"/>
                 
-                <Label text="Contact Preferences" styleClass="h3"/>
-                <TextArea fx:id="contactInfo" editable="false" styleClass="form-control" prefHeight="60"/>
+                <Label text="Contact Preferences" styleClass="h3 text-dark"/>
+                <TextArea fx:id="contactInfo" editable="false" styleClass="modern-input" prefHeight="60"/>
                 
-                <Button fx:id="resolveButton" text="Resolve Complaint" styleClass="btn btn-success" prefWidth="200">
+                <Button fx:id="resolveButton" text="Resolve Complaint" styleClass="primary-button" prefWidth="200">
                     <graphic>
-                        <FontIcon iconLiteral="fas-check-circle"/>
+                        <FontIcon iconLiteral="fas-check-circle" iconSize="14"/>
                     </graphic>
                 </Button>
             </VBox>
         </SplitPane>
     </VBox>
     
-    <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>
+    <!-- Footer -->
+    <Label text="© 2025 Lilach Flower Shop" styleClass="copyright"/>
 </VBox>

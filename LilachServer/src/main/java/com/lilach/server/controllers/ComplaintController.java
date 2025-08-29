@@ -148,6 +148,7 @@ public class ComplaintController {
     public static void updateComplaint(Context ctx) {
         try {
             int complaintId = Integer.parseInt(ctx.pathParam("id"));
+            mapper.registerModule(new JavaTimeModule());
             ComplaintDTO complaintDTO = mapper.readValue(ctx.body(), ComplaintDTO.class);
             
             Complaint complaintUpdates = new Complaint();
