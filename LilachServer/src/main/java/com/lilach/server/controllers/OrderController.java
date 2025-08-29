@@ -54,7 +54,16 @@ public class OrderController {
 
             List<OrderItem> items = new ArrayList<>();
             for (var itemDto : order.getItems()) {
-                Product product = ProductService.getProductById(itemDto.getProduct().getId());
+                Product product = new Product();
+                if (itemDto.getProduct().getId() == -1)
+                {
+                    continue;
+                }
+                else
+                {
+
+                    product = ProductService.getProductById(itemDto.getProduct().getId());
+                }
                 if (product == null) {
                     ctx.status(HttpStatus.BAD_REQUEST).json("Invalid product ID: " + itemDto.getProduct().getId());
                     return;
@@ -86,10 +95,10 @@ public class OrderController {
             order.setUser(user);
    
             // Calculate total price
-            double totalPrice = items.stream().mapToDouble(item -> item.getPrice()).sum();
+           // double totalPrice = items.stream().mapToDouble(item -> item.getPrice()).sum();
 
 
-            order.setTotalPrice(totalPrice);
+            //order.setTotalPrice(totalPrice);
             order.setStatus(Order.OrderStatus.PENDING);
             Order createdOrder = OrderService.createOrder(order);
             ctx.json(createdOrder).status(HttpStatus.CREATED);

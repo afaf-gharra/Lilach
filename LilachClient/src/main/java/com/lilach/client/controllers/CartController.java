@@ -90,6 +90,7 @@ public class CartController extends BaseController {
                     btn.setOnAction(event -> {
                         CartItem item = getTableView().getItems().get(getIndex());
                         cartItems.remove(item);
+                        CartService.getInstance().removeItem(item.getId());
                         calculateTotal();
                     });
                 }
