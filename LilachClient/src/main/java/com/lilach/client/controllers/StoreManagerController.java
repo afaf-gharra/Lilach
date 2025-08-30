@@ -484,7 +484,7 @@ public class StoreManagerController extends BaseController {
         return true;
     }
     
-    private ProductDTO createProductFromForm() {
+    private ProductDTO createProductFromForm() throws IOException {
         ProductDTO product = new ProductDTO();
         product.setName(productNameField.getText());
         product.setCategory(productCategoryField.getText());
@@ -494,6 +494,9 @@ public class StoreManagerController extends BaseController {
         product.setColor(productColorField.getText());
         product.setImageUrl(productImageField.getText());
         product.setAvailable(productAvailableCheckbox.isSelected());
+        StoreDTO loggedinUserStore = ApiService.getStoreById(loggedInUser.getStoreId());
+        
+        product.setStore(loggedinUserStore);
         return product;
     }
     

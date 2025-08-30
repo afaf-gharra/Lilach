@@ -52,4 +52,5 @@ public class UserDTO {
     
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
+
 }

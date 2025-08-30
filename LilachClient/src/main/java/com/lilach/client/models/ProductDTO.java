@@ -13,6 +13,11 @@ public class ProductDTO {
     private String imageUrl;
     private boolean available;
     private int stock;
+    private StoreDTO store;
+    
+    // Default constructor
+    public ProductDTO() {}
+    
 
     // Getters and setters
     public int getId() { return id; }
@@ -32,8 +37,7 @@ public class ProductDTO {
     public boolean isAvailable() { return available; }
     public void setAvailable(boolean available) { this.available = available; }
     public int getStock() { return stock; }
-    public void setStock(int int1) {
-        this.stock = int1;
-        
-    }
+    public void setStock(int int1) { this.stock = int1; }
+    public StoreDTO getStore() { return store; }
+    public void setStore(StoreDTO store) { this.store = store; }
 }
