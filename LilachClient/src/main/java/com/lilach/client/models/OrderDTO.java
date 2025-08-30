@@ -24,8 +24,8 @@ public class OrderDTO {
     private double totalPrice;
     private List<OrderItemDTO> items;
 
-    private String delivaryType;
-    private double delivaryFee;
+    private String deliveryType;
+    private double deliveryFee;
 
     // Default constructor
     public OrderDTO() {}
@@ -64,10 +64,10 @@ public class OrderDTO {
     public List<OrderItemDTO> getItems() { return items; }
     public void setItems(List<OrderItemDTO> items) { this.items = items; }
 
-    public String getDelivaryType() { return delivaryType; }
-    public void setDelivaryType(String delivaryType) { this.delivaryType = delivaryType; }
+    public String getdeliveryType() { return deliveryType; }
+    public void setdeliveryType(String deliveryType) { this.deliveryType = deliveryType; }
 
-    public double getDelivaryFee() { return delivaryFee; }
-    public void setDelivaryFee(double delivaryFee) { this.delivaryFee = delivaryFee; }
+    public double getdeliveryFee() { return deliveryFee; }
+    public void setdeliveryFee(double deliveryFee) { this.deliveryFee = deliveryFee; }
 
 }

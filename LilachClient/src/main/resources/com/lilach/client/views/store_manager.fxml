@@ -60,6 +60,7 @@
                         <TableColumn fx:id="deliveryDateColumn" text="Delivery Date" prefWidth="150"/>
                         <TableColumn fx:id="totalColumn" text="Total" prefWidth="100"/>
                         <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                        <TableColumn fx:id="deliveryTypeColumn" text="deliveryType" prefWidth="100"/>
                     </columns>
                 </TableView>
                 

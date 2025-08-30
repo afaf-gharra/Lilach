@@ -26,6 +26,7 @@ public class StoreManagerController extends BaseController {
     @FXML private TableColumn<OrderDTO, String> deliveryDateColumn;
     @FXML private TableColumn<OrderDTO, Double> totalColumn;
     @FXML private TableColumn<OrderDTO, String> statusColumn;
+    @FXML private TableColumn<OrderDTO, String> deliveryTypeColumn;
     @FXML private ComboBox<String> statusFilterCombo;
     @FXML private TextArea orderDetailsArea;
     @FXML private ComboBox<String> statusUpdateCombo;
@@ -108,7 +109,16 @@ public class StoreManagerController extends BaseController {
                     e1.printStackTrace();
                 }
             });
-        
+
+        // set deliveryTypeColumn
+        deliveryTypeColumn.setCellValueFactory(new PropertyValueFactory<>("deliveryType"));
+         deliveryTypeColumn.setCellFactory(column -> new TableCell<OrderDTO, String>() {
+            @Override
+            protected void updateItem(String deliveryType, boolean empty) {
+                super.updateItem(deliveryType, empty);
+                setText(empty || deliveryType == null ? "" : deliveryType);
+            }
+        });        
         // Update status button
         updateStatusButton.setOnAction(e -> updateOrderStatus());
     }
@@ -278,6 +288,7 @@ public class StoreManagerController extends BaseController {
         }
         
         StringBuilder details = new StringBuilder();
+        details.append("-------------> ").append(order.getdeliveryType()).append(" <-------------\n");
         details.append("Order ID: ").append(order.getId()).append("\n");
         details.append("Customer: ").append(order.getRecipientName()).append("\n");
         details.append("Phone: ").append(order.getRecipientPhone()).append("\n");
@@ -300,15 +311,6 @@ public class StoreManagerController extends BaseController {
                 details.append(null != product ? product.getName() : "Unknown Product").append(" - ");
                 details.append(null != product ? String.format("$%.2f", product.getPrice()) : "Price N/A").append(" - ");
                 details.append(null != product ? product.getCategory() : "Category N/A").append(" - ");
-
-                // if (item.getProductId() != null) {
-                //     details.append("Product ID: ").append(item.getProductId());
-                // } else {
-                //     details.append("Custom: ").append(item.getCustomType());
-                //     if (item.getCustomColor() != null) {
-                //         details.append(" (").append(item.getCustomColor()).append(")");
-                //     }
-                // }
                 details.append(" - Qty: ").append(item.getQuantity()).append("\n");
             }
         }

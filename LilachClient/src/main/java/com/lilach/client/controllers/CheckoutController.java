@@ -9,6 +9,9 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +64,6 @@ public class CheckoutController extends BaseController  {
         setupDeliveryMethodToggle();
         initializeFormatters();
         loadStores();
-        setupValidation();
         // get cart items
        
         ObservableList<String> items = FXCollections.observableArrayList(
@@ -98,8 +100,7 @@ public class CheckoutController extends BaseController  {
 
     private void initializeFormatters() {
         // Time formatter for HH:mm format
-        setupTimeFormatter(deliveryTimeField);
-        setupTimeFormatter(pickupTimeField);
+
         
         // Phone number formatter
         setupPhoneFormatter(recipientPhone);
@@ -122,19 +123,7 @@ public class CheckoutController extends BaseController  {
         });
     }
 
-    private void setupTimeFormatter(TextField timeField) {
-        timeField.setTextFormatter(new TextFormatter<String>(change -> {
-            String newText = change.getControlNewText();
-            if (newText.matches("([0-1]?[0-9]|2[0-3]):?[0-5]?[0-9]?")) {
-                // Auto-insert colon after 2 digits
-                if (newText.length() == 2 && !newText.contains(":") && change.getText().matches("\\d")) {
-                    change.setText(change.getText() + ":");
-                }
-                return change;
-            }
-            return null;
-        }));
-    }
+
 
     private void setupPhoneFormatter(TextField phoneField) {
         phoneField.setTextFormatter(new TextFormatter<String>(change -> {
@@ -221,34 +210,7 @@ public class CheckoutController extends BaseController  {
         pickupInfoSection.setManaged(true);
     }
 
-    private void setupValidation() {
-        // Add validation listeners to required fields
-        addRequiredFieldValidation(deliveryDatePicker);
-        addRequiredFieldValidation(deliveryTimeField);
-        addRequiredFieldValidation(deliveryAddress);
-        addRequiredFieldValidation(recipientName);
-        addRequiredFieldValidation(recipientPhone);
-        addRequiredFieldValidation(pickupStoreCombo);
-        addRequiredFieldValidation(pickupDatePicker);
-        addRequiredFieldValidation(pickupTimeField);
-        addRequiredFieldValidation(pickupPersonField);
-    }
 
-    private void addRequiredFieldValidation(Control field) {
-        if (field instanceof TextInputControl) {
-            ((TextInputControl) field).textProperty().addListener((observable, oldValue, newValue) -> {
-                validateField(field, newValue);
-            });
-        } else if (field instanceof ComboBox) {
-            ((ComboBox<?>) field).valueProperty().addListener((observable, oldValue, newValue) -> {
-                validateField(field, newValue != null ? newValue.toString() : "");
-            });
-        } else if (field instanceof DatePicker) {
-            ((DatePicker) field).valueProperty().addListener((observable, oldValue, newValue) -> {
-                validateField(field, newValue != null ? newValue.toString() : "");
-            });
-        }
-    }
 
     private void validateField(Control field, String value) {
         if (value == null || value.trim().isEmpty()) {
@@ -286,21 +248,25 @@ public class CheckoutController extends BaseController  {
         
         // Set user ID (would come from logged-in user)
         order.setUserId(loggedInUser.getId());
-        
-
-        // Set delivery information
-        order.setDeliveryDate(deliveryDatePicker.getValue().atTime(java.time.LocalTime.parse(deliveryTimeField.getText())));
-        order.setDeliveryAddress(deliveryAddress.getText());
-        order.setRecipientName(recipientName.getText());
-        order.setRecipientPhone(recipientPhone.getText());
-        order.setGreetingMessage(greetingMessage.getText());
-        
-        // Set order details
+        order.setdeliveryFee(deliveryToggle.isSelected() ? DELIVERY_FEE : 0.00);
+        order.setdeliveryType(deliveryToggle.isSelected() ? "Delivery" : "Pickup");
         order.setOrderDate(LocalDateTime.now());
         order.setStatus("PENDING");
         order.setTotalPrice(CartService.getInstance().getCartTotal() + (deliveryToggle.isSelected() ? DELIVERY_FEE : 0.00)); // Add delivery fee
-        order.setDelivaryFee(deliveryToggle.isSelected() ? DELIVERY_FEE : 0.00);
-        order.setDelivaryType(deliveryToggle.isSelected() ? "Delivery" : "Pickup");
+        order.setGreetingMessage(greetingMessage.getText());
+        
+
+         if (deliveryToggle.isSelected()) {
+            order.setDeliveryDate(deliveryDatePicker.getValue().atTime(java.time.LocalTime.parse(deliveryTimeField.getText())));
+            order.setDeliveryAddress(deliveryAddress.getText());
+            order.setRecipientName(recipientName.getText());
+            order.setRecipientPhone(recipientPhone.getText());
+        } else {
+            order.setDeliveryDate(pickupDatePicker.getValue().atTime(java.time.LocalTime.parse(pickupTimeField.getText())));
+            order.setRecipientName(pickupPersonField.getText());
+        }
+        
+        // Set order details
         
         // Convert cart items to order items
         List<OrderItemDTO> orderItems = new ArrayList<>();
@@ -317,24 +283,109 @@ public class CheckoutController extends BaseController  {
         return order;
     }
 
-    private boolean validateForm() {
+    // private boolean validateForm() {
+    //     if (deliveryDatePicker.getValue() == null) {
+    //         showError("Validation Error", "Please select delivery date");
+    //         return false;
+    //     }
+    //     if (!deliveryTimeField.getText().matches("^([01]?[0-9]|2[0-3]):[0-5][0-9]$")) {
+    //         showError("Validation Error", "Please enter valid time in HH:mm format");
+    //         return false;
+    //     }
+    //     if (deliveryAddress.getText().isEmpty()) {
+    //         showError("Validation Error", "Delivery address is required");
+    //         return false;
+    //     }
+    //     if (recipientName.getText().isEmpty()) {
+    //         showError("Validation Error", "Recipient name is required");
+    //         return false;
+    //     }
+    //     return true;
+    // }
+
+     private boolean validateDeliveryFields() {
+        boolean valid = true;
+        
         if (deliveryDatePicker.getValue() == null) {
-            showError("Validation Error", "Please select delivery date");
+            deliveryDatePicker.getStyleClass().add("field-error");
+            valid = false;
+        }
+        
+        if (!isValidTime(deliveryTimeField.getText())) {
+            deliveryTimeField.getStyleClass().add("field-error");
+            valid = false;
+        }
+        
+        if (deliveryAddress.getText().trim().isEmpty()) {
+            deliveryAddress.getStyleClass().add("field-error");
+            valid = false;
+        }
+        
+        if (recipientName.getText().trim().isEmpty()) {
+            recipientName.getStyleClass().add("field-error");
+            valid = false;
+        }
+        
+        if (!isValidPhone(recipientPhone.getText())) {
+            recipientPhone.getStyleClass().add("field-error");
+            valid = false;
+        }
+        
+        return valid;
+    }
+
+    private boolean validateForm() {
+        boolean isValid = true;
+        
+        if (deliveryToggle.isSelected()) {
+            isValid &= validateDeliveryFields();
+        } else {
+            isValid &= validatePickupFields();
+        }
+        
+        return isValid;
+    }
+
+
+    private boolean validatePickupFields() {
+        boolean valid = true;
+        
+        if (pickupStoreCombo.getValue() == null) {
+            pickupStoreCombo.getStyleClass().add("field-error");
+            valid = false;
+        }
+        
+        if (pickupDatePicker.getValue() == null) {
+            pickupDatePicker.getStyleClass().add("field-error");
+            valid = false;
+        }
+        
+        if (!isValidTime(pickupTimeField.getText())) {
+            pickupTimeField.getStyleClass().add("field-error");
+            valid = false;
+        }
+        
+        if (pickupPersonField.getText().trim().isEmpty()) {
+            pickupPersonField.getStyleClass().add("field-error");
+            valid = false;
+        }
+        
+        return valid;
+    }
+
+    private boolean isValidTime(String time) {
+        if (time == null || time.trim().isEmpty()) return false;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime.parse(time, formatter);
+            return true;
+        } catch (DateTimeParseException e) {
             return false;
         }
-        if (!deliveryTimeField.getText().matches("^([01]?[0-9]|2[0-3]):[0-5][0-9]$")) {
-            showError("Validation Error", "Please enter valid time in HH:mm format");
-            return false;
-        }
-        if (deliveryAddress.getText().isEmpty()) {
-            showError("Validation Error", "Delivery address is required");
-            return false;
-        }
-        if (recipientName.getText().isEmpty()) {
-            showError("Validation Error", "Recipient name is required");
-            return false;
-        }
-        return true;
+    }
+
+    private boolean isValidPhone(String phone) {
+        return phone != null && phone.matches("\\d{10}");
     }
 
 

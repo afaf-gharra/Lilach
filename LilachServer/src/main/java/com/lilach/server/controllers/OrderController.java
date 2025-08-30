@@ -47,6 +47,8 @@ public class OrderController {
     }
     public static void createOrder(Context ctx) {
         try {
+            String body = ctx.body();
+            System.out.println(body);
 
             OrderDTO dto = mapper.readValue(ctx.body(), OrderDTO.class);
             Order order = mapper.readValue(ctx.body(), Order.class);

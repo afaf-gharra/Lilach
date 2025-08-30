@@ -51,8 +51,11 @@ public class Order {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    private String delivaryType;
-    private double delivaryFee;
+    @Column(name = "delivery_type")
+    private String deliveryType;
+
+    @Column(name = "delivery_fee")
+    private double deliveryFee;
     
     public enum OrderStatus {
         PENDING, PROCESSING, DELIVERED, CANCELLED
@@ -98,10 +101,10 @@ public class Order {
     public Store getStore() { return store; }
     public void setStore(Store store) { this.store = store; }
     
-    public String getDeliveryType() { return delivaryType; }
-    public void setDeliveryType(String delivaryType) { this.delivaryType = delivaryType; }
+    public String getDeliveryType() { return deliveryType; }
+    public void setDeliveryType(String deliveryType) { this.deliveryType = deliveryType; }
 
-    public double getDeliveryFee() { return delivaryFee; }
-    public void setDeliveryFee(double delivaryFee) { this.delivaryFee = delivaryFee; }
+    public double getDeliveryFee() { return deliveryFee; }
+    public void setDeliveryFee(double deliveryFee) { this.deliveryFee = deliveryFee; }
 
 }
