@@ -50,6 +50,9 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
+
+    private String delivaryType;
+    private double delivaryFee;
     
     public enum OrderStatus {
         PENDING, PROCESSING, DELIVERED, CANCELLED
@@ -94,4 +97,11 @@ public class Order {
 
     public Store getStore() { return store; }
     public void setStore(Store store) { this.store = store; }
+    
+    public String getDeliveryType() { return delivaryType; }
+    public void setDeliveryType(String delivaryType) { this.delivaryType = delivaryType; }
+
+    public double getDeliveryFee() { return delivaryFee; }
+    public void setDeliveryFee(double delivaryFee) { this.delivaryFee = delivaryFee; }
+
 }

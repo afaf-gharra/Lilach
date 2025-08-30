@@ -1553,3 +1553,232 @@
     -fx-border-radius: 6;
     -fx-border-width: 1;
 }
+
+.secondary-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -primary-color;
+    -fx-border-color: -primary-color;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-padding: 12 20;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-pref-width: 320;
+}
+
+.secondary-button:hover {
+    -fx-background-color: rgba(142, 68, 173, 0.1);
+}
+
+/* Enhanced Checkout Page Styles */
+
+/* Delivery/Pickup Toggle */
+.delivery-toggle {
+    -fx-background-color: -input-background;
+    -fx-background-radius: 25;
+    -fx-border-color: -input-border;
+    -fx-border-radius: 25;
+    -fx-border-width: 1;
+    -fx-padding: 2;
+}
+
+.toggle-left, .toggle-right {
+    -fx-background-color: transparent;
+    -fx-background-radius: 25;
+    -fx-border-color: transparent;
+    -fx-text-fill: -text-muted;
+    -fx-font-weight: bold;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+}
+
+.toggle-left:selected, .toggle-right:selected {
+    -fx-background-color: -primary-color;
+    -fx-text-fill: white;
+}
+
+.toggle-left {
+    -fx-background-radius: 25 0 0 25;
+}
+
+.toggle-right {
+    -fx-background-radius: 0 25 25 0;
+}
+
+/* Delivery/Pickup info sections */
+.delivery-section {
+    -fx-padding: 20;
+    -fx-background-color: derive(-card-background, 2%);
+    -fx-background-radius: 8;
+    -fx-border-color: -input-border;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+}
+
+.delivery-info, .pickup-info {
+    -fx-padding: 15;
+    -fx-background-color: derive(-input-background, 2%);
+    -fx-background-radius: 6;
+    -fx-border-color: derive(-input-border, 5%);
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
+
+/* Store information for pickup */
+.store-info {
+    -fx-padding: 10;
+    -fx-background-color: derive(-primary-light, 95%);
+    -fx-background-radius: 6;
+    -fx-border-color: derive(-primary-light, 80%);
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
+
+.store-name {
+    -fx-font-weight: bold;
+    -fx-text-fill: -primary-color;
+}
+
+.store-address {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 12px;
+}
+
+.store-hours {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 11px;
+    -fx-font-style: italic;
+}
+
+/* Delivery fee indicator */
+.free-delivery {
+    -fx-text-fill: #27ae60;
+    -fx-font-weight: bold;
+}
+
+/* Time slot suggestions */
+.time-suggestions {
+    -fx-spacing: 5;
+    -fx-padding: 5 0;
+}
+
+.time-slot-button {
+    -fx-background-color: derive(-input-background, 5%);
+    -fx-background-radius: 15;
+    -fx-border-color: -input-border;
+    -fx-border-radius: 15;
+    -fx-border-width: 1;
+    -fx-padding: 5 10;
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+}
+
+.time-slot-button:hover {
+    -fx-background-color: derive(-primary-light, 90%);
+    -fx-border-color: -primary-light;
+}
+
+.time-slot-button:selected {
+    -fx-background-color: -primary-color;
+    -fx-text-fill: white;
+    -fx-border-color: -primary-dark;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1000px) {
+    .checkout-container {
+        -fx-orientation: vertical;
+    }
+    
+    .delivery-section, .summary-section {
+        -fx-pref-width: 100%;
+    }
+}
+
+/* Visual indicators */
+.required-indicator {
+    -fx-text-fill: #e74c3c;
+    -fx-content: " *";
+}
+
+.info-tooltip {
+    -fx-background-color: #f8f9fa;
+    -fx-text-fill: -text-color;
+    -fx-border-color: -input-border;
+    -fx-border-radius: 4;
+    -fx-padding: 8;
+    -fx-font-size: 12px;
+}
+
+/* Progress indicator */
+.checkout-progress {
+    -fx-padding: 0 0 20 0;
+}
+
+.progress-step {
+    -fx-padding: 8 15;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: -primary-color;
+    -fx-border-width: 1;
+    -fx-text-fill: -primary-color;
+    -fx-font-weight: bold;
+}
+
+.progress-step.active {
+    -fx-background-color: -primary-color;
+    -fx-text-fill: white;
+}
+
+.progress-step.completed {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+    -fx-border-color: #27ae60;
+}
+
+/* Validation Styles */
+.field-error {
+    -fx-border-color: #e74c3c !important;
+    -fx-border-width: 2px !important;
+    -fx-effect: dropshadow(gaussian, rgba(231, 76, 60, 0.2), 5, 0, 0, 0);
+}
+
+.validation-message {
+    -fx-text-fill: #e74c3c;
+    -fx-font-size: 12px;
+    -fx-font-style: italic;
+}
+
+/* Loading indicator */
+.loading-overlay {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-alignment: CENTER;
+}
+
+.progress-spinner {
+    -fx-progress-color: -primary-color;
+}
+
+/* Success animation */
+.success-check {
+    -fx-stroke: #27ae60;
+    -fx-stroke-width: 2;
+    -fx-fill: transparent;
+}
+
+/* Time slot suggestions container */
+.time-suggestions-container {
+    -fx-spacing: 5;
+    -fx-padding: 10;
+    -fx-background-color: derive(-input-background, 2%);
+    -fx-background-radius: 6;
+    -fx-border-color: -input-border;
+    -fx-border-radius: 6;
+}
+
+.suggestion-title {
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-color;
+    -fx-padding: 0 0 5 0;
+}
