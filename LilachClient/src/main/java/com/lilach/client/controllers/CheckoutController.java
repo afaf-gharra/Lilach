@@ -76,8 +76,9 @@ public class CheckoutController extends BaseController  {
         orderItems.setItems(items);
         
         // Set prices
-        subtotalLabel.setText(String.format("$%.2f", CartService.getInstance().getCartTotal()));
-        totalLabel.setText(String.format("$%.2f", CartService.getInstance().getCartTotal() + 10.00)); // Add $10 delivery fee
+        currentSubtotal = CartService.getInstance().getCartTotal();
+        subtotalLabel.setText(String.format("$%.2f", currentSubtotal));
+        totalLabel.setText(String.format("$%.2f", currentSubtotal + 10.00)); // Add $10 delivery fee
     }
 
     
