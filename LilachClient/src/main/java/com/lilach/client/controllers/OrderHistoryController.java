@@ -3,8 +3,10 @@ package com.lilach.client.controllers;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import com.lilach.client.models.OrderDTO;
+import com.lilach.client.models.RefundDTO;
 import com.lilach.client.services.ApiService;
 
 import javafx.beans.property.SimpleDoubleProperty;
@@ -13,9 +15,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.Node;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 public class OrderHistoryController extends BaseController {
@@ -222,25 +227,109 @@ public class OrderHistoryController extends BaseController {
         
         navigateTo("/com/lilach/client/views/complaint.fxml", "Submit Complaint");
     }
-    
+
     private void cancelOrder(Order order) {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Cancel Order");
-        confirm.setHeaderText("Cancel Order #" + order.getId());
-        confirm.setContentText("Are you sure you want to cancel this order?");
+        // Create cancellation dialog with reason input
+        Dialog<CancelResult> dialog = new Dialog<>();
+        dialog.setTitle("Cancel Order");
+        dialog.setHeaderText("Cancel Order #" + order.getId());
         
-        confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                try {
-                    ApiService.cancelOrder(order.getId());
+        // Set the button types
+        ButtonType cancelButtonType = new ButtonType("Cancel Order", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(cancelButtonType, ButtonType.CANCEL);
+        
+        // Create the reason input
+        VBox content = new VBox(10);
+        content.setPadding(new Insets(20));
+        
+        Label infoLabel = new Label("Cancellation refund policy:\n" +
+            "• More than 3 hours before delivery: 100% refund\n" +
+            "• 1-3 hours before delivery: 50% refund\n" +
+            "• Less than 1 hour before delivery: 0% refund");
+        infoLabel.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
+        
+        TextArea reasonField = new TextArea();
+        reasonField.setPromptText("Please provide a reason for cancellation (optional)");
+        reasonField.setPrefHeight(80);
+        
+        content.getChildren().addAll(infoLabel, new Label("Cancellation Reason:"), reasonField);
+        dialog.getDialogPane().setContent(content);
+        
+        // Enable/disable cancel button based on input
+        Node cancelButton = dialog.getDialogPane().lookupButton(cancelButtonType);
+        cancelButton.setDisable(false);
+        
+        // Convert the result to CancelResult when the cancel button is clicked
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == cancelButtonType) {
+                return new CancelResult(reasonField.getText().trim());
+            }
+            return null;
+        });
+    
+    // Show dialog and process cancellation
+        Optional<CancelResult> result = dialog.showAndWait();
+        result.ifPresent(cancelResult -> {
+            try {
+                RefundDTO refund = ApiService.cancelOrderWithRefund(order.getId(), cancelResult.getReason());
+                
+                if (refund != null) {
+                    // Show refund information to user
+                    showRefundInformation(refund, order);
+                    
+                    // Remove order from list
                     orders.remove(order);
-                } catch (IOException e) {
-                    System.out.println("Failed to cancel order: " + e.getMessage());
-                    e.printStackTrace();
+                    ordersTable.refresh();
+                } else {
+                    showError("Cancellation Failed", "Failed to cancel the order. Please try again.");
                 }
-                showSuccess("Order Cancelled", "Order #" + order.getId() + " has been cancelled.");
+            } catch (IOException e) {
+                showError("Connection Error", "Failed to cancel order: " + e.getMessage());
             }
         });
+    }
+
+    private void showRefundInformation(RefundDTO refund, Order order) {
+        String message;
+        
+        if (refund.getRefundPercentage() == 0) {
+            message = String.format(
+                "Order #%d has been cancelled.\n\n" +
+                "Refund Amount: $%.2f (%d%%)\n" +
+                "Note: No refund is provided for cancellations made less than 1 hour before delivery.",
+                order.getId(), refund.getRefundAmount(), refund.getRefundPercentage()
+            );
+        } else {
+            message = String.format(
+                "Order #%d has been cancelled successfully!\n\n" +
+                "Refund Amount: $%.2f (%d%% of order total)\n" +
+                "The refund will be processed to your original payment method within 3-5 business days.",
+                order.getId(), refund.getRefundAmount(), refund.getRefundPercentage()
+            );
+        }
+        
+        if (refund.getCancellationReason() != null && !refund.getCancellationReason().isEmpty()) {
+            message += "\n\nReason: " + refund.getCancellationReason();
+        }
+        
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Order Cancelled");
+        alert.setHeaderText("Cancellation Complete");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    // Helper class for cancellation result
+    private static class CancelResult {
+        private final String reason;
+        
+        public CancelResult(String reason) {
+            this.reason = reason;
+        }
+        
+        public String getReason() {
+            return reason;
+        }
     }
     
  

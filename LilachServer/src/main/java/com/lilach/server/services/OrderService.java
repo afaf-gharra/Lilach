@@ -102,18 +102,21 @@ public class OrderService {
         }
     }
     
-    public static Order cancelOrder(int orderId) {
+
+    // Add cancellation method to OrderService
+    public static boolean cancelOrder(int orderId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            
             Order order = session.get(Order.class, orderId);
-            if (order != null) {
+            
+            if (order != null && order.getStatus() == Order.OrderStatus.PENDING) {
                 order.setStatus(Order.OrderStatus.CANCELLED);
+                order.setCancelledAt(LocalDateTime.now());
                 session.update(order);
                 transaction.commit();
-                return order;
+                return true;
             }
-            return null;
+            return false;
         }
     }
     

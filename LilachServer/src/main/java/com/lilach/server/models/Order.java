@@ -1,10 +1,24 @@
 package com.lilach.server.models;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "orders")
@@ -56,6 +70,9 @@ public class Order {
 
     @Column(name = "delivery_fee")
     private double deliveryFee;
+
+    @Column(name = "cancelled_at")
+    private LocalDateTime cancelledAt;
     
     public enum OrderStatus {
         PENDING, PROCESSING, DELIVERED, CANCELLED
@@ -106,5 +123,9 @@ public class Order {
 
     public double getDeliveryFee() { return deliveryFee; }
     public void setDeliveryFee(double deliveryFee) { this.deliveryFee = deliveryFee; }
+
+    public void setCancelledAt(LocalDateTime now) {
+        this.cancelledAt = now;
+    }
 
 }

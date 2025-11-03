@@ -122,9 +122,9 @@ public class OrderController {
     public static void cancelOrder(Context ctx) {
         try {
             int orderId = Integer.parseInt(ctx.pathParam("id"));
-            Order cancelledOrder = OrderService.cancelOrder(orderId);
-            if (cancelledOrder != null) {
-                ctx.json(cancelledOrder).status(HttpStatus.OK);
+            boolean cancelledOrder = OrderService.cancelOrder(orderId);
+            if (cancelledOrder) {
+                ctx.status(HttpStatus.OK).json("Order cancelled successfully");
             } else {
                 ctx.status(HttpStatus.BAD_REQUEST).json("Cannot cancel order");
             }

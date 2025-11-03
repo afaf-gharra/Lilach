@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.lilach.client.controllers.RefundHistoryController"
+      spacing="20" 
+      styleClass="bg-primary"
+      prefWidth="1000" 
+      prefHeight="700">
+    
+    <Label text="Refund History" styleClass="h1 text-white"/>
+    
+    <VBox styleClass="card p-4" spacing="15">
+        <TableView fx:id="refundsTable" prefHeight="500">
+            <columns>
+                <TableColumn text="Order ID" prefWidth="100">
+                    <cellValueFactory><PropertyValueFactory property="orderId" /></cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Refund Amount" prefWidth="120">
+                    <cellValueFactory><PropertyValueFactory property="refundAmount" /></cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Percentage" prefWidth="100">
+                    <cellValueFactory><PropertyValueFactory property="refundPercentage" /></cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Status" prefWidth="100">
+                    <cellValueFactory><PropertyValueFactory property="refundStatus" /></cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Cancelled Date" prefWidth="150">
+                    <cellValueFactory><PropertyValueFactory property="cancelledAt" /></cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Reason" prefWidth="200">
+                    <cellValueFactory><PropertyValueFactory property="cancellationReason" /></cellValueFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
+        
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Label text="Total Refunds:" styleClass="h3"/>
+            <Label fx:id="totalRefundsLabel" text="$0.00" styleClass="h2 text-lilac"/>
+        </HBox>
+    </VBox>
+</VBox>

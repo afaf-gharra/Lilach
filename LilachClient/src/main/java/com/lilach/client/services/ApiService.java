@@ -1,19 +1,26 @@
 package com.lilach.client.services;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.lilach.client.controllers.LoginController;
 import com.lilach.client.controllers.OrderHistoryController.Order;
 import com.lilach.client.models.ComplaintDTO;
 import com.lilach.client.models.OrderDTO;
 import com.lilach.client.models.ProductDTO;
+import com.lilach.client.models.RefundDTO;
 import com.lilach.client.models.ReportDTO;
 import com.lilach.client.models.StoreDTO;
 import com.lilach.client.models.UserDTO;
-import okhttp3.*;
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ApiService {
     private static final String BASE_URL = "http://localhost:8080/api/";
@@ -716,4 +723,52 @@ public class ApiService {
         }
     }
 
+    // Add refund-related methods to ApiService
+    public static RefundDTO cancelOrderWithRefund(int orderId, String reason) throws IOException {
+        String json = String.format("{\"reason\":\"%s\"}", reason);
+        RequestBody body = RequestBody.create(json, JSON);
+        
+        Request request = new Request.Builder()
+            .url(BASE_URL + "orders/" + orderId + "/cancel")
+            .post(body)
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), RefundDTO.class);
+            }
+            return null;
+        }
+    }
+
+    public static RefundDTO getRefundByOrder(int orderId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "orders/" + orderId + "/refund")
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), RefundDTO.class);
+            }
+            return null;
+        }
+    }
+
+    public static List<RefundDTO> getUserRefunds(int userId) throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "users/" + userId + "/refunds")
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(
+                    response.body().string(),
+                    mapper.getTypeFactory().constructCollectionType(List.class, RefundDTO.class)
+                );
+            }
+            return List.of();
+        }
+    }
 }
