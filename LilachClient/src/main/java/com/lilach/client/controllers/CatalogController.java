@@ -1,5 +1,10 @@
 package com.lilach.client.controllers;
 
+import java.io.IOException;
+import java.util.List;
+
+import org.kordamp.ikonli.javafx.FontIcon;
+
 import com.lilach.client.models.ProductDTO;
 import com.lilach.client.services.ApiService;
 import com.lilach.client.services.CartItem;
@@ -9,16 +14,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.kordamp.ikonli.javafx.FontIcon;
-
-import java.io.IOException;
-import java.util.List;
 
 public class CatalogController extends BaseController  {
     @FXML private Label welcomeLabel;
@@ -61,10 +65,10 @@ public class CatalogController extends BaseController  {
     private void setupCategoryFilter() {
         categoryComboBox.getItems().addAll(
             "All Products",
-            "Flowers",
-            "Arrangements",
+            "Bouquet",
+            "box",
             "Accessories",
-            "Special Offers"
+            "Sale"
         );
         categoryComboBox.setValue("All Products");
         categoryComboBox.setOnAction(e -> filterProducts());
@@ -104,15 +108,16 @@ public class CatalogController extends BaseController  {
         // Product image
         ImageView imageView = new ImageView();
         try {
-            //Image image = new Image(product.getImageUrl(), true);
-           // imageView.setImage(image);
+            String imagePath = "/com/lilach/client/images/" + product.getCategory() + "/" + product.getImageUrl() + ".jpg";
+            System.out.println("Loading image from path: " + imagePath);
+            imageView.setImage(new Image(getClass().getResourceAsStream(imagePath)));
             imageView.setFitWidth(180);
             imageView.setFitHeight(180);
             imageView.setPreserveRatio(true);
-            imageView.setImage(new Image(getClass().getResourceAsStream("/com/lilach/client/images/logo.png")));
 
         } catch (Exception e) {
-            //imageView.setImage(new Image(getClass().getResourceAsStream("/com/lilach/client/images/logo.png")));
+            System.out.println("Image not found: " + e.getMessage());
+            imageView.setImage(new Image(getClass().getResourceAsStream("/com/lilach/client/images/logo.png")));
         }
         
         // Product details
