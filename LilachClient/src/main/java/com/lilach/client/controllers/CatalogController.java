@@ -33,22 +33,20 @@ public class CatalogController extends BaseController  {
     @FXML private Button customArrangementButton;
     @FXML private Button viewCartButton;
     @FXML private Button viewOrdersButton;
-    @FXML private Button loginbutton;
+    @FXML private Button loginLogoutButton;
     
     private List<ProductDTO> allProducts;
     
     @FXML
     public void initialize() {
         welcomeLabel.setText("Welcome to Lilach Flower Shop!");
-        loginbutton = new Button();
+        
         if(loggedInUser != null) {
             welcomeLabel.setText("Welcome, " + loggedInUser.getUsername() + "!");
-            loginbutton.setText("Logout");
-            loginbutton.setOnAction(e -> handleLogout());
+            loginLogoutButton.setText("Logout");
         }
         else {
-            loginbutton.setText("Login");
-            loginbutton.setOnAction(e -> navigateToLogin());
+            loginLogoutButton.setText("Login");
         }
 
         setupCategoryFilter();
@@ -156,6 +154,17 @@ public class CatalogController extends BaseController  {
     @FXML
     private void handleLogout() {
         logout();
+    }
+    
+    @FXML
+    private void handleLoginLogout() {
+        if (loggedInUser != null) {
+            // User is logged in, so logout
+            logout();
+        } else {
+            // User is not logged in, navigate to login
+            navigateToLogin();
+        }
     }
     
     @FXML

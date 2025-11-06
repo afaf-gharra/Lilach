@@ -428,7 +428,7 @@
 
 /* Background pattern */
 .bg-floral-pattern {
-    -fx-background-color: linear-gradient(to bottom right, #fdf6f9, #fceef3);
+    -fx-background-color: linear-gradient(to bottom right, #f9f7fe, #f0e6ff);
     -fx-background-repeat: repeat;
 }
 
@@ -1792,9 +1792,9 @@
 
 /* ===== Navigation Bar Styles ===== */
 .navbar {
-    -fx-background-color: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+    -fx-background-color: linear-gradient(to right, #8a4fff 0%, #6a30e3 100%);
     -fx-padding: 12 30;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0.0, 0, 3);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0.0, 0, 3);
 }
 
 .navbar-brand {
@@ -1830,34 +1830,15 @@
     -fx-cursor: hand;
     -fx-border-color: transparent;
     -fx-border-width: 0;
-    -fx-transition: all 0.3s ease;
-}
-
-.nav-button:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.15);
-    -fx-text-fill: white;
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-}
-
-.nav-button:pressed {
-    -fx-background-color: rgba(255, 255, 255, 0.25);
 }
 
 .nav-button .ikonli-font-icon {
     -icon-color: rgba(255, 255, 255, 0.9);
 }
 
-.nav-button:hover .ikonli-font-icon {
-    -icon-color: white;
-}
-
 .nav-button.nav-active {
-    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-background-color: rgba(255, 255, 255, 0.25);
     -fx-text-fill: white;
-    -fx-border-color: rgba(255, 255, 255, 0.3);
-    -fx-border-width: 0 0 3 0;
-    -fx-border-radius: 0;
     -fx-font-weight: bold;
 }
 
@@ -1866,7 +1847,7 @@
 }
 
 .nav-button-logout {
-    -fx-background-color: rgba(220, 53, 69, 0.2);
+    -fx-background-color: rgba(220, 53, 69, 0.25);
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-font-weight: 600;
@@ -1875,16 +1856,6 @@
     -fx-cursor: hand;
     -fx-border-color: transparent;
     -fx-border-width: 0;
-}
-
-.nav-button-logout:hover {
-    -fx-background-color: rgba(220, 53, 69, 0.4);
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-}
-
-.nav-button-logout:pressed {
-    -fx-background-color: rgba(220, 53, 69, 0.6);
 }
 
 .nav-button-logout .ikonli-font-icon {

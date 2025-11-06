@@ -48,7 +48,7 @@
             </Button>
             <Separator orientation="VERTICAL" styleClass="nav-separator"/>
             <Label fx:id="welcomeLabel" styleClass="navbar-welcome"/>
-            <Button text="Logout" onAction="#handleLogout" styleClass="nav-button-logout">
+            <Button fx:id="loginLogoutButton" text="Login" onAction="#handleLoginLogout" styleClass="nav-button-logout">
                 <graphic>
                     <FontIcon iconLiteral="fas-sign-out-alt" iconSize="16"/>
                 </graphic>
