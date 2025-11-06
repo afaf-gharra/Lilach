@@ -28,6 +28,7 @@ public class CheckoutController extends BaseController  {
     @FXML private Label deliveryFeeLabel;
     
     @FXML private ToggleButton deliveryToggle;
+    @FXML private ToggleButton fastDeliveryToggle;
     @FXML private ToggleButton pickupToggle;
     
     @FXML private VBox deliveryInfoSection;
@@ -50,6 +51,7 @@ public class CheckoutController extends BaseController  {
 
     private ToggleGroup deliveryMethodGroup;
     private static final double DELIVERY_FEE = 10.00;
+    private static final double FAST_DELIVERY_FEE = 20.00;
     private static final double PICKUP_FEE = 0.00;
     private double currentSubtotal = 0.0;
 
@@ -85,6 +87,7 @@ public class CheckoutController extends BaseController  {
     private void setupDeliveryMethodToggle() {
         deliveryMethodGroup = new ToggleGroup();
         deliveryToggle.setToggleGroup(deliveryMethodGroup);
+        fastDeliveryToggle.setToggleGroup(deliveryMethodGroup);
         pickupToggle.setToggleGroup(deliveryMethodGroup);
         deliveryToggle.setSelected(true);
         
@@ -92,6 +95,9 @@ public class CheckoutController extends BaseController  {
             if (newValue == deliveryToggle) {
                 showDeliverySection();
                 updateDeliveryFee(DELIVERY_FEE);
+            } else if (newValue == fastDeliveryToggle) {
+                showDeliverySection();
+                updateDeliveryFee(FAST_DELIVERY_FEE);
             } else if (newValue == pickupToggle) {
                 showPickupSection();
                 updateDeliveryFee(PICKUP_FEE);
@@ -192,6 +198,12 @@ public class CheckoutController extends BaseController  {
     }
 
     @FXML
+    private void handleFastDeliveryToggle() {
+        showDeliverySection();
+        updateDeliveryFee(FAST_DELIVERY_FEE);
+    }
+
+    @FXML
     private void handlePickupToggle() {
         showPickupSection();
         updateDeliveryFee(PICKUP_FEE);
@@ -249,15 +261,31 @@ public class CheckoutController extends BaseController  {
         
         // Set user ID (would come from logged-in user)
         order.setUserId(loggedInUser.getId());
-        order.setdeliveryFee(deliveryToggle.isSelected() ? DELIVERY_FEE : 0.00);
-        order.setdeliveryType(deliveryToggle.isSelected() ? "Delivery" : "Pickup");
+        
+        // Determine delivery fee based on selected option
+        double deliveryFee;
+        String deliveryType;
+        
+        if (deliveryToggle.isSelected()) {
+            deliveryFee = DELIVERY_FEE;
+            deliveryType = "Delivery";
+        } else if (fastDeliveryToggle.isSelected()) {
+            deliveryFee = FAST_DELIVERY_FEE;
+            deliveryType = "Fast Delivery";
+        } else {
+            deliveryFee = PICKUP_FEE;
+            deliveryType = "Pickup";
+        }
+        
+        order.setdeliveryFee(deliveryFee);
+        order.setdeliveryType(deliveryType);
         order.setOrderDate(LocalDateTime.now());
         order.setStatus("PENDING");
-        order.setTotalPrice(CartService.getInstance().getCartTotal() + (deliveryToggle.isSelected() ? DELIVERY_FEE : 0.00)); // Add delivery fee
+        order.setTotalPrice(CartService.getInstance().getCartTotal() + deliveryFee);
         order.setGreetingMessage(greetingMessage.getText());
         
 
-         if (deliveryToggle.isSelected()) {
+         if (deliveryToggle.isSelected() || fastDeliveryToggle.isSelected()) {
             order.setDeliveryDate(deliveryDatePicker.getValue().atTime(java.time.LocalTime.parse(deliveryTimeField.getText())));
             order.setDeliveryAddress(deliveryAddress.getText());
             order.setRecipientName(recipientName.getText());
@@ -338,7 +366,7 @@ public class CheckoutController extends BaseController  {
     private boolean validateForm() {
         boolean isValid = true;
         
-        if (deliveryToggle.isSelected()) {
+        if (deliveryToggle.isSelected() || fastDeliveryToggle.isSelected()) {
             isValid &= validateDeliveryFields();
         } else {
             isValid &= validatePickupFields();
