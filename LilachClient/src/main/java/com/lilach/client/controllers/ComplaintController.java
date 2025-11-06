@@ -1,15 +1,19 @@
 package com.lilach.client.controllers;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.stream.Collectors;
+
 import com.lilach.client.models.ComplaintDTO;
 import com.lilach.client.services.ApiService;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.stream.Collectors;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 
 public class ComplaintController extends BaseController {
     
@@ -172,6 +176,31 @@ public class ComplaintController extends BaseController {
     
     private void navigateToOrderHistory() {
         navigateTo("/com/lilach/client/views/order_history.fxml", "My Orders");
+    }
+    
+    @FXML
+    private void handleLogout() {
+        logout();
+    }
+
+    @FXML
+    private void navigateToCatalog() {
+        navigateToWithSize("/com/lilach/client/views/catalog.fxml", "Lilach Flower Shop Catalog", 1200, 800);
+    }
+
+    @FXML
+    private void handleViewCart() {
+        navigateTo("/com/lilach/client/views/cart.fxml", "Shopping Cart");
+    }
+
+    @FXML
+    private void handleViewOrders() {
+        navigateTo("/com/lilach/client/views/order_history.fxml", "My Orders");
+    }
+
+    @FXML
+    private void handleComplaints() {
+        // Already on complaints page
     }
     
 

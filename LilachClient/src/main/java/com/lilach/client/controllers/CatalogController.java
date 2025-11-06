@@ -40,6 +40,7 @@ public class CatalogController extends BaseController  {
     @FXML
     public void initialize() {
         welcomeLabel.setText("Welcome to Lilach Flower Shop!");
+        loginbutton = new Button();
         if(loggedInUser != null) {
             welcomeLabel.setText("Welcome, " + loggedInUser.getUsername() + "!");
             loginbutton.setText("Logout");
@@ -56,6 +57,8 @@ public class CatalogController extends BaseController  {
     }
     
     private void setupButtonIcons() {
+        viewCartButton = new Button();
+        viewOrdersButton = new Button();
         searchButton.setGraphic(new FontIcon("fas-search"));
         customArrangementButton.setGraphic(new FontIcon("fas-plus-circle"));
         viewCartButton.setGraphic(new FontIcon("fas-shopping-cart"));
@@ -224,6 +227,12 @@ public class CatalogController extends BaseController  {
     @FXML
     private void handleComplaints() {
         navigateTo("/com/lilach/client/views/complaints.fxml", "Complaints Form");
+    }
+
+    @FXML
+    private void navigateToCatalog() {
+        // Already on catalog, do nothing or refresh
+        initialize();
     }
 
     // @Override

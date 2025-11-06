@@ -133,6 +133,11 @@ public class CartController extends BaseController {
         navigateTo("/com/lilach/client/views/order_history.fxml", "My Orders");
     }
 
+    @FXML
+    private void handleComplaints() {
+        navigateTo("/com/lilach/client/views/complaints.fxml", "Complaints Form");
+    }
+
  
     
 }

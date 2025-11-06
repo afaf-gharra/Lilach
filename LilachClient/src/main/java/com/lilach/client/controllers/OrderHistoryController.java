@@ -103,6 +103,11 @@ public class OrderHistoryController extends BaseController {
     }
 
     @FXML
+    private void handleComplaints() {
+        navigateTo("/com/lilach/client/views/complaints.fxml", "Complaints Form");
+    }
+
+    @FXML
     private void handleCancelOrder() {
         Order selectedOrder = ordersTable.getSelectionModel().getSelectedItem();
         if (selectedOrder != null && selectedOrder.getStatus().equals("Processing")) {

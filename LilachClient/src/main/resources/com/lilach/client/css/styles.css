@@ -1789,3 +1789,114 @@
     -fx-text-fill: -text-color;
     -fx-padding: 0 0 5 0;
 }
+
+/* ===== Navigation Bar Styles ===== */
+.navbar {
+    -fx-background-color: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+    -fx-padding: 12 30;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0.0, 0, 3);
+}
+
+.navbar-brand {
+    -fx-spacing: 8;
+}
+
+.navbar-title {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 2, 0.0, 0, 1);
+}
+
+.navbar-menu {
+    -fx-spacing: 5;
+    -fx-alignment: center-right;
+}
+
+.navbar-welcome {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 0 10;
+    -fx-font-weight: 500;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-padding: 8 16;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-text-fill: white;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.nav-button:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+}
+
+.nav-button .ikonli-font-icon {
+    -icon-color: rgba(255, 255, 255, 0.9);
+}
+
+.nav-button:hover .ikonli-font-icon {
+    -icon-color: white;
+}
+
+.nav-button.nav-active {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-text-fill: white;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 0 0 3 0;
+    -fx-border-radius: 0;
+    -fx-font-weight: bold;
+}
+
+.nav-button.nav-active .ikonli-font-icon {
+    -icon-color: white;
+}
+
+.nav-button-logout {
+    -fx-background-color: rgba(220, 53, 69, 0.2);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-padding: 8 16;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.nav-button-logout:hover {
+    -fx-background-color: rgba(220, 53, 69, 0.4);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.nav-button-logout:pressed {
+    -fx-background-color: rgba(220, 53, 69, 0.6);
+}
+
+.nav-button-logout .ikonli-font-icon {
+    -icon-color: white;
+}
+
+.nav-separator {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-padding: 0 1;
+    -fx-pref-height: 24;
+}
+
+.content-section {
+    -fx-padding: 20 30;
+}

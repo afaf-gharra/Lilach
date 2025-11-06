@@ -5,7 +5,8 @@ import com.lilach.client.services.CartItem;
 import com.lilach.client.services.CartService;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 
 public class CustomArrangementController extends BaseController  {
     @FXML private ComboBox<String> typeCombo;
@@ -70,6 +71,7 @@ public class CustomArrangementController extends BaseController  {
     private void handleLogout() {
         logout();
     }
+    
     @FXML
     private void handleViewCart() {
         navigateTo("/com/lilach/client/views/cart.fxml", "Shopping Cart");
@@ -78,6 +80,16 @@ public class CustomArrangementController extends BaseController  {
     @FXML
     private void handleViewOrders() {
         navigateTo("/com/lilach/client/views/order_history.fxml", "My Orders");
+    }
+
+    @FXML
+    private void navigateToCatalog() {
+        navigateToWithSize("/com/lilach/client/views/catalog.fxml", "Lilach Flower Shop Catalog", 1200, 800);
+    }
+
+    @FXML
+    private void handleComplaints() {
+        navigateTo("/com/lilach/client/views/complaints.fxml", "Complaints Form");
     }
 
 

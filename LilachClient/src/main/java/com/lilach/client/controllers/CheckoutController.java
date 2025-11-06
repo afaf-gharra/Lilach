@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +33,8 @@ public class CheckoutController extends BaseController  {
     @FXML private VBox pickupInfoSection;
 
     @FXML private DatePicker deliveryDatePicker;
-    @FXML private TextField deliveryTimeField;
+    @FXML private ComboBox<String> deliveryHourCombo;
+    @FXML private ComboBox<String> deliveryMinuteCombo;
     @FXML private TextArea deliveryAddress;
     @FXML private TextField recipientName;
     @FXML private TextField recipientPhone;
@@ -46,7 +45,8 @@ public class CheckoutController extends BaseController  {
 
     @FXML private ComboBox<StoreDTO> pickupStoreCombo;
     @FXML private DatePicker pickupDatePicker;
-    @FXML private TextField pickupTimeField;
+    @FXML private ComboBox<String> pickupHourCombo;
+    @FXML private ComboBox<String> pickupMinuteCombo;
     @FXML private TextField pickupPersonField;
 
     private ToggleGroup deliveryMethodGroup;
@@ -64,6 +64,7 @@ public class CheckoutController extends BaseController  {
         deliveryDatePicker.setValue(LocalDate.now().plusDays(1));
 
         setupDeliveryMethodToggle();
+        initializeTimeComboBoxes();
         initializeFormatters();
         loadStores();
         // get cart items
@@ -81,6 +82,27 @@ public class CheckoutController extends BaseController  {
         currentSubtotal = CartService.getInstance().getCartTotal();
         subtotalLabel.setText(String.format("$%.2f", currentSubtotal));
         totalLabel.setText(String.format("$%.2f", currentSubtotal + 10.00)); // Add $10 delivery fee
+    }
+
+    private void initializeTimeComboBoxes() {
+        // Populate hours (09:00 to 20:00 for business hours)
+        ObservableList<String> hours = FXCollections.observableArrayList();
+        for (int i = 9; i <= 20; i++) {
+            hours.add(String.format("%02d", i));
+        }
+        deliveryHourCombo.setItems(hours);
+        pickupHourCombo.setItems(hours);
+        
+        // Populate minutes (00, 15, 30, 45)
+        ObservableList<String> minutes = FXCollections.observableArrayList("00", "15", "30", "45");
+        deliveryMinuteCombo.setItems(minutes);
+        pickupMinuteCombo.setItems(minutes);
+        
+        // Set default time to 14:00
+        deliveryHourCombo.setValue("14");
+        deliveryMinuteCombo.setValue("00");
+        pickupHourCombo.setValue("14");
+        pickupMinuteCombo.setValue("00");
     }
 
     
@@ -286,28 +308,30 @@ public class CheckoutController extends BaseController  {
         
 
          if (deliveryToggle.isSelected() || fastDeliveryToggle.isSelected()) {
-            order.setDeliveryDate(deliveryDatePicker.getValue().atTime(java.time.LocalTime.parse(deliveryTimeField.getText())));
+            String timeString = deliveryHourCombo.getValue() + ":" + deliveryMinuteCombo.getValue();
+            order.setDeliveryDate(deliveryDatePicker.getValue().atTime(LocalTime.parse(timeString)));
             order.setDeliveryAddress(deliveryAddress.getText());
             order.setRecipientName(recipientName.getText());
             order.setRecipientPhone(recipientPhone.getText());
         } else {
-            order.setDeliveryDate(pickupDatePicker.getValue().atTime(java.time.LocalTime.parse(pickupTimeField.getText())));
+            String timeString = pickupHourCombo.getValue() + ":" + pickupMinuteCombo.getValue();
+            order.setDeliveryDate(pickupDatePicker.getValue().atTime(LocalTime.parse(timeString)));
             order.setRecipientName(pickupPersonField.getText());
         }
         
         // Set order details
         
         // Convert cart items to order items
-        List<OrderItemDTO> orderItems = new ArrayList<>();
+        List<OrderItemDTO> items = new ArrayList<>();
         for (CartItem orderItemDTO : CartService.getInstance().getCartItems()) {
             OrderItemDTO orderItem = new OrderItemDTO();
             orderItem.setProduct(new ProductDTO());
             orderItem.setProductId(orderItemDTO.getId());
             orderItem.setQuantity(orderItemDTO.getQuantity());
-            orderItems.add(orderItem);
+            items.add(orderItem);
         }
         
-        order.setItems(orderItems);
+        order.setItems(items);
         
         return order;
     }
@@ -340,8 +364,9 @@ public class CheckoutController extends BaseController  {
             valid = false;
         }
         
-        if (!isValidTime(deliveryTimeField.getText())) {
-            deliveryTimeField.getStyleClass().add("field-error");
+        if (deliveryHourCombo.getValue() == null || deliveryMinuteCombo.getValue() == null) {
+            if (deliveryHourCombo.getValue() == null) deliveryHourCombo.getStyleClass().add("field-error");
+            if (deliveryMinuteCombo.getValue() == null) deliveryMinuteCombo.getStyleClass().add("field-error");
             valid = false;
         }
         
@@ -389,8 +414,9 @@ public class CheckoutController extends BaseController  {
             valid = false;
         }
         
-        if (!isValidTime(pickupTimeField.getText())) {
-            pickupTimeField.getStyleClass().add("field-error");
+        if (pickupHourCombo.getValue() == null || pickupMinuteCombo.getValue() == null) {
+            if (pickupHourCombo.getValue() == null) pickupHourCombo.getStyleClass().add("field-error");
+            if (pickupMinuteCombo.getValue() == null) pickupMinuteCombo.getStyleClass().add("field-error");
             valid = false;
         }
         
@@ -400,17 +426,6 @@ public class CheckoutController extends BaseController  {
         }
         
         return valid;
-    }
-
-    private boolean isValidTime(String time) {
-        if (time == null || time.trim().isEmpty()) return false;
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            LocalTime.parse(time, formatter);
-            return true;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
     }
 
     private boolean isValidPhone(String phone) {
@@ -433,6 +448,16 @@ public class CheckoutController extends BaseController  {
     @FXML
     private void handleViewOrders() {
         navigateTo("/com/lilach/client/views/order_history.fxml", "My Orders");
+    }
+    
+    @FXML
+    private void handleComplaints() {
+        navigateTo("/com/lilach/client/views/complaints.fxml", "Complaints Form");
+    }
+
+    @FXML
+    private void navigateToCatalog() {
+        navigateToWithSize("/com/lilach/client/views/catalog.fxml", "Lilach Flower Shop Catalog", 1200, 800);
     }
     
 
