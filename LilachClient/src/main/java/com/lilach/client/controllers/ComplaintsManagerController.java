@@ -1,16 +1,23 @@
 package com.lilach.client.controllers;
 
-import com.lilach.client.models.ComplaintDTO;
-import com.lilach.client.services.ApiService;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
+
+import com.lilach.client.models.ComplaintDTO;
+import com.lilach.client.services.ApiService;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ComplaintsManagerController extends BaseController {
     
@@ -243,5 +250,10 @@ public class ComplaintsManagerController extends BaseController {
     private void handleRefresh() {
         loadComplaints();
         showSuccess("Refreshed", "Complaints list refreshed");
+    }
+    
+    @FXML
+    private void handleBack() {
+        navigateTo("/com/lilach/client/views/store_manager.fxml", "Store Manager");
     }
 }

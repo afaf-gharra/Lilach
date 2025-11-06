@@ -2,77 +2,150 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <VBox xmlns="http://javafx.com/javafx/17" 
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.lilach.client.controllers.ReportsController"
-      spacing="20" 
-      styleClass="bg-primary"
-      prefWidth="1000" 
-      prefHeight="700"
+      spacing="0" 
+      style="-fx-background-color: linear-gradient(to bottom, #f9f7fe, #f0e6ff);"
+      prefWidth="1600" 
+      prefHeight="900"
       stylesheets="@/com/lilach/client/css/styles.css">
     
-    <Label text="Store Reports" styleClass="h1 text-white"/>
-    
-    <HBox spacing="20" alignment="CENTER">
-        <ComboBox fx:id="reportTypeCombo" promptText="Select Report Type" styleClass="form-control" prefWidth="150">
-
-        </ComboBox>
+    <!-- Header Section -->
+    <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-background-color: #8a4fff; -fx-background-radius: 0 0 15 15; -fx-padding: 15;">
         
-        <ComboBox fx:id="yearCombo" promptText="Select Year" styleClass="form-control" prefWidth="120"/>
-        <ComboBox fx:id="quarterCombo" promptText="Select Quarter" styleClass="form-control" prefWidth="120" disable="true">
- 
-        </ComboBox>
-        
-        <Button text="Generate Report" onAction="#handleGenerateReport" styleClass="btn btn-success">
+        <Button onAction="#handleBack" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 20px; -fx-cursor: hand;">
             <graphic>
-                <FontIcon iconLiteral="fas-chart-bar"/>
+                <FontIcon iconLiteral="fas-arrow-left" iconSize="20" iconColor="white"/>
             </graphic>
         </Button>
+        
+        <ImageView fitHeight="50" fitWidth="50">
+            <Image url="@/com/lilach/client/images/logo.png" preserveRatio="true"/>
+        </ImageView>
+
+        <Label text="Store Reports" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="24" />
+            </font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS" />
+        <Label fx:id="userNameLabel" text="Manager" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
     </HBox>
     
-    <VBox styleClass="card p-4" spacing="15">
-        <Label fx:id="reportTitle" text="Select report parameters to generate" styleClass="h2 text-dark"/>
-        
-        <HBox spacing="30">
-            <!-- Financial Summary -->
-            <VBox spacing="10" styleClass="report-section">
-                <Label text="Financial Summary" styleClass="h3 text-lilac"/>
-                <Label fx:id="totalRevenue" text="Total Revenue: $0.00" styleClass="report-item"/>
-                <Label fx:id="totalProfit" text="Total Profit: $0.00" styleClass="report-item"/>
-                <Label fx:id="avgOrderValue" text="Avg Order Value: $0.00" styleClass="report-item"/>
+    <!-- Main Content Area -->
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
+        <VBox spacing="20" style="-fx-padding: 30;">
+            
+            <!-- Report Parameters Card -->
+            <VBox spacing="20" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 25; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+                <Label text="Report Parameters" style="-fx-font-size: 18px; -fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
+                
+                <HBox spacing="20" alignment="CENTER_LEFT">
+                    <VBox spacing="8">
+                        <Label text="Report Type:" style="-fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
+                        <ComboBox fx:id="reportTypeCombo" promptText="Select Report Type" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-pref-width: 180; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                    </VBox>
+                    
+                    <VBox spacing="8">
+                        <Label text="Year:" style="-fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
+                        <ComboBox fx:id="yearCombo" promptText="Select Year" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-pref-width: 140; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
+                    </VBox>
+                    
+                    <VBox spacing="8">
+                        <Label text="Quarter:" style="-fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
+                        <ComboBox fx:id="quarterCombo" promptText="Select Quarter" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-pref-width: 140; -fx-background-color: white; -fx-border-color: #e0d6ff;" disable="true"/>
+                    </VBox>
+                    
+                    <Region HBox.hgrow="ALWAYS"/>
+                    
+                    <Button text="Generate Report" onAction="#handleGenerateReport" style="-fx-background-color: #8a4fff; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 12 30; -fx-font-size: 14px; -fx-font-weight: bold;">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-chart-bar" iconColor="white"/>
+                        </graphic>
+                    </Button>
+                </HBox>
             </VBox>
             
-            <!-- Order Summary -->
-            <VBox spacing="10" styleClass="report-section">
-                <Label text="Order Summary" styleClass="h3 text-lilac"/>
-                <Label fx:id="totalOrders" text="Total Orders: 0" styleClass="report-item"/>
-                <Label fx:id="completedOrders" text="Completed Orders: 0" styleClass="report-item"/>
-                <Label fx:id="completionRate" text="Completion Rate: 0%" styleClass="report-item"/>
+            <!-- Report Results Card -->
+            <VBox spacing="20" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 25; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <Label fx:id="reportTitle" text="Select report parameters to generate" style="-fx-font-size: 20px; -fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Export to PDF" onAction="#handleExport" style="-fx-background-color: #ff6b6b; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 10 25; -fx-font-weight: bold;">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-file-pdf" iconColor="white"/>
+                        </graphic>
+                    </Button>
+                </HBox>
+                
+                <Separator style="-fx-background-color: #e0d6ff;"/>
+                
+                <GridPane hgap="30" vgap="20">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="33"/>
+                        <ColumnConstraints percentWidth="33"/>
+                        <ColumnConstraints percentWidth="33"/>
+                    </columnConstraints>
+                    
+                    <!-- Financial Summary -->
+                    <VBox spacing="12" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-background-color: #f3efff; -fx-background-radius: 12; -fx-padding: 20;">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontIcon iconLiteral="fas-dollar-sign" iconSize="24" iconColor="#8a4fff"/>
+                            <Label text="Financial Summary" style="-fx-font-size: 16px; -fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
+                        </HBox>
+                        <Separator style="-fx-background-color: #d0c0ff;"/>
+                        <Label fx:id="totalRevenue" text="Total Revenue: $0.00" style="-fx-font-size: 14px; -fx-text-fill: #333;"/>
+                        <Label fx:id="totalProfit" text="Total Profit: $0.00" style="-fx-font-size: 14px; -fx-text-fill: #333;"/>
+                        <Label fx:id="avgOrderValue" text="Avg Order Value: $0.00" style="-fx-font-size: 14px; -fx-text-fill: #333;"/>
+                    </VBox>
+                    
+                    <!-- Order Summary -->
+                    <VBox spacing="12" GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-background-color: #fff3e0; -fx-background-radius: 12; -fx-padding: 20;">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontIcon iconLiteral="fas-shopping-bag" iconSize="24" iconColor="#ff9800"/>
+                            <Label text="Order Summary" style="-fx-font-size: 16px; -fx-text-fill: #e65100; -fx-font-weight: bold;"/>
+                        </HBox>
+                        <Separator style="-fx-background-color: #ffcc80;"/>
+                        <Label fx:id="totalOrders" text="Total Orders: 0" style="-fx-font-size: 14px; -fx-text-fill: #333;"/>
+                        <Label fx:id="completedOrders" text="Completed Orders: 0" style="-fx-font-size: 14px; -fx-text-fill: #333;"/>
+                        <Label fx:id="completionRate" text="Completion Rate: 0%" style="-fx-font-size: 14px; -fx-text-fill: #333;"/>
+                    </VBox>
+                    
+                    <!-- Complaint Summary -->
+                    <VBox spacing="12" GridPane.rowIndex="0" GridPane.columnIndex="2" style="-fx-background-color: #ffebee; -fx-background-radius: 12; -fx-padding: 20;">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontIcon iconLiteral="fas-exclamation-triangle" iconSize="24" iconColor="#f44336"/>
+                            <Label text="Complaint Summary" style="-fx-font-size: 16px; -fx-text-fill: #c62828; -fx-font-weight: bold;"/>
+                        </HBox>
+                        <Separator style="-fx-background-color: #ef9a9a;"/>
+                        <Label fx:id="totalComplaints" text="Total Complaints: 0" style="-fx-font-size: 14px; -fx-text-fill: #333;"/>
+                        <Label fx:id="resolvedComplaints" text="Resolved: 0" style="-fx-font-size: 14px; -fx-text-fill: #333;"/>
+                        <Label fx:id="resolutionRate" text="Resolution Rate: 0%" style="-fx-font-size: 14px; -fx-text-fill: #333;"/>
+                    </VBox>
+                </GridPane>
+                
+                <!-- Top Products Section -->
+                <VBox spacing="12" style="-fx-background-color: #e8f5e9; -fx-background-radius: 12; -fx-padding: 20;">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <FontIcon iconLiteral="fas-star" iconSize="24" iconColor="#4caf50"/>
+                        <Label text="Top Products" style="-fx-font-size: 16px; -fx-text-fill: #2e7d32; -fx-font-weight: bold;"/>
+                    </HBox>
+                    <Separator style="-fx-background-color: #a5d6a7;"/>
+                    <ListView fx:id="topProductsList" prefHeight="150" style="-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #c8e6c9; -fx-border-radius: 8;"/>
+                </VBox>
             </VBox>
             
-            <!-- Complaint Summary -->
-            <VBox spacing="10" styleClass="report-section">
-                <Label text="Complaint Summary" styleClass="h3 text-lilac"/>
-                <Label fx:id="totalComplaints" text="Total Complaints: 0" styleClass="report-item"/>
-                <Label fx:id="resolvedComplaints" text="Resolved: 0" styleClass="report-item"/>
-                <Label fx:id="resolutionRate" text="Resolution Rate: 0%" styleClass="report-item"/>
-            </VBox>
-        </HBox>
-        
-        <!-- Top Products -->
-        <VBox spacing="10" styleClass="report-section">
-            <Label text="Top Products" styleClass="h3 text-lilac"/>
-            <ListView fx:id="topProductsList" prefHeight="100" styleClass="report-list"/>
         </VBox>
-        
-        <Button text="Export to PDF" onAction="#handleExport" styleClass="btn btn-info">
-            <graphic>
-                <FontIcon iconLiteral="fas-file-pdf"/>
-            </graphic>
-        </Button>
-    </VBox>
+    </ScrollPane>
     
-    <Label text="© 2025 Lilach Flower Shop" styleClass="text-white"/>
+    <!-- Footer -->
+    <HBox alignment="CENTER" style="-fx-background-color: #8a4fff; -fx-background-radius: 15 15 0 0; -fx-padding: 10;">
+        <Label text="© 2025 Lilach Flower Shop" style="-fx-text-fill: white;"/>
+    </HBox>
 </VBox>

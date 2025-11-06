@@ -1,8 +1,9 @@
 package com.lilach.client.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDate;
 import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ReportDTO {
@@ -38,8 +39,10 @@ public class ReportDTO {
     // Complaint metrics
     private int totalComplaints;
     private int resolvedComplaints;
+    private int pendingComplaints;
     private double resolutionRate;
     private double averageResolutionTime; // in days
+    private java.util.List<String> pendingComplaintCustomers; // Customer names with pending complaints
     
     public ReportDTO() {}
     
@@ -66,6 +69,8 @@ public class ReportDTO {
     public double getCustomerSatisfaction() { return customerSatisfaction; } public void setCustomerSatisfaction(double customerSatisfaction) { this.customerSatisfaction = customerSatisfaction; }
     public int getTotalComplaints() { return totalComplaints; } public void setTotalComplaints(int totalComplaints) { this.totalComplaints = totalComplaints; }
     public int getResolvedComplaints() { return resolvedComplaints; } public void setResolvedComplaints(int resolvedComplaints) { this.resolvedComplaints = resolvedComplaints; }
+    public int getPendingComplaints() { return pendingComplaints; } public void setPendingComplaints(int pendingComplaints) { this.pendingComplaints = pendingComplaints; }
     public double getResolutionRate() { return resolutionRate; } public void setResolutionRate(double resolutionRate) { this.resolutionRate = resolutionRate; }
     public double getAverageResolutionTime() { return averageResolutionTime; } public void setAverageResolutionTime(double averageResolutionTime) { this.averageResolutionTime = averageResolutionTime; }
+    public java.util.List<String> getPendingComplaintCustomers() { return pendingComplaintCustomers; } public void setPendingComplaintCustomers(java.util.List<String> pendingComplaintCustomers) { this.pendingComplaintCustomers = pendingComplaintCustomers; }
 }

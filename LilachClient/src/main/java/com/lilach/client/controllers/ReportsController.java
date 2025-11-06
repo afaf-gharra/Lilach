@@ -1,16 +1,19 @@
 package com.lilach.client.controllers;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.lilach.client.models.ReportDTO;
 import com.lilach.client.services.ApiService;
 import com.lilach.client.utils.ReportPdfGenerator;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 
 public class ReportsController extends BaseController {
     
@@ -29,6 +32,7 @@ public class ReportsController extends BaseController {
     @FXML private Label resolutionRate;
     @FXML private ListView<String> topProductsList;
     @FXML private Button exportButton;
+    @FXML private Label userNameLabel;
     
     private ReportDTO currentReport;
     
@@ -36,6 +40,16 @@ public class ReportsController extends BaseController {
     public void initialize() {
         setupReportTypeListener();
         loadAvailableYears();
+        
+        // Set user name in header
+        if (getLoggedInUser() != null) {
+            userNameLabel.setText(getLoggedInUser().getFullName());
+        }
+    }
+    
+    @FXML
+    private void handleBack() {
+        navigateTo("/com/lilach/client/views/store_manager.fxml", "Store Manager");
     }
     
     private void setupReportTypeListener() {
