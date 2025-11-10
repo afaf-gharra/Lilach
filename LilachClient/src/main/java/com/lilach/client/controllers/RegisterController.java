@@ -132,6 +132,12 @@ private void navigateToCatalog() {
             "Lilach Flower Shop Catalog", 1200, 800);
 }
 
+    // FXML onAction handler expected by register.fxml (See Catalog button)
+    @FXML
+    private void handleSeeCatalog() {
+        navigateToCatalog();
+    }
+
     
     @FXML
     private void handleRegister() {
