@@ -1,18 +1,31 @@
 package com.lilach.client.controllers;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.kordamp.ikonli.javafx.FontIcon;
+
 import com.lilach.client.models.StoreDTO;
 import com.lilach.client.models.UserDTO;
 import com.lilach.client.services.ApiService;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import org.kordamp.ikonli.javafx.FontIcon;
-
-import java.io.IOException;
-import java.util.List;
 
 public class AdminDashboardController extends BaseController {
 
@@ -195,36 +208,57 @@ public class AdminDashboardController extends BaseController {
     }
 
     private void loadData() {
-        loadStores();
-        loadUsers();
-        loadStoreCombo();
-    }
-
-    private void loadStores() {
+        String accountType = getLoggedInUser().getAccountType();
         try {
-            List<StoreDTO> allStores = ApiService.getAllStores();
-            stores.setAll(allStores);
+            if ("CHAIN".equals(accountType) || "MEMBER".equals(accountType)) {
+                // Load all stores and users for chain/member admins
+                List<StoreDTO> allStores = ApiService.getAllStores();
+                List<UserDTO> allUsers = ApiService.getAllUsers();
+                stores.setAll(allStores);
+                users.setAll(allUsers);
+                userStoreCombo.getItems().setAll(allStores);
+            } else {
+                // Load only data for admin's store
+                Integer storeId = getLoggedInUser().getStoreId();
+                StoreDTO store = ApiService.getStoreById(storeId);
+                List<UserDTO> allUsers = ApiService.getAllUsers();
+                List<UserDTO> storeUsers = allUsers.stream()
+                    .filter(u -> u.getStoreId() != null && u.getStoreId().equals(storeId))
+                    .collect(Collectors.toList());
+
+                if (store != null) {
+                    stores.setAll(store);
+                    users.setAll(storeUsers);
+                    userStoreCombo.getItems().setAll(store);
+                } else {
+                    // No store assigned: empty lists
+                    stores.clear();
+                    users.clear();
+                    userStoreCombo.getItems().clear();
+                }
+            }
+
+            // Update table views
             storesTable.setItems(stores);
-        } catch (IOException e) {
-            showError("Connection Error", "Failed to load stores: " + e.getMessage());
-        }
-    }
-
-    private void loadUsers() {
-        try {
-            // You'll need to implement getAllUsers in ApiService
-            List<UserDTO> allUsers = ApiService.getAllUsers();
-            users.setAll(allUsers);
             usersTable.setItems(users);
+            loadStatistics();
+
         } catch (IOException e) {
-            showError("Connection Error", "Failed to load users: " + e.getMessage());
+            showError("Connection Error", "Failed to load data: " + e.getMessage());
         }
     }
 
     private void loadStoreCombo() {
         try {
-            List<StoreDTO> allStores = ApiService.getAllStores();
-            userStoreCombo.getItems().setAll(allStores);
+            String accountType = getLoggedInUser().getAccountType();
+            if ("CHAIN".equals(accountType) || "MEMBER".equals(accountType)) {
+                List<StoreDTO> allStores = ApiService.getAllStores();
+                userStoreCombo.getItems().setAll(allStores);
+            } else {
+                StoreDTO store = ApiService.getStoreById(getLoggedInUser().getStoreId());
+                if (store != null) userStoreCombo.getItems().setAll(store);
+                else userStoreCombo.getItems().clear();
+            }
         } catch (IOException e) {
             showError("Connection Error", "Failed to load stores for combo: " + e.getMessage());
         }
@@ -235,13 +269,13 @@ public class AdminDashboardController extends BaseController {
             // Update statistics
             totalStoresLabel.setText(String.valueOf(stores.size()));
             totalUsersLabel.setText(String.valueOf(users.size()));
-            
+
             long activeStores = stores.stream().filter(StoreDTO::isActive).count();
             long activeUsers = users.stream().filter(UserDTO::isActive).count();
-            
+
             activeStoresLabel.setText(String.valueOf(activeStores));
             activeUsersLabel.setText(String.valueOf(activeUsers));
-            
+
         } catch (Exception e) {
             showError("Error", "Failed to load statistics: " + e.getMessage());
         }
@@ -297,7 +331,7 @@ public class AdminDashboardController extends BaseController {
         storePhoneField.clear();
         storeEmailField.clear();
         storeActiveCheckbox.setSelected(true);
-        
+
         selectedStore = null;
         updateStoreButton.setDisable(true);
         addStoreButton.setDisable(false);
@@ -312,7 +346,7 @@ public class AdminDashboardController extends BaseController {
         userAccountTypeCombo.getSelectionModel().clearSelection();
         userStoreCombo.getSelectionModel().clearSelection();
         userActiveCheckbox.setSelected(true);
-        
+
         selectedUser = null;
         updateUserButton.setDisable(true);
         addUserButton.setDisable(false);
@@ -326,7 +360,7 @@ public class AdminDashboardController extends BaseController {
         try {
             StoreDTO newStore = createStoreFromForm();
             StoreDTO createdStore = ApiService.createStore(newStore);
-            
+
             if (createdStore != null) {
                 stores.add(createdStore);
                 clearStoreForm();
@@ -348,7 +382,7 @@ public class AdminDashboardController extends BaseController {
         try {
             StoreDTO updatedStore = createStoreFromForm();
             updatedStore.setId(selectedStore.getId());
-            
+
             StoreDTO result = ApiService.updateStore(updatedStore);
             if (result != null) {
                 int index = stores.indexOf(selectedStore);
@@ -397,7 +431,7 @@ public class AdminDashboardController extends BaseController {
         try {
             UserDTO newUser = createUserFromForm();
             UserDTO createdUser = ApiService.createUser(newUser);
-            
+
             if (createdUser != null) {
                 users.add(createdUser);
                 clearUserForm();
@@ -419,7 +453,7 @@ public class AdminDashboardController extends BaseController {
         try {
             UserDTO updatedUser = createUserFromForm();
             updatedUser.setId(selectedUser.getId());
-            
+
             UserDTO result = ApiService.updateUser(updatedUser);
             if (result != null) {
                 int index = users.indexOf(selectedUser);
@@ -507,13 +541,13 @@ public class AdminDashboardController extends BaseController {
         user.setRole(userRoleCombo.getValue());
         user.setAccountType(userAccountTypeCombo.getValue());
         user.setActive(userActiveCheckbox.isSelected());
-        
+
         // Set store if selected
         StoreDTO selectedStore = userStoreCombo.getValue();
         if (selectedStore != null) {
             user.setStoreId(selectedStore.getId());
         }
-        
+
         return user;
     }
 

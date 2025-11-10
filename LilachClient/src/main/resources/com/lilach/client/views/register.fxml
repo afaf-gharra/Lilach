@@ -130,6 +130,13 @@
                         <FontIcon iconLiteral="fas-user-plus" iconSize="14"/>
                     </graphic>
                 </Button>
+
+                <!-- See Catalog Button -->
+                <Button fx:id="seeCatalogButton" text="See Catalog" onAction="#handleSeeCatalog" styleClass="secondary-button">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-shopping-bag" iconSize="14"/>
+                    </graphic>
+                </Button>
                 
                 <!-- Login Link -->
                 <HBox spacing="5" alignment="CENTER">

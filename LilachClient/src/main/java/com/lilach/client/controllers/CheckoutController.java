@@ -154,14 +154,19 @@ public class CheckoutController extends BaseController  {
 
 
 
-    private void setupPhoneFormatter(TextField phoneField) {
-        phoneField.setTextFormatter(new TextFormatter<String>(change -> {
-            if (change.getControlNewText().matches("\\d{0,10}")) {
-                return change;
-            }
-            return null;
-        }));
-    }
+  private void setupPhoneFormatter(TextField phoneField) {
+    phoneField.setTextFormatter(new TextFormatter<String>(change -> {
+        String newText = change.getControlNewText();
+
+        if (newText.isEmpty()) return change;
+
+        if (newText.equals("0") || newText.equals("05")) return change;
+
+        if (newText.matches("05\\d{0,8}")) return change;
+
+        return null;
+    }));
+}
 
 
     private void loadStores() {

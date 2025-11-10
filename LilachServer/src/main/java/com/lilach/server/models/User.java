@@ -1,10 +1,18 @@
 package com.lilach.server.models;
 
-import javax.persistence.*;
+import java.time.LocalDate;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
@@ -28,6 +36,9 @@ public class User {
 
     @JsonProperty("isActive")
     private boolean isActive = true;
+    
+    @JsonProperty("isOnline")
+    private boolean isOnline = false;
     
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.CUSTOMER;
@@ -74,4 +85,6 @@ public class User {
     public void setRole(UserRole role) { this.role = role; }
     public Store getStore() { return store; }
     public void setStore(Store store) { this.store = store; }
+    public boolean isOnline() { return isOnline; }
+    public void setOnline(boolean isOnline) { this.isOnline = isOnline; }
 }

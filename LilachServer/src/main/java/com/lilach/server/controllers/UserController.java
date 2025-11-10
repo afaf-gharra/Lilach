@@ -1,12 +1,13 @@
 package com.lilach.server.controllers;
 
+import java.util.List;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lilach.server.models.User;
 import com.lilach.server.services.UserService;
+
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
-
-import java.util.List;
 
 public class UserController {
     private static final ObjectMapper mapper = new ObjectMapper();

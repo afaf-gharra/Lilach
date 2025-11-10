@@ -61,6 +61,12 @@
                     <Button fx:id="loginButton" text="Login" onAction="#handleLogin" styleClass="primary-button" prefWidth="150"/>
                     <Button fx:id="registerButton" text="Register" onAction="#handleRegister" styleClass="primary-button" prefWidth="150"/>
                 </HBox>
+                
+                <Button fx:id="seeCatalogButton" text="See Catalog" onAction="#handleSeeCatalog" styleClass="secondary-button" prefWidth="310">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-shopping-bag" iconSize="14"/>
+                    </graphic>
+                </Button>
             </VBox>
             
             <Label text="© 2025 Lilach Flower Shop" styleClass="copyright"/>

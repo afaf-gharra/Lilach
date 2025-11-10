@@ -25,6 +25,7 @@ public class RegisterController extends BaseController {
     @FXML private CheckBox termsCheckbox;
     @FXML private Button registerButton;
     @FXML private Hyperlink loginLink;
+
     
     private List<StoreDTO> allStores;
     
@@ -36,12 +37,19 @@ public class RegisterController extends BaseController {
     }
     
     private void setupFormValidation() {
-         phoneField.setTextFormatter(new TextFormatter<String>(change -> {
-            if (change.getControlNewText().matches("\\d{0,10}")) {
-                return change;
-            }
-            return null;
-        }));
+       phoneField.setTextFormatter(new TextFormatter<String>(change -> {
+    String newText = change.getControlNewText();
+
+    if (newText.isEmpty()) return change;
+
+    if (newText.equals("0") || newText.equals("05")) return change;
+
+    if (newText.matches("05\\d{0,8}")) return change;
+
+    return null;
+}));
+
+
 
         // Credit card validation
         creditCardField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -118,6 +126,12 @@ public class RegisterController extends BaseController {
         // Subscription checkbox tooltip
         subscriptionCheckbox.setTooltip(new Tooltip("Get 10% discount and free delivery for $20/month"));
     }
+    @FXML
+private void navigateToCatalog() {
+    navigateToWithSize("/com/lilach/client/views/catalog.fxml",
+            "Lilach Flower Shop Catalog", 1200, 800);
+}
+
     
     @FXML
     private void handleRegister() {
@@ -193,9 +207,10 @@ public class RegisterController extends BaseController {
         return true;
     }
     
-    private boolean validatePhoneNumber(String phone) {
-        return phone != null && phone.matches("\\d{10}");
-    }
+  private boolean validatePhoneNumber(String phone) {
+    return phone != null && phone.matches("05\\d{8}");
+}
+
     private UserDTO createUserFromForm() {
         UserDTO user = new UserDTO();
         user.setFullName(fullNameField.getText());
@@ -211,9 +226,9 @@ public class RegisterController extends BaseController {
         
         // Set account type based on subscription
         if (subscriptionCheckbox.isSelected()) {
-            user.setAccountType("MEMBER");
+            user.setAccountType("CHAIN");
         } else {
-            user.setAccountType("CUSTOMER");
+            user.setAccountType("STORE");
         }
         
         user.setRole("CUSTOMER");
@@ -223,7 +238,5 @@ public class RegisterController extends BaseController {
     }
     
     
-    private void navigateToCatalog() {
-        navigateToWithSize("/com/lilach/client/views/catalog.fxml", "Lilach Flower Shop Catalog", 1200, 800);
-    }
+   
 }

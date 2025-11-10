@@ -15,6 +15,7 @@ public class UserDTO {
     private Integer storeId;
     private String creditCard;
     private boolean isActive;
+    private boolean isOnline;
     
     // Default constructor
     public UserDTO() {}
@@ -52,5 +53,7 @@ public class UserDTO {
     
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
+    public boolean isOnline() { return isOnline; }
+    public void setOnline(boolean online) { isOnline = online; }
 
 }
