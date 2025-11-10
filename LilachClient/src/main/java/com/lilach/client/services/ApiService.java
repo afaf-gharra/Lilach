@@ -45,8 +45,10 @@ public class ApiService {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful() && response.body() != null) {
                 return mapper.readValue(response.body().string(), UserDTO.class);
+            } else {
+                String msg = response.body() != null ? response.body().string() : "Login failed: HTTP " + response.code();
+                throw new IOException(msg);
             }
-            return null;
         }
     }
     public static void addToCart(ProductDTO product) {
@@ -116,6 +118,19 @@ public class ApiService {
             return null;
         }
     }
+
+    public static boolean logout(int userId) throws IOException {
+        String json = String.format("{\"id\":%d}", userId);
+        RequestBody body = RequestBody.create(json, JSON);
+        Request request = new Request.Builder()
+            .url(BASE_URL + "logout")
+            .post(body)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        }
+    }
     //update order status
 
     public static OrderDTO updateOrderStatus(int orderId, String status) throws IOException {
@@ -173,7 +188,7 @@ public class ApiService {
     }
 
     // Add store-related methods
-    public static List<StoreDTO> getAllStores() throws IOException {
+    public static List<StoreDTO> getStores() throws IOException {
         Request request = new Request.Builder()
             .url(BASE_URL + "stores")
             .get()
@@ -188,6 +203,10 @@ public class ApiService {
             }
             return List.of();
         }
+    }
+
+    public static List<StoreDTO> getAllStores() throws IOException {
+        return getStores();
     }
 
 

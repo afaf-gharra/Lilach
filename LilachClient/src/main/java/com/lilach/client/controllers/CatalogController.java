@@ -77,12 +77,20 @@ public class CatalogController extends BaseController  {
     
     private void loadProducts() {
         try {
-            if(loggedInUser == null)
-            {
+            if (loggedInUser == null) {
+                // Not logged in - show all products
                 allProducts = ApiService.getAllProducts();
             }
-            else
-            {
+            else if ("member".equalsIgnoreCase(loggedInUser.getAccountType())) {
+                // Member users can see all products
+                allProducts = ApiService.getAllProducts();
+            }
+            else if ("chain".equalsIgnoreCase(loggedInUser.getAccountType())) {
+                // Chain users can see all products
+                allProducts = ApiService.getAllProducts();
+            }
+            else {
+                // Default case (store employees, etc) - show store-specific products
                 allProducts = ApiService.getStoreProducts(getLoggedInUser().getStoreId());
             }
             displayProducts(allProducts);
@@ -135,6 +143,21 @@ public class CatalogController extends BaseController  {
         addToCartButton.getStyleClass().addAll("btn", "btn-primary");
         addToCartButton.setOnAction(e -> addToCart(product));
         
+        try {
+            if (product.getStock() <= 0) {
+                addToCartButton.setText("Out of Stock");
+                addToCartButton.setDisable(true);
+                addToCartButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
+            } else {
+                // Ensure enabled and default text/style for in-stock items
+                addToCartButton.setText("Add to Cart");
+                addToCartButton.setDisable(false);
+                addToCartButton.setStyle(null);
+            }
+        } catch (Exception ex) {
+            // If product.getStock() doesn't exist or fails, leave button as default
+            System.out.println("Stock check skipped: " + ex.getMessage());
+        }
         card.getChildren().addAll(
             imageView,
             nameLabel,

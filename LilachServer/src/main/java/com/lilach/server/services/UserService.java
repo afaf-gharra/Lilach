@@ -1,14 +1,14 @@
 package com.lilach.server.services;
 
-import com.lilach.server.models.Store;
-import com.lilach.server.models.User;
-import com.lilach.server.utils.HibernateUtil;
-
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+
+import com.lilach.server.models.Store;
+import com.lilach.server.models.User;
+import com.lilach.server.utils.HibernateUtil;
 
 public class UserService {
     public static User authenticate(String username, String password) {
@@ -120,6 +120,52 @@ public class UserService {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             User manager = session.get(User.class, managerId);
             return manager != null ? manager.getStore() : null;
+        }
+    }
+
+    /**
+     * Reset the isOnline flag for all users to false.
+     * Intended to be called on server startup to clear any stale online states.
+     */
+    public static int resetAllOnlineFlags() {
+        Transaction transaction = null;
+        int updated = 0;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            // HQL bulk update to set isOnline = false for all users
+            updated = session.createQuery("UPDATE User SET isOnline = false").executeUpdate();
+            transaction.commit();
+            return updated;
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+            return updated;
+        }
+    }
+
+    /**
+     * Set a single user's isOnline flag.
+     * @param userId the user id
+     * @param online desired online state
+     * @return true if update succeeded
+     */
+    public static boolean setUserOnline(int userId, boolean online) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            User user = session.get(User.class, userId);
+            if (user == null) {
+                if (transaction != null) transaction.rollback();
+                return false;
+            }
+            user.setOnline(online);
+            session.update(user);
+            transaction.commit();
+            return true;
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+            return false;
         }
     }
 }
