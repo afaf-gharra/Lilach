@@ -9,6 +9,8 @@ import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class RegisterController extends BaseController {
     @FXML private TextField fullNameField;
@@ -19,7 +21,8 @@ public class RegisterController extends BaseController {
     @FXML private TextField phoneField;
     @FXML private ComboBox<StoreDTO> storeCombo;
     @FXML private TextField creditCardField;
-    @FXML private TextField expiryDateField;
+    @FXML private ComboBox<String> monthCombo;
+    @FXML private ComboBox<String> yearCombo;
     @FXML private TextField cvvField;
     @FXML private CheckBox subscriptionCheckbox;
     @FXML private CheckBox termsCheckbox;
@@ -28,9 +31,12 @@ public class RegisterController extends BaseController {
 
     
     private List<StoreDTO> allStores;
+    // Simple email validation pattern (allows subdomains, final TLD of length >=2)
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
     
     @FXML
     public void initialize() {
+        populateExpiryCombos();
         setupFormValidation();
         loadStores();
         setupEventHandlers();
@@ -60,18 +66,7 @@ public class RegisterController extends BaseController {
             }
         });
         
-        // Expiry date validation (MM/YY)
-        expiryDateField.setTextFormatter(new TextFormatter<String>(change -> {
-            String newText = change.getControlNewText();
-            if (newText.matches("\\d{0,2}/?\\d{0,2}")) {
-                // Auto-insert slash after 2 digits
-                if (newText.length() == 2 && !newText.contains("/")) {
-                    change.setText(change.getText() + "/");
-                }
-                return change;
-            }
-            return null;
-        }));
+        // expiry month/year are provided via combo boxes; no text formatter needed
         
         // CVV validation
         cvvField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -183,6 +178,11 @@ private void navigateToCatalog() {
             showError("Validation Error", "Email is required");
             return false;
         }
+        // Email format validation
+        if (!EMAIL_PATTERN.matcher(emailField.getText()).matches()) {
+            showError("Validation Error", "Please enter a valid email address (e.g. john.doe@gmail.com)");
+            return false;
+        }
         if (storeCombo.getValue() == null) {
             showError("Validation Error", "Please select a preferred store");
             return false;
@@ -197,8 +197,8 @@ private void navigateToCatalog() {
             showError("Validation Error", "Please enter a valid 16-digit credit card number");
             return false;
         }
-        if (!expiryDateField.getText().matches("\\d{2}/\\d{2}")) {
-            showError("Validation Error", "Please enter expiry date in MM/YY format");
+        if (monthCombo.getValue() == null || yearCombo.getValue() == null) {
+            showError("Validation Error", "Please select expiry month and year");
             return false;
         }
         if (cvvField.getText().length() < 3 || cvvField.getText().length() > 4) {
@@ -241,6 +241,22 @@ private void navigateToCatalog() {
         user.setActive(true);
         
         return user;
+    }
+    
+    private void populateExpiryCombos() {
+        // Months 1-12
+        ArrayList<String> months = new ArrayList<>();
+        for (int m = 1; m <= 12; m++) {
+            months.add(String.valueOf(m));
+        }
+        monthCombo.setItems(FXCollections.observableArrayList(months));
+
+        // Years 2026-2040
+        ArrayList<String> years = new ArrayList<>();
+        for (int y = 2026; y <= 2040; y++) {
+            years.add(String.valueOf(y));
+        }
+        yearCombo.setItems(FXCollections.observableArrayList(years));
     }
     
     

@@ -89,8 +89,11 @@
                     
                     <!-- Row 7 - Expiry & CVV -->
                     <Label text="Expiry Date *" styleClass="input-label" GridPane.rowIndex="12" GridPane.columnIndex="0"/>
-                    <TextField fx:id="expiryDateField" promptText="MMYY" styleClass="modern-input" 
-                               GridPane.rowIndex="13" GridPane.columnIndex="0"/>
+                    <!-- Month and Year combo boxes -->
+                    <HBox spacing="10" GridPane.rowIndex="13" GridPane.columnIndex="0">
+                        <ComboBox fx:id="monthCombo" promptText="Month" styleClass="modern-input"/>
+                        <ComboBox fx:id="yearCombo" promptText="Year" styleClass="modern-input"/>
+                    </HBox>
                     
                     <Label text="CVV *" styleClass="input-label" GridPane.rowIndex="12" GridPane.columnIndex="1"/>
                     <TextField fx:id="cvvField" promptText="CVV" styleClass="modern-input" 

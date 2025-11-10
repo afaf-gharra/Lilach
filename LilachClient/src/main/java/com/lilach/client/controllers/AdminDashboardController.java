@@ -88,6 +88,8 @@ public class AdminDashboardController extends BaseController {
         setupUserManagement();
         loadData();
         loadStatistics();
+         setupPhoneValidation(storePhoneField);
+    setupPhoneValidation(userPhoneField);
     }
 
     private void setupStoreManagement() {
@@ -205,7 +207,30 @@ public class AdminDashboardController extends BaseController {
         addUserButton.setOnAction(e -> addUser());
         updateUserButton.setOnAction(e -> updateUser());
         clearUserButton.setOnAction(e -> clearUserForm());
+        
     }
+/** 
+ * Phone field validation: must start with '05' and have up to 10 digits in total. 
+ * Allows empty or '0' as intermediate typing states.
+ */
+private void setupPhoneValidation(TextField phoneField) {
+    phoneField.textProperty().addListener((obs, oldValue, newValue) -> {
+        if (newValue == null) return;
+
+        // Allow: empty string, "0", or valid pattern starting with 05 followed by up to 8 digits
+        if (!newValue.matches("^$|^0$|^05\\d{0,8}$")) {
+            phoneField.setText(oldValue);
+            return;
+        }
+
+        // Safety trim to 10 characters (in case of paste)
+        if (newValue.length() > 10) {
+            phoneField.setText(newValue.substring(0, 10));
+        }
+    });
+}
+
+
 
     private void loadData() {
         String accountType = getLoggedInUser().getAccountType();
@@ -503,6 +528,11 @@ public class AdminDashboardController extends BaseController {
             showError("Validation Error", "Address is required");
             return false;
         }
+        String phone = storePhoneField.getText().trim();
+    if (!phone.matches("^05\\d{8}$")) {
+        showError("Validation Error", "Phone must start with 05 and contain exactly 10 digits");
+        return false;
+    }
         return true;
     }
 
@@ -519,6 +549,11 @@ public class AdminDashboardController extends BaseController {
             showError("Validation Error", "Role is required");
             return false;
         }
+            String phone = userPhoneField.getText().trim();
+    if (!phone.matches("^05\\d{8}$")) {
+        showError("Validation Error", "User phone must start with 05 and contain exactly 10 digits");
+        return false;
+    }
         return true;
     }
 
