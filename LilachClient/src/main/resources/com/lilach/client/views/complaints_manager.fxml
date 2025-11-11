@@ -41,7 +41,6 @@
             </graphic>
         </Button>
     </HBox>
-    </HBox>
     
     <!-- Main Content Area -->
     <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">

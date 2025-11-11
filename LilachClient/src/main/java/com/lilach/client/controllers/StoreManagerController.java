@@ -47,6 +47,7 @@ public class StoreManagerController extends BaseController {
     @FXML private TableColumn<ProductDTO, String> productNameColumn;
     @FXML private TableColumn<ProductDTO, String> categoryColumn;
     @FXML private TableColumn<ProductDTO, Double> priceColumn;
+    @FXML private TableColumn<ProductDTO, Integer> discountColumn;
     @FXML private TableColumn<ProductDTO, Integer> stockColumn;
     @FXML private TableColumn<ProductDTO, Boolean> availableColumn;
     @FXML private TextField productNameField;
@@ -56,6 +57,7 @@ public class StoreManagerController extends BaseController {
     @FXML private TextArea productDescriptionField;
     @FXML private TextField productColorField;
     @FXML private TextField productImageField;
+    @FXML private TextField productDiscountField;
     @FXML private CheckBox productAvailableCheckbox;
     @FXML private Button addProductButton;
     @FXML private Button updateProductButton;
@@ -143,6 +145,23 @@ public class StoreManagerController extends BaseController {
                 setText(empty || price == null ? "" : String.format("$%.2f", price));
             }
         });
+        discountColumn.setCellValueFactory(new PropertyValueFactory<>("discount"));
+        discountColumn.setCellFactory(column -> new TableCell<ProductDTO, Integer>() {
+            @Override
+            protected void updateItem(Integer discount, boolean empty) {
+                super.updateItem(discount, empty);
+                if (empty || discount == null) {
+                    setText("");
+                } else {
+                    setText(discount + "%");
+                    if (discount > 0) {
+                        setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+                    } else {
+                        setStyle("");
+                    }
+                }
+            }
+        });
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
         availableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
         availableColumn.setCellFactory(column -> new TableCell<ProductDTO, Boolean>() {
@@ -179,32 +198,75 @@ public class StoreManagerController extends BaseController {
                 productStockField.setText(oldValue);
             }
         });
+        
+        // Discount validation (0-100)
+        productDiscountField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+                if (!newValue.matches("\\d*")) {
+                    productDiscountField.setText(oldValue);
+                } else {
+                    try {
+                        int value = Integer.parseInt(newValue);
+                        if (value > 100) {
+                            productDiscountField.setText(oldValue);
+                        }
+                    } catch (NumberFormatException e) {
+                        // Keep the value if parsing fails (empty or incomplete)
+                    }
+                }
+            }
+        });
     }
     
     private void loadStoreData() {
-        Integer storeId = getLoggedInUser().getStoreId();
-        loadOrders(storeId);
-        loadProducts(storeId);
-    }
-    
-    private void loadOrders(Integer storeId) {
-        Integer ammangerstoreId = getLoggedInUser().getStoreId();
+        String accountType = getLoggedInUser().getAccountType();
         
-        
-        try {
-            currentStore = ApiService.getStoreById(ammangerstoreId);
-            if (currentStore == null) {
+        if ("CHAIN".equalsIgnoreCase(accountType) || "MEMBER".equalsIgnoreCase(accountType)) {
+            // Chain/Member accounts can see all orders and products
+            loadAllOrders();
+            loadAllProducts();
+        } else {
+            // Store employees see only their store's data
+            Integer storeId = getLoggedInUser().getStoreId();
+            if (storeId == null) {
                 showError("Store Error", "No store assigned to this manager");
                 return;
             }
             
-
+            try {
+                currentStore = ApiService.getStoreById(storeId);
+                if (currentStore == null) {
+                    showError("Store Error", "No store found");
+                    return;
+                }
+            } catch (IOException e) {
+                showError("Connection Error", "Failed to load store: " + e.getMessage());
+                return;
+            }
             
-            loadStoreOrders(currentStore.getId());
-            loadProducts(currentStore.getId());
-            
+            loadStoreOrders(storeId);
+            loadStoreProducts(storeId);
+        }
+    }
+    
+    private void loadAllOrders() {
+        try {
+            List<OrderDTO> allOrders = ApiService.getAllOrders();
+            orders.setAll(allOrders);
+            ordersTable.setItems(orders);
+            filterOrders();
         } catch (IOException e) {
-            showError("Connection Error", "Failed to load store data: " + e.getMessage());
+            showError("Connection Error", "Failed to load orders: " + e.getMessage());
+        }
+    }
+    
+    private void loadAllProducts() {
+        try {
+            List<ProductDTO> allProducts = ApiService.getAllProducts();
+            products.setAll(allProducts);
+            productsTable.setItems(products);
+        } catch (IOException e) {
+            showError("Connection Error", "Failed to load products: " + e.getMessage());
         }
     }
 
@@ -219,12 +281,11 @@ public class StoreManagerController extends BaseController {
         }
     }
 
-    private void loadProducts(int storeId) {
+    private void loadStoreProducts(int storeId) {
         try {
             List<ProductDTO> storeProducts = ApiService.getStoreProducts(storeId);
             products.setAll(storeProducts);
             productsTable.setItems(products);
-            
         } catch (IOException e) {
             showError("Connection Error", "Failed to load products: " + e.getMessage());
         }
@@ -259,18 +320,6 @@ public class StoreManagerController extends BaseController {
             showError("Validation Error", "Please enter a valid number for stock");
         } catch (IOException e) {
             showError("Connection Error", "Failed to update stock: " + e.getMessage());
-        }
-    }
-    
-    private void loadProducts(Integer storeId) {
-        try {
-            // In a real app, you'd have an API endpoint for store products
-            List<ProductDTO> allProducts = ApiService.getStoreProducts(storeId);
-            products.setAll(allProducts);
-            productsTable.setItems(products);
-            
-        } catch (IOException e) {
-            showError("Connection Error", "Failed to load products: " + e.getMessage());
         }
     }
     
@@ -380,6 +429,13 @@ public class StoreManagerController extends BaseController {
         productImageField.setText(product.getImageUrl());
         productAvailableCheckbox.setSelected(product.isAvailable());
         
+        // Set discount field
+        try {
+            productDiscountField.setText(String.valueOf(product.getDiscount()));
+        } catch (Exception e) {
+            productDiscountField.setText("0");
+        }
+        
         updateProductButton.setDisable(false);
         deleteProductButton.setDisable(false);
         addProductButton.setDisable(true);
@@ -393,6 +449,7 @@ public class StoreManagerController extends BaseController {
         productDescriptionField.clear();
         productColorField.clear();
         productImageField.clear();
+        productDiscountField.setText("0");
         productAvailableCheckbox.setSelected(true);
         
         updateProductButton.setDisable(true);
@@ -502,6 +559,16 @@ public class StoreManagerController extends BaseController {
         product.setColor(productColorField.getText());
         product.setImageUrl(productImageField.getText());
         product.setAvailable(productAvailableCheckbox.isSelected());
+        
+        // Set discount (default to 0 if empty or invalid)
+        try {
+            String discountText = productDiscountField.getText();
+            int discount = discountText.isEmpty() ? 0 : Integer.parseInt(discountText);
+            product.setDiscount(Math.max(0, Math.min(100, discount))); // Clamp to 0-100
+        } catch (NumberFormatException e) {
+            product.setDiscount(0);
+        }
+        
         StoreDTO loggedinUserStore = ApiService.getStoreById(loggedInUser.getStoreId());
         
         product.setStore(loggedinUserStore);

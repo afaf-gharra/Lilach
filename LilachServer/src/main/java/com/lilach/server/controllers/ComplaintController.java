@@ -1,5 +1,8 @@
 package com.lilach.server.controllers;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lilach.server.models.Complaint;
@@ -8,11 +11,9 @@ import com.lilach.server.models.User;
 import com.lilach.server.services.ComplaintService;
 import com.lilach.server.services.OrderService;
 import com.lilach.server.services.UserService;
+
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class ComplaintController {
     private static final ObjectMapper mapper = new ObjectMapper();
@@ -134,6 +135,7 @@ public class ComplaintController {
             // Create complaint
             Complaint complaint = new Complaint(order, user, complaintDTO.getType(), complaintDTO.getDescription());
             complaint.setDesiredResolution(complaintDTO.getDesiredResolution());
+            complaint.setCompensation(complaintDTO.getCompensation());
             complaint.setContactEmail(complaintDTO.isContactEmail());
             complaint.setContactPhone(complaintDTO.isContactPhone());
             

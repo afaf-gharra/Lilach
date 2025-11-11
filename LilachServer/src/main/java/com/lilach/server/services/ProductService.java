@@ -1,12 +1,14 @@
 package com.lilach.server.services;
 
-import com.lilach.server.models.Product;
-import com.lilach.server.models.Store;
-import com.lilach.server.utils.HibernateUtil;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import java.util.List;
+
+import com.lilach.server.models.Product;
+import com.lilach.server.models.Store;
+import com.lilach.server.utils.HibernateUtil;
 
 public class ProductService {
     public static List<Product> getAllProducts() {
@@ -67,6 +69,8 @@ public class ProductService {
                 if (updates.getImageUrl() != null) product.setImageUrl(updates.getImageUrl());
                 if (updates.getStock() >= 0) product.setStock(updates.getStock());
                 product.setAvailable(updates.isAvailable());
+                // Update discount field
+                product.setDiscount(updates.getDiscount());
                 
                 session.update(product);
                 transaction.commit();

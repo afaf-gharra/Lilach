@@ -28,12 +28,22 @@ public class OrderController {
         mapper.registerModule(new JavaTimeModule());
 
         app.post("/api/orders", OrderController::createOrder);
+        app.get("/api/orders", OrderController::getAllOrders);
         app.get("/api/orders/user/{userId}", OrderController::getUserOrders);
         app.put("/api/orders/{id}/cancel", OrderController::cancelOrder);
         // app put status
         app.put("/api/orders/{id}/status", OrderController::updateOrderStatus);
         // get store orders
         app.get("/api/store/{storeId}/orders", OrderController::getStoreOrders);
+    }
+
+    public static void getAllOrders(Context ctx) {
+        try {
+            List<Order> orders = OrderService.getAllOrders();
+            ctx.json(orders).status(HttpStatus.OK);
+        } catch (Exception e) {
+            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Error retrieving all orders: " + e.getMessage());
+        }
     }
 
     public static void getStoreOrders(Context ctx) {
