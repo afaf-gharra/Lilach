@@ -74,6 +74,28 @@ public class ApiService {
     }
 
     //getStoreOrders
+    
+    public static List<OrderDTO> getAllOrders() throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "orders")
+            .get()
+            .build();
+
+        mapper.registerModule(new JavaTimeModule());
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                String responseBody = response.body().string();
+                return mapper.readValue(
+                    responseBody, 
+                    mapper.getTypeFactory().constructCollectionType(List.class, OrderDTO.class)
+                );
+            } else {
+                System.err.println("Failed to get all orders: " + response.code());
+                return List.of();
+            }
+        }
+    }
 
     public static List<OrderDTO> getStoreOrders(int storeId) throws IOException {
         Request request = new Request.Builder()
