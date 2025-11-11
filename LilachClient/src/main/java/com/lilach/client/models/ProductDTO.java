@@ -12,6 +12,7 @@ public class ProductDTO {
     private String color;
     private String imageUrl;
     private boolean available;
+    private int discount; // Discount percentage [0-100], default 0
     private int stock;
     private StoreDTO store;
     
@@ -36,6 +37,8 @@ public class ProductDTO {
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     public boolean isAvailable() { return available; }
     public void setAvailable(boolean available) { this.available = available; }
+    public int getDiscount() { return discount; }
+    public void setDiscount(int discount) { this.discount = discount; }
     public int getStock() { return stock; }
     public void setStock(int int1) { this.stock = int1; }
     public StoreDTO getStore() { return store; }

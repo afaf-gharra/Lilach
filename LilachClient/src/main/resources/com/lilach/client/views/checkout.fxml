@@ -86,6 +86,7 @@
                     <VBox spacing="5">
                         <Label text="Delivery Date *" styleClass="input-label"/>
                         <DatePicker fx:id="deliveryDatePicker" promptText="Select delivery date" styleClass="modern-input"/>
+                        <Label fx:id="fastDeliveryTimeLabel" text="" styleClass="input-label" visible="false" managed="false"/>
                     </VBox>
                     
                     <VBox spacing="5">

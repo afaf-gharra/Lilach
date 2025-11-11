@@ -113,7 +113,7 @@ public class CatalogController extends BaseController  {
         card.getStyleClass().add("product-card");
         card.setSpacing(10);
         card.setPrefWidth(200);
-        
+
         // Product image
         ImageView imageView = new ImageView();
         try {
@@ -123,49 +123,72 @@ public class CatalogController extends BaseController  {
             imageView.setFitWidth(180);
             imageView.setFitHeight(180);
             imageView.setPreserveRatio(true);
-
         } catch (Exception e) {
             System.out.println("Image not found: " + e.getMessage());
             imageView.setImage(new Image(getClass().getResourceAsStream("/com/lilach/client/images/logo.png")));
         }
-        
+
         // Product details
         Label nameLabel = new Label(product.getName());
         nameLabel.getStyleClass().add("product-name");
-        
-        Label priceLabel = new Label(String.format("$%.2f", product.getPrice()));
-        priceLabel.getStyleClass().add("product-price");
-        
+
+        int discount = 0;
+        try {
+            discount = product.getDiscount();
+        } catch (Exception ignore) {}
+
+        double originalPrice = product.getPrice();
+        double discountedPrice = originalPrice;
+        Label originalPriceLabel = new Label(String.format("$%.2f", originalPrice));
+        originalPriceLabel.getStyleClass().add("product-price");
+
+        Label discountedPriceLabel = null;
+        Label saleBadge = null;
+        if (discount > 0) {
+            discountedPrice = originalPrice * (100 - discount) / 100.0;
+            // Style original price as smaller & strikethrough
+            originalPriceLabel.getStyleClass().add("original-price");
+            discountedPriceLabel = new Label(String.format("$%.2f", discountedPrice));
+            discountedPriceLabel.getStyleClass().add("discount-price");
+            saleBadge = new Label("SALE -" + discount + "%");
+            saleBadge.getStyleClass().add("sale-badge");
+            card.getStyleClass().add("sale-card");
+        }
+
         Label categoryLabel = new Label(product.getCategory());
         categoryLabel.getStyleClass().add("product-category");
-        
+
         Button addToCartButton = new Button("Add to Cart");
         addToCartButton.getStyleClass().addAll("btn", "btn-primary");
         addToCartButton.setOnAction(e -> addToCart(product));
-        
+
         try {
             if (product.getStock() <= 0) {
                 addToCartButton.setText("Out of Stock");
                 addToCartButton.setDisable(true);
                 addToCartButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
             } else {
-                // Ensure enabled and default text/style for in-stock items
                 addToCartButton.setText("Add to Cart");
                 addToCartButton.setDisable(false);
                 addToCartButton.setStyle(null);
             }
         } catch (Exception ex) {
-            // If product.getStock() doesn't exist or fails, leave button as default
             System.out.println("Stock check skipped: " + ex.getMessage());
         }
-        card.getChildren().addAll(
-            imageView,
-            nameLabel,
-            priceLabel,
-            categoryLabel,
-            addToCartButton
-        );
-        
+
+        // Assemble card children
+        card.getChildren().add(imageView);
+        if (saleBadge != null) card.getChildren().add(saleBadge);
+        card.getChildren().add(nameLabel);
+        if (discount > 0) {
+            card.getChildren().add(originalPriceLabel);
+            card.getChildren().add(discountedPriceLabel);
+        } else {
+            card.getChildren().add(originalPriceLabel);
+        }
+        card.getChildren().add(categoryLabel);
+        card.getChildren().add(addToCartButton);
+
         return card;
     }
     
@@ -209,18 +232,27 @@ public class CatalogController extends BaseController  {
     
     @FXML
     private void addToCart(ProductDTO product) {
+        // Calculate discounted price if discount exists
+        double price = product.getPrice();
+        int discount = 0;
+        try {
+            discount = product.getDiscount();
+            if (discount > 0) {
+                price = price * (100 - discount) / 100.0;
+            }
+        } catch (Exception e) {
+            // No discount field, use original price
+        }
         
         CartItem item = new CartItem(
             product.getId(),
             product.getName(),
-            product.getPrice(),
+            price,
             1,
             product.getImageUrl()
         );
         
         CartService.getInstance().addItem(item);
-
-
 
         showSuccess("Added to Cart", product.getName() + " added to your cart!");
     }

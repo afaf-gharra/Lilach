@@ -1,6 +1,12 @@
 package com.lilach.server.models;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "products")
@@ -15,6 +21,8 @@ public class Product {
     private double price;
     private String color;
     private String imageUrl;
+    // Discount percentage [0-100]
+    private int discount; // default 0
     private int stock;
     private boolean isAvailable = true;
     @ManyToOne
@@ -36,6 +44,8 @@ public class Product {
     public void setColor(String color) { this.color = color; }
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public int getDiscount() { return discount; }
+    public void setDiscount(int discount) { this.discount = discount; }
     public int getStock() { return stock; }
     public void setStock(int stock) { this.stock = stock; }
     public boolean isAvailable() { return isAvailable; }
