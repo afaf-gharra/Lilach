@@ -1,3 +1,4 @@
 **/**/target
 
 .vscode/
+LilachServer\src\main\resources\hibernate.cfg.xml
