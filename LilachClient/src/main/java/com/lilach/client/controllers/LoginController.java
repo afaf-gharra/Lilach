@@ -1,15 +1,17 @@
 package com.lilach.client.controllers;
 
+import java.io.IOException;
+
+import org.kordamp.ikonli.javafx.FontIcon;
+
 import com.lilach.client.models.UserDTO;
 import com.lilach.client.services.ApiService;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import org.kordamp.ikonli.javafx.FontIcon;
-
-import java.io.IOException;
 
 public class LoginController extends BaseController {
     @FXML private TextField usernameField;
@@ -42,13 +44,19 @@ public class LoginController extends BaseController {
                 showAlert("Login Failed", "Invalid credentials");
             }
         } catch (IOException e) {
-            showAlert("Connection Error", "Failed to connect to server: " + e.getMessage());
+            // Show server-provided message (e.g. "User already logged in") or network error
+            showAlert("Login Failed", e.getMessage());
         }
     }
     
     @FXML
     private void handleRegister() {
         navigateTo("/com/lilach/client/views/register.fxml", "Create Account");
+    }
+
+    @FXML
+    private void handleSeeCatalog() {
+        navigateTo("/com/lilach/client/views/catalog.fxml", "Lilach Flower Shop Catalog");
     }
     
     private void redirectBasedOnRole(UserDTO user) {
@@ -82,4 +90,10 @@ public class LoginController extends BaseController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+     @FXML
+    private void navigateToCatalog() {
+        navigateToWithSize("/com/lilach/client/views/catalog.fxml",
+                "Lilach Flower Shop Catalog", 1200, 800);
+    }
+
 }

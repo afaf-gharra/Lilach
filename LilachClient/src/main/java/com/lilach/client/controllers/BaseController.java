@@ -1,7 +1,10 @@
 package com.lilach.client.controllers;
 
+import java.io.IOException;
+
 import com.lilach.client.Main;
 import com.lilach.client.models.UserDTO;
+import com.lilach.client.services.ApiService;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -9,10 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public abstract  class BaseController {
     
@@ -97,6 +97,16 @@ public abstract  class BaseController {
     }
     
     protected void logout() {
+        // Best-effort notify server to mark user offline, then clear local session and navigate to login
+        if (loggedInUser != null) {
+            try {
+                ApiService.logout(loggedInUser.getId());
+            } catch (Exception e) {
+                // ignore network errors; proceed to clear local session
+            }
+            loggedInUser = null;
+        }
+
         try {
             Stage stage = Main.getPrimaryStage();
             Parent root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/login.fxml"));

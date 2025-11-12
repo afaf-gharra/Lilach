@@ -1,13 +1,14 @@
 package com.lilach.server.services;
 
-import com.lilach.server.models.Order;
-import com.lilach.server.models.OrderItem;
-import com.lilach.server.utils.HibernateUtil;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import com.lilach.server.models.Order;
+import com.lilach.server.models.OrderItem;
+import com.lilach.server.utils.HibernateUtil;
 
 public class OrderService {
     public static Order createOrder(Order order) {
@@ -17,18 +18,8 @@ public class OrderService {
             // Set order date
             order.setOrderDate(LocalDateTime.now());
             
-            // Calculate total price
-            double total = order.getItems().stream()
-                .mapToDouble(item -> {
-                    if (item.getProduct() != null) {
-                        return item.getProduct().getPrice() * item.getQuantity();
-                    } else {
-                        // Custom item price calculation
-                        return calculateCustomItemPrice(item);
-                    }
-                })
-                .sum();
-            order.setTotalPrice(total);
+            // Use the total price from checkout (already includes discounts and delivery fee)
+            // DO NOT recalculate - the checkout has the correct discounted total
             
             // Save order and items
             session.persist(order);
@@ -83,14 +74,21 @@ public class OrderService {
         }
     }
     
-    private static double calculateCustomItemPrice(OrderItem item) {
-        // Simplified custom pricing logic
-        if (item.getCustomPriceRange() != null) {
-            if (item.getCustomPriceRange().equals("LOW")) return 50.0;
-            if (item.getCustomPriceRange().equals("MEDIUM")) return 100.0;
-            if (item.getCustomPriceRange().equals("HIGH")) return 200.0;
+    public static List<Order> getAllOrders() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                "SELECT DISTINCT o FROM Order o " +
+                "LEFT JOIN FETCH o.user " +
+                "LEFT JOIN FETCH o.store " +
+                "LEFT JOIN FETCH o.items i " +
+                "LEFT JOIN FETCH i.product " +
+                "ORDER BY o.orderDate DESC", Order.class)
+                .list();
+        } catch (Exception e) {
+            System.err.println("Error in getAllOrders: " + e.getMessage());
+            e.printStackTrace();
+            return List.of();
         }
-        return 80.0; // Default price
     }
     
     public static List<Order> getUserOrders(int userId) {

@@ -6,6 +6,7 @@ import com.lilach.server.models.User;
 import com.lilach.server.models.User.UserRole;
 import com.lilach.server.services.StoreService;
 import com.lilach.server.services.UserService;
+
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 
@@ -15,6 +16,7 @@ public class AuthController {
     public static void registerRoutes(io.javalin.Javalin app) {
         app.post("/api/login", AuthController::login);
         app.post("/api/register", AuthController::register);
+        app.post("/api/logout", AuthController::logout);
     }
     
     public static void register(Context ctx) {
@@ -55,9 +57,15 @@ public class AuthController {
             newUser.setAccountType(User.AccountType.MEMBER);
         }
         
-        // Save new user
+        // Save new user and mark online (auto-login)
         User createdUser = UserService.createUser(newUser);
-        ctx.json(convertToDTO(createdUser)).status(HttpStatus.CREATED);
+        if (createdUser != null) {
+            UserService.setUserOnline(createdUser.getId(), true);
+            User refreshed = UserService.getUserById(createdUser.getId());
+            ctx.json(convertToDTO(refreshed)).status(HttpStatus.CREATED);
+        } else {
+            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Failed to create user");
+        }
         
     } catch (Exception e) {
         ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Error creating user: " + e.getMessage());
@@ -76,7 +84,8 @@ public class AuthController {
             public final String accountType = createdUser.getAccountType().name();
             public final Integer storeId = createdUser.getStoreId();
             public final String creditCard = createdUser.getCreditCard();
-            public final boolean isActive = createdUser.isActive();
+            public final boolean  isActive = createdUser.isActive();
+            public final boolean isOnline = createdUser.isOnline();
         };
     }
 
@@ -89,10 +98,42 @@ public class AuthController {
             );
             
             if (user != null) {
-                ctx.json(user).status(HttpStatus.OK);
+                // If user already marked online, reject the login
+                if (user.isOnline()) {
+                    ctx.status(HttpStatus.CONFLICT).json("User already logged in");
+                    return;
+                }
+
+                // Mark user online and return the user DTO
+                UserService.setUserOnline(user.getId(), true);
+                User refreshed = UserService.getUserById(user.getId());
+                ctx.json(convertToDTO(refreshed)).status(HttpStatus.OK);
             } else {
                 ctx.status(HttpStatus.UNAUTHORIZED).json("Invalid credentials");
             }
+        } catch (Exception e) {
+            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Server error: " + e.getMessage());
+        }
+    }
+
+    public static void logout(Context ctx) {
+        try {
+            // Expect JSON with { "id": <userId> }
+            User payload = mapper.readValue(ctx.body(), User.class);
+            if (payload == null) {
+                ctx.status(HttpStatus.BAD_REQUEST).json("Missing user id");
+                return;
+            }
+
+            int id = payload.getId();
+            if (id <= 0) {
+                ctx.status(HttpStatus.BAD_REQUEST).json("Invalid user id");
+                return;
+            }
+
+            boolean ok = UserService.setUserOnline(id, false);
+            if (ok) ctx.status(HttpStatus.OK).json("Logged out");
+            else ctx.status(HttpStatus.NOT_FOUND).json("User not found");
         } catch (Exception e) {
             ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Server error: " + e.getMessage());
         }

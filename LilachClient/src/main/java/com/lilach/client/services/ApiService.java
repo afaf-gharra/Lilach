@@ -45,8 +45,10 @@ public class ApiService {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful() && response.body() != null) {
                 return mapper.readValue(response.body().string(), UserDTO.class);
+            } else {
+                String msg = response.body() != null ? response.body().string() : "Login failed: HTTP " + response.code();
+                throw new IOException(msg);
             }
-            return null;
         }
     }
     public static void addToCart(ProductDTO product) {
@@ -72,6 +74,28 @@ public class ApiService {
     }
 
     //getStoreOrders
+    
+    public static List<OrderDTO> getAllOrders() throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "orders")
+            .get()
+            .build();
+
+        mapper.registerModule(new JavaTimeModule());
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                String responseBody = response.body().string();
+                return mapper.readValue(
+                    responseBody, 
+                    mapper.getTypeFactory().constructCollectionType(List.class, OrderDTO.class)
+                );
+            } else {
+                System.err.println("Failed to get all orders: " + response.code());
+                return List.of();
+            }
+        }
+    }
 
     public static List<OrderDTO> getStoreOrders(int storeId) throws IOException {
         Request request = new Request.Builder()
@@ -114,6 +138,19 @@ public class ApiService {
                 return mapper.readValue(response.body().string(), UserDTO.class);
             }
             return null;
+        }
+    }
+
+    public static boolean logout(int userId) throws IOException {
+        String json = String.format("{\"id\":%d}", userId);
+        RequestBody body = RequestBody.create(json, JSON);
+        Request request = new Request.Builder()
+            .url(BASE_URL + "logout")
+            .post(body)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
         }
     }
     //update order status
@@ -173,7 +210,7 @@ public class ApiService {
     }
 
     // Add store-related methods
-    public static List<StoreDTO> getAllStores() throws IOException {
+    public static List<StoreDTO> getStores() throws IOException {
         Request request = new Request.Builder()
             .url(BASE_URL + "stores")
             .get()
@@ -188,6 +225,10 @@ public class ApiService {
             }
             return List.of();
         }
+    }
+
+    public static List<StoreDTO> getAllStores() throws IOException {
+        return getStores();
     }
 
 

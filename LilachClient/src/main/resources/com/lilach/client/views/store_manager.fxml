@@ -94,6 +94,7 @@
                                 <TableColumn fx:id="productNameColumn" text="Name" prefWidth="200"/>
                                 <TableColumn fx:id="categoryColumn" text="Category" prefWidth="120"/>
                                 <TableColumn fx:id="priceColumn" text="Price" prefWidth="80"/>
+                                <TableColumn fx:id="discountColumn" text="Discount %" prefWidth="80"/>
                                 <TableColumn fx:id="stockColumn" text="Stock" prefWidth="80"/>
                                 <TableColumn fx:id="availableColumn" text="Available" prefWidth="80"/>
                             </columns>
@@ -130,8 +131,11 @@
                                     <Label text="Image URL:" GridPane.rowIndex="5" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
                                     <TextField fx:id="productImageField" GridPane.rowIndex="5" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;"/>
                                     
-                                    <Label text="Available:" GridPane.rowIndex="6" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
-                                    <CheckBox fx:id="productAvailableCheckbox" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+                                    <Label text="Discount (%):" GridPane.rowIndex="6" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                                    <TextField fx:id="productDiscountField" GridPane.rowIndex="6" GridPane.columnIndex="1" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;" promptText="0-100"/>
+                                    
+                                    <Label text="Available:" GridPane.rowIndex="7" GridPane.columnIndex="0" style="-fx-text-fill: #5a2db1;"/>
+                                    <CheckBox fx:id="productAvailableCheckbox" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
                                 </GridPane>
                                 
                                 <Label text="Description:" style="-fx-text-fill: #5a2db1;"/>

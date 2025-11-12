@@ -192,10 +192,21 @@ public class OrderHistoryController extends BaseController {
                     } else {
                         setGraphic(pane);
                         Order order = getTableView().getItems().get(getIndex());
-                        String status =order.getStatus();
-                        cancelBtn.setDisable(status.equals( "CANCELLED" )|| LocalDateTime.parse(order.getOrderDate()).isBefore(LocalDateTime.now().minusDays(1)));
+                        String status = order.getStatus();
+
+                        boolean isCancelled = "CANCELLED".equalsIgnoreCase(status);
+                        boolean isDelivered = "DELIVERED".equalsIgnoreCase(status);
+                        boolean tooOld = false;
+                        try {
+                            tooOld = LocalDateTime.parse(order.getOrderDate())
+                                                .isBefore(LocalDateTime.now().minusDays(1));
+                        } catch (Exception ignore) { /* keep safe if format changes */ }
+
+                        // disable when: cancelled OR delivered OR past allowed time
+                        cancelBtn.setDisable(isCancelled || isDelivered || tooOld);
                     }
                 }
+
             };
         }
     }

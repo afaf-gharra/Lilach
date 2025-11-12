@@ -35,6 +35,7 @@ public class CheckoutController extends BaseController  {
     @FXML private DatePicker deliveryDatePicker;
     @FXML private ComboBox<String> deliveryHourCombo;
     @FXML private ComboBox<String> deliveryMinuteCombo;
+    @FXML private Label fastDeliveryTimeLabel;
     @FXML private TextArea deliveryAddress;
     @FXML private TextField recipientName;
     @FXML private TextField recipientPhone;
@@ -62,6 +63,12 @@ public class CheckoutController extends BaseController  {
     public void initialize() {
         // Set default delivery date (tomorrow)
         deliveryDatePicker.setValue(LocalDate.now().plusDays(1));
+
+        // hide fast delivery label by default (in case FXML exists)
+        if (fastDeliveryTimeLabel != null) {
+            fastDeliveryTimeLabel.setVisible(false);
+            fastDeliveryTimeLabel.setManaged(false);
+        }
 
         setupDeliveryMethodToggle();
         initializeTimeComboBoxes();
@@ -117,14 +124,76 @@ public class CheckoutController extends BaseController  {
             if (newValue == deliveryToggle) {
                 showDeliverySection();
                 updateDeliveryFee(DELIVERY_FEE);
+                // enable manual date/time selection
+                enableDeliveryDateTime(true);
+                if (fastDeliveryTimeLabel != null) {
+                    fastDeliveryTimeLabel.setVisible(false);
+                    fastDeliveryTimeLabel.setManaged(false);
+                }
             } else if (newValue == fastDeliveryToggle) {
                 showDeliverySection();
                 updateDeliveryFee(FAST_DELIVERY_FEE);
+                // set and lock fast delivery time
+                setFastDeliveryTime();
+                enableDeliveryDateTime(false);
             } else if (newValue == pickupToggle) {
                 showPickupSection();
                 updateDeliveryFee(PICKUP_FEE);
+                enableDeliveryDateTime(true);
+                if (fastDeliveryTimeLabel != null) {
+                    fastDeliveryTimeLabel.setVisible(false);
+                    fastDeliveryTimeLabel.setManaged(false);
+                }
             }
         });
+    }
+
+    // Disable/enable date and time controls
+    private void enableDeliveryDateTime(boolean enable) {
+        deliveryDatePicker.setDisable(!enable);
+        deliveryHourCombo.setDisable(!enable);
+        deliveryMinuteCombo.setDisable(!enable);
+    }
+
+    // Compute fast delivery time (3 hours from now) rounded to nearest 15 minutes,
+    // update the date/time controls and show a label. Also lock the controls.
+    private void setFastDeliveryTime() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime fast = now.plusHours(3);
+        // round minutes to nearest 15
+        int minute = fast.getMinute();
+        int rounded = roundToNearestQuarter(minute);
+        if (rounded == 60) {
+            fast = fast.plusHours(1).withMinute(0);
+        } else {
+            fast = fast.withMinute(rounded);
+        }
+        // Ensure seconds/nanos cleared
+        fast = fast.withSecond(0).withNano(0);
+
+        // Update UI
+        deliveryDatePicker.setValue(fast.toLocalDate());
+        deliveryHourCombo.setValue(String.format("%02d", fast.getHour()));
+        deliveryMinuteCombo.setValue(String.format("%02d", fast.getMinute()));
+        if (fastDeliveryTimeLabel != null) {
+            fastDeliveryTimeLabel.setText("Estimated delivery: " + fast.toLocalDate() + " " + String.format("%02d:%02d", fast.getHour(), fast.getMinute()));
+            fastDeliveryTimeLabel.setVisible(true);
+            fastDeliveryTimeLabel.setManaged(true);
+        }
+    }
+
+    private int roundToNearestQuarter(int minute) {
+        // rounds to 0,15,30,45 or 60
+        int mod = minute % 15;
+        if (mod == 0) return minute;
+        if (mod >= 8) {
+            // round up
+            int up = minute + (15 - mod);
+            return up >= 60 ? 60 : up;
+        } else {
+            // round down
+            return minute - mod;
+        }
     }
 
     private void initializeFormatters() {
@@ -154,14 +223,19 @@ public class CheckoutController extends BaseController  {
 
 
 
-    private void setupPhoneFormatter(TextField phoneField) {
-        phoneField.setTextFormatter(new TextFormatter<String>(change -> {
-            if (change.getControlNewText().matches("\\d{0,10}")) {
-                return change;
-            }
-            return null;
-        }));
-    }
+  private void setupPhoneFormatter(TextField phoneField) {
+    phoneField.setTextFormatter(new TextFormatter<String>(change -> {
+        String newText = change.getControlNewText();
+
+        if (newText.isEmpty()) return change;
+
+        if (newText.equals("0") || newText.equals("05")) return change;
+
+        if (newText.matches("05\\d{0,8}")) return change;
+
+        return null;
+    }));
+}
 
 
     private void loadStores() {
@@ -307,7 +381,20 @@ public class CheckoutController extends BaseController  {
         order.setGreetingMessage(greetingMessage.getText());
         
 
-         if (deliveryToggle.isSelected() || fastDeliveryToggle.isSelected()) {
+        if (fastDeliveryToggle.isSelected()) {
+            // compute fast delivery time: 3 hours from now, rounded to nearest 15 minutes
+            LocalDateTime fast = LocalDateTime.now().plusHours(3).withSecond(0).withNano(0);
+            int rounded = roundToNearestQuarter(fast.getMinute());
+            if (rounded == 60) {
+                fast = fast.plusHours(1).withMinute(0);
+            } else {
+                fast = fast.withMinute(rounded);
+            }
+            order.setDeliveryDate(fast);
+            order.setDeliveryAddress(deliveryAddress.getText());
+            order.setRecipientName(recipientName.getText());
+            order.setRecipientPhone(recipientPhone.getText());
+        } else if (deliveryToggle.isSelected()) {
             String timeString = deliveryHourCombo.getValue() + ":" + deliveryMinuteCombo.getValue();
             order.setDeliveryDate(deliveryDatePicker.getValue().atTime(LocalTime.parse(timeString)));
             order.setDeliveryAddress(deliveryAddress.getText());
@@ -418,6 +505,29 @@ public class CheckoutController extends BaseController  {
             if (pickupHourCombo.getValue() == null) pickupHourCombo.getStyleClass().add("field-error");
             if (pickupMinuteCombo.getValue() == null) pickupMinuteCombo.getStyleClass().add("field-error");
             valid = false;
+        }
+
+        // Check that the selected pickup datetime is not in the past
+        if (pickupDatePicker.getValue() != null && pickupHourCombo.getValue() != null && pickupMinuteCombo.getValue() != null) {
+            try {
+                LocalDate selDate = pickupDatePicker.getValue();
+                LocalTime selTime = LocalTime.parse(pickupHourCombo.getValue() + ":" + pickupMinuteCombo.getValue());
+                LocalDateTime selected = selDate.atTime(selTime);
+                // require at least 1 hour lead time
+                LocalDateTime minAllowed = LocalDateTime.now().plusHours(1);
+                if (selected.isBefore(minAllowed)) {
+                    // mark fields and show error
+                    pickupHourCombo.getStyleClass().add("field-error");
+                    pickupMinuteCombo.getStyleClass().add("field-error");
+                    showError("Validation Error", "Selected pickup time must be at least 1 hour from now.");
+                    valid = false;
+                }
+            } catch (Exception e) {
+                pickupHourCombo.getStyleClass().add("field-error");
+                pickupMinuteCombo.getStyleClass().add("field-error");
+                showError("Validation Error", "Invalid pickup time selected.");
+                valid = false;
+            }
         }
         
         if (pickupPersonField.getText().trim().isEmpty()) {

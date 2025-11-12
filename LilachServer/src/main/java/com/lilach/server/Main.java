@@ -24,7 +24,11 @@ public class Main {
             config.plugins.enableDevLogging();
         }).start(8080);
         
-        // Register controllers
+    // Reset any stale online flags from previous runs
+    int resetCount = com.lilach.server.services.UserService.resetAllOnlineFlags();
+    System.out.println("Reset isOnline flags for " + resetCount + " users");
+
+    // Register controllers
         AuthController.registerRoutes(app);
         ProductController.registerRoutes(app);
         OrderController.registerRoutes(app);
