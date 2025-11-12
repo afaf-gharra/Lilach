@@ -10,7 +10,7 @@
             "request": "launch",
             "mainClass": "com.lilach.client.Main",
             "vmArgs": [
-                "--module-path=C:/Users/farid/Downloads/openjfx-17.0.15_windows-x64_bin-sdk/javafx-sdk-17.0.15/lib",
+                "--module-path=C:\\javafx-sdk-17.0.16\\lib",
                 "--add-modules=javafx.controls,javafx.fxml"
             ],
             "projectName": "LilachClient",
