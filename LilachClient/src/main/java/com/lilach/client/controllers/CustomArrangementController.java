@@ -1,6 +1,5 @@
 package com.lilach.client.controllers;
 
-import com.lilach.client.models.ProductDTO;
 import com.lilach.client.services.CartItem;
 import com.lilach.client.services.CartService;
 
@@ -35,22 +34,36 @@ public class CustomArrangementController extends BaseController  {
             String color = colorCombo.getValue();
             String priceRange = priceCombo.getValue();
             String requests = specialRequests.getText();
-            // For simplicity, we create a dummy ProductDTO with custom details
-            ProductDTO customProduct = new ProductDTO();
-            customProduct.setName("Custom " + type);
-            customProduct.setDescription("Flower Types: " + flowerTypes + 
-                ", Color: " + color + 
-                ", Price Range: " + priceRange + 
-                (requests.isEmpty() ? "" : ", Special Requests: " + requests));
-            customProduct.setPrice(50); // Price to be determined at checkout
-            customProduct.setImageUrl("com/lilach/client/images/logo1.png");
-            customProduct.setCategory("Custom Arrangements");
-            customProduct.setId(-1); // Indicate custom product
-            CartItem cartItem = new CartItem(-1, customProduct.getName(), customProduct.getPrice(), 1, customProduct.getImageUrl());
+            
+            // Generate unique negative ID using timestamp (ensures each custom item is unique)
+            int uniqueId = -(int)(System.currentTimeMillis() % Integer.MAX_VALUE);
+            
+            // Determine price from price range
+            double price = getPriceFromRange(priceRange);
+            
+            // Create cart item with all custom fields
+            CartItem cartItem = new CartItem(uniqueId, "Custom " + type, price, 1, "com/lilach/client/images/logo1.png");
+            cartItem.setCustomType(type);
+            cartItem.setCustomColor(color);
+            cartItem.setCustomPriceRange(priceRange);
+            cartItem.setCustomFlowerTypes(flowerTypes);
+            cartItem.setCustomSpecialRequests(requests);
+            
             CartService.getInstance().addItem(cartItem);
 
             showSuccess("Added to Cart", "Your custom arrangement has been added to cart!");
             navigateToWithSize("/com/lilach/client/views/catalog.fxml", "Lilach Flower Shop Catalog", 1200, 800);        
+        }
+    }
+    
+    private double getPriceFromRange(String priceRange) {
+        // Extract midpoint of price range for cart display
+        switch(priceRange) {
+            case "$20-$40": return 30.0;
+            case "$40-$60": return 50.0;
+            case "$60-$80": return 70.0;
+            case "$80+": return 90.0;
+            default: return 50.0;
         }
     }
     

@@ -8,6 +8,7 @@ import org.hibernate.Transaction;
 
 import com.lilach.server.models.Order;
 import com.lilach.server.models.OrderItem;
+import com.lilach.server.models.Product;
 import com.lilach.server.utils.HibernateUtil;
 
 public class OrderService {
@@ -25,6 +26,18 @@ public class OrderService {
             session.persist(order);
             for (OrderItem item : order.getItems()) {
                 item.setOrder(order);
+                
+                // For custom products (product is null), ensure custom fields are preserved
+                // For regular products, load the product from database
+                if (item.getProduct() != null && item.getProduct().getId() > 0) {
+                    // Regular product - fetch from database to ensure it's managed
+                    Product managedProduct = session.get(Product.class, item.getProduct().getId());
+                    item.setProduct(managedProduct);
+                } else {
+                    // Custom product - set product to null explicitly
+                    item.setProduct(null);
+                }
+                
                 session.persist(item);
             }
             

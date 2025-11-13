@@ -365,10 +365,27 @@ public class StoreManagerController extends BaseController {
                 OrderItemDTO item = order.getItems().get(i);
                 ProductDTO product = item.getProduct();
                 details.append(i + 1).append(". ");
-                details.append(null != product ? product.getName() : "Unknown Product").append(" - ");
-                details.append(null != product ? String.format("$%.2f", product.getPrice()) : "Price N/A").append(" - ");
-                details.append(null != product ? product.getCategory() : "Category N/A").append(" - ");
-                details.append(" - Qty: ").append(item.getQuantity()).append("\n");
+                
+                // Check if this is a custom product
+                if (product == null) {
+                    // Custom product - display custom details
+                    details.append("Custom ").append(item.getCustomType() != null ? item.getCustomType() : "Arrangement");
+                    details.append("\n   Color: ").append(item.getCustomColor() != null ? item.getCustomColor() : "N/A");
+                    details.append("\n   Price Range: ").append(item.getCustomPriceRange() != null ? item.getCustomPriceRange() : "N/A");
+                    if (item.getCustomFlowerTypes() != null && !item.getCustomFlowerTypes().isEmpty()) {
+                        details.append("\n   Flowers: ").append(item.getCustomFlowerTypes());
+                    }
+                    if (item.getCustomSpecialRequests() != null && !item.getCustomSpecialRequests().isEmpty()) {
+                        details.append("\n   Special Requests: ").append(item.getCustomSpecialRequests());
+                    }
+                    details.append("\n   Qty: ").append(item.getQuantity()).append("\n");
+                } else {
+                    // Regular product
+                    details.append(product.getName()).append(" - ");
+                    details.append(String.format("$%.2f", product.getPrice())).append(" - ");
+                    details.append(product.getCategory()).append(" - ");
+                    details.append("Qty: ").append(item.getQuantity()).append("\n");
+                }
             }
         }
         
