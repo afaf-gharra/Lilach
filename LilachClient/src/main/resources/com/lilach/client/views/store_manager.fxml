@@ -87,6 +87,15 @@
             
             <VBox spacing="15" style="-fx-padding: 20; -fx-background-color: #fafafa;">
                 <Label text="Product Management" style="-fx-font-size: 20px; -fx-text-fill: #5a2db1; -fx-font-weight: bold; -fx-padding: 0 0 10 0;"/>
+
+                <!-- Store selector (visible for chain/member users) and Store-wide Discount Controls -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Store:" style="-fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
+                    <ComboBox fx:id="storeSelector" promptText="Select store" prefWidth="220"/>
+                    <Label text="Store-wide Discount (%):" style="-fx-text-fill: #5a2db1; -fx-font-weight: bold;"/>
+                    <TextField fx:id="storeDiscountField" promptText="0-100" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: white; -fx-border-color: #e0d6ff;" prefWidth="100"/>
+                    <Button fx:id="applyStoreDiscountButton" text="Apply" onAction="#applyStoreDiscount" style="-fx-background-color: #8a4fff; -fx-text-fill: white; -fx-background-radius: 20;"/>
+                </HBox>
                 
                 <HBox spacing="20" alignment="TOP_CENTER">
                     <!-- Left side: Product Catalog -->

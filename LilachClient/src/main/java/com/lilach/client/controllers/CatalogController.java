@@ -132,25 +132,28 @@ public class CatalogController extends BaseController  {
         Label nameLabel = new Label(product.getName());
         nameLabel.getStyleClass().add("product-name");
 
-        int discount = 0;
-        try {
-            discount = product.getDiscount();
-        } catch (Exception ignore) {}
+        // Use effective discount (max of product discount and store discount)
+        int effectiveDiscount = product.getEffectiveDiscount();
 
         double originalPrice = product.getPrice();
-        double discountedPrice = originalPrice;
+    double effectivePrice = product.getEffectivePrice();
         Label originalPriceLabel = new Label(String.format("$%.2f", originalPrice));
         originalPriceLabel.getStyleClass().add("product-price");
 
         Label discountedPriceLabel = null;
         Label saleBadge = null;
-        if (discount > 0) {
-            discountedPrice = originalPrice * (100 - discount) / 100.0;
+        if (effectiveDiscount > 0) {
             // Style original price as smaller & strikethrough
             originalPriceLabel.getStyleClass().add("original-price");
-            discountedPriceLabel = new Label(String.format("$%.2f", discountedPrice));
+            discountedPriceLabel = new Label(String.format("$%.2f", effectivePrice));
             discountedPriceLabel.getStyleClass().add("discount-price");
-            saleBadge = new Label("SALE -" + discount + "%");
+            
+            // Show which discount is being applied
+            String badgeText = "SALE -" + effectiveDiscount + "%";
+            if (product.getStore() != null && product.getStore().getStoreDiscount() > product.getDiscount()) {
+                badgeText += " (Store)";
+            }
+            saleBadge = new Label(badgeText);
             saleBadge.getStyleClass().add("sale-badge");
             card.getStyleClass().add("sale-card");
         }
@@ -180,7 +183,7 @@ public class CatalogController extends BaseController  {
         card.getChildren().add(imageView);
         if (saleBadge != null) card.getChildren().add(saleBadge);
         card.getChildren().add(nameLabel);
-        if (discount > 0) {
+    if (effectiveDiscount > 0) {
             card.getChildren().add(originalPriceLabel);
             card.getChildren().add(discountedPriceLabel);
         } else {
@@ -232,17 +235,8 @@ public class CatalogController extends BaseController  {
     
     @FXML
     private void addToCart(ProductDTO product) {
-        // Calculate discounted price if discount exists
-        double price = product.getPrice();
-        int discount = 0;
-        try {
-            discount = product.getDiscount();
-            if (discount > 0) {
-                price = price * (100 - discount) / 100.0;
-            }
-        } catch (Exception e) {
-            // No discount field, use original price
-        }
+        // Use effective price (includes best available discount)
+        double price = product.getEffectivePrice();
         
         CartItem item = new CartItem(
             product.getId(),

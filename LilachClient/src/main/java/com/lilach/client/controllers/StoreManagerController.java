@@ -63,6 +63,11 @@ public class StoreManagerController extends BaseController {
     @FXML private Button updateProductButton;
     @FXML private Button deleteProductButton;
     
+    // Store-wide discount controls
+    @FXML private TextField storeDiscountField;
+    @FXML private Button applyStoreDiscountButton;
+    @FXML private ComboBox<StoreDTO> storeSelector;
+    
     private ObservableList<OrderDTO> orders = FXCollections.observableArrayList();
     private ObservableList<ProductDTO> products = FXCollections.observableArrayList();
     private OrderDTO selectedOrder;
@@ -162,20 +167,35 @@ public class StoreManagerController extends BaseController {
                 }
             }
         });
-        stockColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
-        availableColumn.setCellValueFactory(new PropertyValueFactory<>("available"));
-        availableColumn.setCellFactory(column -> new TableCell<ProductDTO, Boolean>() {
-            @Override
-            protected void updateItem(Boolean available, boolean empty) {
-                super.updateItem(available, empty);
-                setText(empty || available == null ? "" : available ? "Yes" : "No");
+        productDiscountField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+                if (!newValue.matches("\\d*")) {
+                    productDiscountField.setText(oldValue);
+                } else {
+                    try {
+                        int value = Integer.parseInt(newValue);
+                        if (value > 100) {
+                            productDiscountField.setText(oldValue);
+                        }
+                    } catch (NumberFormatException e) {
+                        // Keep the value if parsing fails (empty or incomplete)
+                    }
+                }
             }
         });
-        
-        // Product selection listener
-        productsTable.getSelectionModel().selectedItemProperty().addListener(
-            (obs, oldSelection, newSelection) -> selectProduct(newSelection));
-        
+
+        // Store-wide discount input validation (0-100)
+        if (storeDiscountField != null) {
+            storeDiscountField.textProperty().addListener((obs, oldVal, newVal) -> {
+                if (!newVal.matches("\\d{0,2}|100")) {
+                    storeDiscountField.setText(oldVal);
+                }
+            });
+        }
+
+        if (applyStoreDiscountButton != null) {
+            applyStoreDiscountButton.setOnAction(e -> applyStoreDiscount());
+        }
         // Button actions
         addProductButton.setOnAction(e -> addProduct());
         updateProductButton.setOnAction(e -> updateProduct());
@@ -183,6 +203,17 @@ public class StoreManagerController extends BaseController {
         
         // Form validation
         setupProductFormValidation();
+
+        // Restore: clicking a product populates the form for editing
+        if (productsTable != null) {
+            productsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
+                selectProduct(newSel);
+            });
+        }
+
+        // Initial state: nothing selected, disable update/delete
+        updateProductButton.setDisable(true);
+        deleteProductButton.setDisable(true);
     }
     
     private void setupProductFormValidation() {
@@ -222,30 +253,121 @@ public class StoreManagerController extends BaseController {
         String accountType = getLoggedInUser().getAccountType();
         
         if ("CHAIN".equalsIgnoreCase(accountType) || "MEMBER".equalsIgnoreCase(accountType)) {
-            // Chain/Member accounts can see all orders and products
-            loadAllOrders();
-            loadAllProducts();
+            // Chain/Member can see all stores
+            try {
+                List<StoreDTO> stores = ApiService.getAllStores();
+                if (storeSelector != null) {
+                    storeSelector.getItems().setAll(stores);
+                    storeSelector.setVisible(true);
+                    storeSelector.setManaged(true);
+                    storeSelector.setOnAction(e -> handleStoreSelection());
+                }
+                // If only one store exists, auto-select it
+                if (stores != null && stores.size() == 1) {
+                    if (storeSelector != null) {
+                        storeSelector.getSelectionModel().select(0);
+                    }
+                    currentStore = stores.get(0);
+                    storeDiscountField.setText(String.valueOf(currentStore.getStoreDiscount()));
+                    loadStoreOrders(currentStore.getId());
+                    loadStoreProducts(currentStore.getId());
+                } else {
+                    // Multiple stores: load all orders/products immediately; user can filter by store if needed
+                    currentStore = null;
+                    loadAllOrders();
+                    loadAllProducts();
+                }
+            } catch (IOException e) {
+                showError("Connection Error", "Failed to load stores: " + e.getMessage());
+            }
         } else {
-            // Store employees see only their store's data
+            // Store employees: auto use their assigned store
+            if (storeSelector != null) {
+                storeSelector.setVisible(false);
+                storeSelector.setManaged(false);
+            }
             Integer storeId = getLoggedInUser().getStoreId();
             if (storeId == null) {
                 showError("Store Error", "No store assigned to this manager");
                 return;
             }
-            
             try {
                 currentStore = ApiService.getStoreById(storeId);
                 if (currentStore == null) {
                     showError("Store Error", "No store found");
                     return;
                 }
+                if (storeDiscountField != null) {
+                    storeDiscountField.setText(String.valueOf(currentStore.getStoreDiscount()));
+                }
+                loadStoreOrders(storeId);
+                loadStoreProducts(storeId);
             } catch (IOException e) {
                 showError("Connection Error", "Failed to load store: " + e.getMessage());
                 return;
             }
+        }
+    }
+
+    @FXML
+    private void handleStoreSelection() {
+        if (storeSelector == null) return;
+        StoreDTO selected = storeSelector.getValue();
+        if (selected == null) {
+            currentStore = null;
+            return;
+        }
+        try {
+            // Refresh selected store from server in case discount changed
+            StoreDTO fresh = ApiService.getStoreById(selected.getId());
+            currentStore = fresh != null ? fresh : selected;
+            if (storeDiscountField != null && currentStore != null) {
+                storeDiscountField.setText(String.valueOf(currentStore.getStoreDiscount()));
+            }
+            loadStoreOrders(currentStore.getId());
+            loadStoreProducts(currentStore.getId());
+        } catch (IOException e) {
+            showError("Connection Error", "Failed to load selected store: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void applyStoreDiscount() {
+        if (currentStore == null) {
+            // Try to derive from selector if available
+            if (storeSelector != null && storeSelector.getValue() != null) {
+                currentStore = storeSelector.getValue();
+            } else {
+                showError("Store Error", "Please select a store first");
+                return;
+            }
+        }
+        try {
+            int discount = Integer.parseInt(storeDiscountField.getText());
+            if (discount < 0 || discount > 100) {
+                showError("Invalid Discount", "Discount must be between 0 and 100");
+                return;
+            }
+            // Build updates DTO
+            StoreDTO updates = new StoreDTO();
+            updates.setStoreDiscount(discount);
             
-            loadStoreOrders(storeId);
-            loadStoreProducts(storeId);
+            // Call API to update store
+            StoreDTO updated = ApiService.updateStore(currentStore.getId(), updates);
+            if (updated != null) {
+                currentStore = updated;
+                showSuccess("Store Discount Updated", "Store-wide discount set to " + discount + "%");
+                // Refresh products to reflect effective discounts
+                if (currentStore != null) {
+                    loadStoreProducts(currentStore.getId());
+                }
+            } else {
+                showError("Update Failed", "Could not update store discount");
+            }
+        } catch (NumberFormatException e) {
+            showError("Invalid Input", "Please enter a valid number for discount");
+        } catch (IOException e) {
+            showError("Connection Error", "Failed to update store: " + e.getMessage());
         }
     }
     
@@ -265,6 +387,10 @@ public class StoreManagerController extends BaseController {
             List<ProductDTO> allProducts = ApiService.getAllProducts();
             products.setAll(allProducts);
             productsTable.setItems(products);
+            // Clear selection and form when reloading
+            productsTable.getSelectionModel().clearSelection();
+            selectedProduct = null;
+            clearProductForm();
         } catch (IOException e) {
             showError("Connection Error", "Failed to load products: " + e.getMessage());
         }
@@ -286,6 +412,10 @@ public class StoreManagerController extends BaseController {
             List<ProductDTO> storeProducts = ApiService.getStoreProducts(storeId);
             products.setAll(storeProducts);
             productsTable.setItems(products);
+            // Clear selection and form when reloading
+            productsTable.getSelectionModel().clearSelection();
+            selectedProduct = null;
+            clearProductForm();
         } catch (IOException e) {
             showError("Connection Error", "Failed to load products: " + e.getMessage());
         }
@@ -585,10 +715,21 @@ public class StoreManagerController extends BaseController {
         } catch (NumberFormatException e) {
             product.setDiscount(0);
         }
-        
-        StoreDTO loggedinUserStore = ApiService.getStoreById(loggedInUser.getStoreId());
-        
-        product.setStore(loggedinUserStore);
+
+        // IMPORTANT: use the currently selected store (for chain/member) or the user's store
+        StoreDTO storeForProduct = null;
+        if (currentStore != null) {
+            storeForProduct = currentStore;
+        } else if (loggedInUser != null && loggedInUser.getStoreId() != null) {
+            try {
+                storeForProduct = ApiService.getStoreById(loggedInUser.getStoreId());
+            } catch (IOException ignore) { /* handled below */ }
+        }
+        if (storeForProduct == null) {
+            showError("Store Error", "No store selected or assigned. Please select a store.");
+            throw new IOException("No store available for product assignment");
+        }
+        product.setStore(storeForProduct);
         return product;
     }
     

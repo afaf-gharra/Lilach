@@ -14,6 +14,7 @@ public class StoreDTO {
     private String phone;
     private String email;
     private boolean active;
+    private int storeDiscount = 0; // Store-wide discount percentage [0-100]
     
     // Default constructor
     public StoreDTO() {}
@@ -36,4 +37,7 @@ public class StoreDTO {
     
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
+    
+    public int getStoreDiscount() { return storeDiscount; }
+    public void setStoreDiscount(int storeDiscount) { this.storeDiscount = storeDiscount; }
 }
