@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StoreDTO {
+    @Override
+    public String toString() {
+        return name != null ? name : ("Store #" + id);
+    }
     private int id;
     private String name;
     private String address;

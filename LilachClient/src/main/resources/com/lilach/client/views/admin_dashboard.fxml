@@ -22,6 +22,11 @@
                     <FontIcon iconLiteral="fas-sync-alt"/>
                 </graphic>
             </Button>
+            <Button text="Profile" onAction="#handleProfile" styleClass="btn btn-primary">
+                <graphic>
+                    <FontIcon iconLiteral="fas-user"/>
+                </graphic>
+            </Button>
             <Button text="Export Data" onAction="#handleExportData" styleClass="btn btn-warning">
                 <graphic>
                     <FontIcon iconLiteral="fas-download"/>

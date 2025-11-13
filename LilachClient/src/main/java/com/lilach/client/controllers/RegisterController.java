@@ -24,12 +24,12 @@ public class RegisterController extends BaseController {
     @FXML private ComboBox<String> monthCombo;
     @FXML private ComboBox<String> yearCombo;
     @FXML private TextField cvvField;
+    @FXML private CheckBox chainAccountCheckbox;
     @FXML private CheckBox subscriptionCheckbox;
     @FXML private CheckBox termsCheckbox;
     @FXML private Button registerButton;
     @FXML private Hyperlink loginLink;
 
-    
     private List<StoreDTO> allStores;
     // Simple email validation pattern (allows subdomains, final TLD of length >=2)
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
@@ -117,9 +117,21 @@ public class RegisterController extends BaseController {
     private void setupEventHandlers() {
         registerButton.setOnAction(e -> handleRegister());
         loginLink.setOnAction(e -> navigateToLogin());
-        
+
+        // Chain account checkbox logic
+        chainAccountCheckbox.setTooltip(new Tooltip("Choose this for a network account (CHAIN) with $5 extra delivery fee"));
+        chainAccountCheckbox.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+            subscriptionCheckbox.setDisable(!isSelected);
+            if (!isSelected) {
+                subscriptionCheckbox.setSelected(false);
+            }
+        });
+
+        // initial state: subscription disabled until CHAIN selected
+        subscriptionCheckbox.setDisable(!chainAccountCheckbox.isSelected());
+
         // Subscription checkbox tooltip
-        subscriptionCheckbox.setTooltip(new Tooltip("Get 10% discount and free delivery for $20/month"));
+        subscriptionCheckbox.setTooltip(new Tooltip("Get 10% discount and free delivery for $20/month (only for CHAIN accounts)"));
     }
     @FXML
 private void navigateToCatalog() {
@@ -187,7 +199,7 @@ private void navigateToCatalog() {
             showError("Validation Error", "Please select a preferred store");
             return false;
         }
-        
+
         if (!validatePhoneNumber(phoneField.getText())) {
             showError("Error","Phone number must be exactly 10 digits");
             return false;
@@ -209,7 +221,17 @@ private void navigateToCatalog() {
             showError("Validation Error", "You must agree to terms and conditions");
             return false;
         }
-        
+
+        // Chain/member logic
+        if (chainAccountCheckbox.isSelected()) {
+            // If chain, allow member checkbox
+        } else {
+            // If not chain, member checkbox must be disabled
+            if (subscriptionCheckbox.isSelected()) {
+                showError("Validation Error", "Membership is only available for CHAIN accounts");
+                return false;
+            }
+        }
         return true;
     }
     
@@ -225,21 +247,29 @@ private void navigateToCatalog() {
         user.setEmail(emailField.getText());
         user.setPhone(phoneField.getText());
         user.setCreditCard(creditCardField.getText());
-        
+
         // Set store from selection
         StoreDTO selectedStore = storeCombo.getValue();
         user.setStoreId(selectedStore.getId());
-        
-        // Set account type based on subscription
-        if (subscriptionCheckbox.isSelected()) {
+
+        // Set account type based on checkboxes
+        if (chainAccountCheckbox.isSelected() && subscriptionCheckbox.isSelected()) {
+            // Member account
+            user.setAccountType("MEMBER");
+            user.setMembershipExpiry(java.time.LocalDate.now().plusMonths(1).toString());
+        } else if (chainAccountCheckbox.isSelected()) {
+            // Chain account without membership
             user.setAccountType("CHAIN");
+            user.setMembershipExpiry(null);
         } else {
+            // Store account
             user.setAccountType("STORE");
+            user.setMembershipExpiry(null);
         }
-        
+
         user.setRole("CUSTOMER");
         user.setActive(true);
-        
+
         return user;
     }
     

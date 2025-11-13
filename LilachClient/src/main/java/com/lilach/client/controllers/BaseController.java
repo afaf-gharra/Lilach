@@ -38,6 +38,12 @@ public abstract  class BaseController {
         navigateTo("/com/lilach/client/views/catalog.fxml", "Catalog");
     }
 
+    // Navigate to Profile page (available to all controllers extending BaseController)
+    @FXML
+    protected void handleProfile() {
+        navigateToWithSize("/com/lilach/client/views/profile.fxml", "My Profile", 1200, 800);
+    }
+
     public UserDTO getLoggedInUser() {
     if (loggedInUser == null) {
         Platform.runLater(() -> {

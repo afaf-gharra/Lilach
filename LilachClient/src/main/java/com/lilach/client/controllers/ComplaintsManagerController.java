@@ -113,14 +113,19 @@ public class ComplaintsManagerController extends BaseController {
     }
     
     private void loadComplaints() {
-        Integer storeId = getLoggedInUser().getStoreId();
-
+        String accountType = getLoggedInUser().getAccountType();
         try {
-            // Load complaints for the manager's store
-            var storeComplaints = ApiService.getStoreComplaints(storeId);
-            complaints.setAll(storeComplaints);
+            if ("CHAIN".equalsIgnoreCase(accountType) || "MEMBER".equalsIgnoreCase(accountType)) {
+                // Load all complaints for chain/member managers
+                var allComplaints = ApiService.getAllComplaints();
+                complaints.setAll(allComplaints);
+            } else {
+                // Load complaints for the manager's store only
+                Integer storeId = getLoggedInUser().getStoreId();
+                var storeComplaints = ApiService.getStoreComplaints(storeId);
+                complaints.setAll(storeComplaints);
+            }
             filterComplaints();
-            
         } catch (IOException e) {
             showError("Connection Error", "Failed to load complaints: " + e.getMessage());
         }
@@ -181,8 +186,16 @@ public class ComplaintsManagerController extends BaseController {
     
     private void loadOrderInfo(ComplaintDTO complaint) {
         try {
+            // Check if orderId is invalid (0 or negative means no order)
+            if (complaint.getOrderId() <= 0) {
+                orderDetails.setText("Order ID: " + complaint.getOrderId() + " - No valid order associated with this complaint");
+                return;
+            }
+            
             // Load order information
+            orderDetails.setText("Loading order #" + complaint.getOrderId() + "...");
             var order = ApiService.getOrderById(complaint.getOrderId());
+            
             if (order != null) {
                 orderDetails.setText(String.format(
                     "Order #: %d\nDate: %s\nTotal: $%.2f\nStatus: %s",
@@ -191,9 +204,15 @@ public class ComplaintsManagerController extends BaseController {
                     order.getTotalPrice(),
                     order.getStatus()
                 ));
+            } else {
+                orderDetails.setText("Order ID: " + complaint.getOrderId() + "\nOrder not found (returned NULL from server)");
             }
         } catch (IOException e) {
-            orderDetails.setText("Error loading order information");
+            orderDetails.setText("Order ID: " + complaint.getOrderId() + 
+                               "\nERROR loading order: " + e.getMessage());
+        } catch (Exception e) {
+            orderDetails.setText("Order ID: " + complaint.getOrderId() + 
+                               "\nUNEXPECTED ERROR: " + e.getMessage());
         }
     }
     

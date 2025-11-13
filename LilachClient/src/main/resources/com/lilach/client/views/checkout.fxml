@@ -29,6 +29,11 @@
                     <FontIcon iconLiteral="fas-home" iconSize="16"/>
                 </graphic>
             </Button>
+            <Button text="Profile" onAction="#handleProfile" styleClass="nav-button">
+                <graphic>
+                    <FontIcon iconLiteral="fas-user" iconSize="16"/>
+                </graphic>
+            </Button>
             <Button text="Cart" onAction="#handleViewCart" styleClass="nav-button">
                 <graphic>
                     <FontIcon iconLiteral="fas-shopping-cart" iconSize="16"/>
@@ -71,11 +76,11 @@
                 
                 <!-- Delivery/Pickup Toggle -->
                 <HBox spacing="0" styleClass="delivery-toggle">
-                    <ToggleButton text="Delivery ($10)" styleClass="toggle-left" selected="true"
+                    <ToggleButton text="Delivery" styleClass="toggle-left" selected="true"
                                  fx:id="deliveryToggle" onAction="#handleDeliveryToggle"/>
-                    <ToggleButton text="Fast Delivery ($20)" styleClass="toggle-middle"
+                    <ToggleButton text="Fast Delivery" styleClass="toggle-middle"
                                  fx:id="fastDeliveryToggle" onAction="#handleFastDeliveryToggle"/>
-                    <ToggleButton text="Pickup (Free)" styleClass="toggle-right"
+                    <ToggleButton text="Pickup" styleClass="toggle-right"
                                  fx:id="pickupToggle" onAction="#handlePickupToggle"/>
                 </HBox>
                 
@@ -165,6 +170,10 @@
                 <HBox spacing="10" alignment="CENTER_RIGHT">
                     <Label text="Subtotal:" styleClass="h3 text-dark"/>
                     <Label fx:id="subtotalLabel" text="0.00" styleClass="h3 text-dark"/>
+                </HBox>
+                <HBox fx:id="discountRow" spacing="10" alignment="CENTER_RIGHT" visible="false" managed="false">
+                    <Label text="Member Discount:" styleClass="h3 text-dark"/>
+                    <Label fx:id="discountLabel" text="-$0.00" styleClass="h3 text-dark"/>
                 </HBox>
                 
                 <HBox spacing="10" alignment="CENTER_RIGHT">

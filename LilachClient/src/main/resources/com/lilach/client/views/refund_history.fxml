@@ -10,6 +10,35 @@
       styleClass="bg-primary"
       prefWidth="1000" 
       prefHeight="700">
+
+    <HBox alignment="CENTER_LEFT" spacing="5" styleClass="navbar">
+        <Button text="Home" onAction="#navigateToCatalog" styleClass="nav-button" >
+            <graphic>
+                <FontIcon iconLiteral="fas-home" iconSize="16"/>
+            </graphic>
+        </Button>
+        <Button text="Profile" onAction="#handleProfile" styleClass="nav-button" >
+            <graphic>
+                <FontIcon iconLiteral="fas-user" iconSize="16"/>
+            </graphic>
+        </Button>
+        <Button text="Cart" onAction="#handleViewCart" styleClass="nav-button" >
+            <graphic>
+                <FontIcon iconLiteral="fas-shopping-cart" iconSize="16"/>
+            </graphic>
+        </Button>
+        <Button text="My Orders" onAction="#handleViewOrders" styleClass="nav-button" >
+            <graphic>
+                <FontIcon iconLiteral="fas-clipboard-list" iconSize="16"/>
+            </graphic>
+        </Button>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Logout" onAction="#handleLogout" styleClass="nav-button-logout" >
+            <graphic>
+                <FontIcon iconLiteral="fas-sign-out-alt" iconSize="16"/>
+            </graphic>
+        </Button>
+    </HBox>
     
     <Label text="Refund History" styleClass="h1 text-white"/>
     

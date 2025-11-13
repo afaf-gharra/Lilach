@@ -36,6 +36,11 @@
         </Label>
         <Region HBox.hgrow="ALWAYS" />
         <Label fx:id="userNameLabel" text="Manager" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+        <Button text="Profile" onAction="#handleProfile" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-cursor: hand;">
+            <graphic>
+                <FontIcon iconLiteral="fas-user" iconSize="18" iconColor="white"/>
+            </graphic>
+        </Button>
     </HBox>
     
     <!-- Main Content Area -->

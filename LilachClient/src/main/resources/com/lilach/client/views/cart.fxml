@@ -29,6 +29,11 @@
                     <FontIcon iconLiteral="fas-home" iconSize="16"/>
                 </graphic>
             </Button>
+            <Button text="Profile" onAction="#handleProfile" styleClass="nav-button">
+                <graphic>
+                    <FontIcon iconLiteral="fas-user" iconSize="16"/>
+                </graphic>
+            </Button>
             <Button text="Cart" styleClass="nav-button nav-active">
                 <graphic>
                     <FontIcon iconLiteral="fas-shopping-cart" iconSize="16"/>
