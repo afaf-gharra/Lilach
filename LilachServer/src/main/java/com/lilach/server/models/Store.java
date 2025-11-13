@@ -1,11 +1,18 @@
 package com.lilach.server.models;
 
-import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "stores")
@@ -19,6 +26,9 @@ public class Store {
     private String phone;
     private String email;
     private boolean isActive = true;
+    
+    @Column(name = "store_discount")
+    private Integer storeDiscount; // Store-wide discount percentage [0-100], may be null in legacy rows
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -62,6 +72,16 @@ public class Store {
     
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
+    
+    // For JSON serialization: always expose a non-null number (default 0)
+    @JsonProperty("storeDiscount")
+    public int getStoreDiscount() { return storeDiscount == null ? 0 : storeDiscount.intValue(); }
+
+    // For internal use (e.g., detecting whether the client provided a value)
+    @JsonIgnore
+    public Integer getStoreDiscountRaw() { return storeDiscount; }
+
+    public void setStoreDiscount(Integer storeDiscount) { this.storeDiscount = storeDiscount; }
     
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

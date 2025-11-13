@@ -317,6 +317,24 @@ public class ApiService {
         }
     }
 
+    // Overload to update a store by ID with a partial StoreDTO payload (e.g., just storeDiscount)
+    public static StoreDTO updateStore(int storeId, StoreDTO updates) throws IOException {
+        String json = mapper.writeValueAsString(updates);
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+            .url(BASE_URL + "stores/" + storeId)
+            .put(body)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(response.body().string(), StoreDTO.class);
+            }
+            return null;
+        }
+    }
+
     public static boolean deleteStore(int storeId) throws IOException {
         Request request = new Request.Builder()
             .url(BASE_URL + "stores/" + storeId)

@@ -1,12 +1,13 @@
 package com.lilach.server.services;
 
-import com.lilach.server.models.Store;
-import com.lilach.server.utils.HibernateUtil;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import java.util.List;
+import com.lilach.server.models.Store;
+import com.lilach.server.utils.HibernateUtil;
 
 public class StoreService {
     
@@ -43,6 +44,13 @@ public class StoreService {
                 if (storeUpdates.getPhone() != null) store.setPhone(storeUpdates.getPhone());
                 if (storeUpdates.getEmail() != null) store.setEmail(storeUpdates.getEmail());
                 store.setActive(storeUpdates.isActive());
+                
+                // Update store-wide discount only when provided (0-100)
+                Integer newDiscount = storeUpdates.getStoreDiscountRaw();
+                if (newDiscount != null) {
+                    int clamped = Math.max(0, Math.min(100, newDiscount));
+                    store.setStoreDiscount(clamped);
+                }
                 
                 session.update(store);
                 transaction.commit();

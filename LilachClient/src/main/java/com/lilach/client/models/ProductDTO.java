@@ -43,4 +43,25 @@ public class ProductDTO {
     public void setStock(int int1) { this.stock = int1; }
     public StoreDTO getStore() { return store; }
     public void setStore(StoreDTO store) { this.store = store; }
+    
+    /**
+     * Get the effective discount - the maximum of product discount and store discount
+     * @return effective discount percentage (0-100)
+     */
+    public int getEffectiveDiscount() {
+        int storeDiscount = (store != null) ? store.getStoreDiscount() : 0;
+        return Math.max(discount, storeDiscount);
+    }
+    
+    /**
+     * Get the effective price after applying the best available discount
+     * @return price after discount
+     */
+    public double getEffectivePrice() {
+        int effectiveDiscount = getEffectiveDiscount();
+        if (effectiveDiscount > 0) {
+            return price * (100 - effectiveDiscount) / 100.0;
+        }
+        return price;
+    }
 }
