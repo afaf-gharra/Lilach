@@ -9,6 +9,8 @@ public class OrderItemDTO {
     private String customType;
     private String customPriceRange;
     private String customColor;
+    private String customFlowerTypes;
+    private String customSpecialRequests;
     private int quantity;
 
     // Default constructor
@@ -30,10 +32,18 @@ public class OrderItemDTO {
     public String getCustomColor() { return customColor; }
     public void setCustomColor(String customColor) { this.customColor = customColor; }
     
+    public String getCustomFlowerTypes() { return customFlowerTypes; }
+    public void setCustomFlowerTypes(String customFlowerTypes) { this.customFlowerTypes = customFlowerTypes; }
+    
+    public String getCustomSpecialRequests() { return customSpecialRequests; }
+    public void setCustomSpecialRequests(String customSpecialRequests) { this.customSpecialRequests = customSpecialRequests; }
+    
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
 
     public void setProductId(int id2) {
-        product.setId(id2);
+        if (product != null) {
+            product.setId(id2);
+        }
     }
 }

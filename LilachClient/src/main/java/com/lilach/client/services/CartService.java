@@ -22,16 +22,19 @@ public class CartService {
     }
     
     public void addItem(CartItem item) {
-        // Check if item already exists in cart
-        for (CartItem cartItem : cartItems) {
-            if (cartItem.getId() == item.getId()) {
-                cartItem.setQuantity(cartItem.getQuantity() + item.getQuantity());
-                updateTotal();
-                return;
+        // For custom products (negative IDs), always add as new item
+        // For regular products, check if item already exists and merge quantities
+        if (item.getId() > 0) {
+            for (CartItem cartItem : cartItems) {
+                if (cartItem.getId() == item.getId()) {
+                    cartItem.setQuantity(cartItem.getQuantity() + item.getQuantity());
+                    updateTotal();
+                    return;
+                }
             }
         }
         
-        // Add new item
+        // Add new item (either custom product or first instance of regular product)
         cartItems.add(item);
         updateTotal();
     }

@@ -26,11 +26,17 @@ public class OrderItem {
     private Order order;
     
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = true)
     private Product product;
     
     @Column(name = "custom_type")
     private String customType;
+    
+    @Column(name = "custom_flower_types")
+    private String customFlowerTypes;
+    
+    @Column(name = "custom_special_requests")
+    private String customSpecialRequests;
     
     @Column(name = "custom_price_range")
     private String customPriceRange;
@@ -64,13 +70,24 @@ public class OrderItem {
     
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
+    
+    public String getCustomFlowerTypes() { return customFlowerTypes; }
+    public void setCustomFlowerTypes(String customFlowerTypes) { this.customFlowerTypes = customFlowerTypes; }
+    
+    public String getCustomSpecialRequests() { return customSpecialRequests; }
+    public void setCustomSpecialRequests(String customSpecialRequests) { this.customSpecialRequests = customSpecialRequests; }
 
     public void setPrice(double d) {
-        
-        this.product.setPrice(d);
+        if (this.product != null) {
+            this.product.setPrice(d);
+        }
     }
 
     public double getPrice() {
-        return this.product.getPrice();
+        return (this.product != null) ? this.product.getPrice() : 0.0;
+    }
+    
+    public boolean isCustomProduct() {
+        return this.product == null;
     }
 }

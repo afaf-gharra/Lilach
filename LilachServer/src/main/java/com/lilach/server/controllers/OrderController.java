@@ -81,32 +81,41 @@ public class OrderController {
 
             List<OrderItem> items = new ArrayList<>();
             for (var itemDto : order.getItems()) {
-                Product product = new Product();
-                if (itemDto.getProduct().getId() == -1)
-                {
-                    continue;
-                }
-                else
-                {
-
-                    product = ProductService.getProductById(itemDto.getProduct().getId());
-                }
-                if (product == null) {
-                    ctx.status(HttpStatus.BAD_REQUEST).json("Invalid product ID: " + itemDto.getProduct().getId());
-                    return;
-                }
-                if (product.getStock() < itemDto.getQuantity()) {
-                    ctx.status(HttpStatus.BAD_REQUEST).json("Insufficient stock for product ID: " + itemDto.getProduct().getId());
-                    return;
-                }
-                // Reduce stock
-                product.setStock(product.getStock() - itemDto.getQuantity());
-                ProductService.updateProduct(product.getId(), product);
-                
                 OrderItem orderItem = new OrderItem();
-                orderItem.setProduct(product);
-                orderItem.setQuantity(itemDto.getQuantity());
-                orderItem.setPrice(product.getPrice() * itemDto.getQuantity());
+                
+                // Check if this is a custom product (null product reference) or regular product
+                if (itemDto.getProduct() == null) {
+                    // Custom product - no product reference, use custom fields
+                    orderItem.setProduct(null);
+                    orderItem.setCustomType(itemDto.getCustomType());
+                    orderItem.setCustomColor(itemDto.getCustomColor());
+                    orderItem.setCustomPriceRange(itemDto.getCustomPriceRange());
+                    orderItem.setCustomFlowerTypes(itemDto.getCustomFlowerTypes());
+                    orderItem.setCustomSpecialRequests(itemDto.getCustomSpecialRequests());
+                    orderItem.setQuantity(itemDto.getQuantity());
+                    // No stock check for custom products
+                } else {
+                    // Regular product - validate and check stock
+                    Product product = ProductService.getProductById(itemDto.getProduct().getId());
+                    
+                    if (product == null) {
+                        ctx.status(HttpStatus.BAD_REQUEST).json("Invalid product ID: " + itemDto.getProduct().getId());
+                        return;
+                    }
+                    if (product.getStock() < itemDto.getQuantity()) {
+                        ctx.status(HttpStatus.BAD_REQUEST).json("Insufficient stock for product ID: " + itemDto.getProduct().getId());
+                        return;
+                    }
+                    
+                    // Reduce stock
+                    product.setStock(product.getStock() - itemDto.getQuantity());
+                    ProductService.updateProduct(product.getId(), product);
+                    
+                    orderItem.setProduct(product);
+                    orderItem.setQuantity(itemDto.getQuantity());
+                    orderItem.setPrice(product.getPrice() * itemDto.getQuantity());
+                }
+                
                 orderItem.setOrder(order); // Set the back-reference to Order
                 items.add(orderItem);
             }

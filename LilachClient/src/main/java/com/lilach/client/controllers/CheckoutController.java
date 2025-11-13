@@ -459,11 +459,26 @@ public class CheckoutController extends BaseController  {
         
         // Convert cart items to order items
         List<OrderItemDTO> items = new ArrayList<>();
-        for (CartItem orderItemDTO : CartService.getInstance().getCartItems()) {
+        for (CartItem cartItem : CartService.getInstance().getCartItems()) {
             OrderItemDTO orderItem = new OrderItemDTO();
-            orderItem.setProduct(new ProductDTO());
-            orderItem.setProductId(orderItemDTO.getId());
-            orderItem.setQuantity(orderItemDTO.getQuantity());
+            
+            // Check if this is a custom product (negative ID) or regular product
+            if (cartItem.isCustomProduct()) {
+                // Custom product - don't set product, populate custom fields instead
+                orderItem.setProduct(null);
+                orderItem.setCustomType(cartItem.getCustomType());
+                orderItem.setCustomColor(cartItem.getCustomColor());
+                orderItem.setCustomPriceRange(cartItem.getCustomPriceRange());
+                orderItem.setCustomFlowerTypes(cartItem.getCustomFlowerTypes());
+                orderItem.setCustomSpecialRequests(cartItem.getCustomSpecialRequests());
+            } else {
+                // Regular product - set product reference
+                ProductDTO product = new ProductDTO();
+                product.setId(cartItem.getId());
+                orderItem.setProduct(product);
+            }
+            
+            orderItem.setQuantity(cartItem.getQuantity());
             items.add(orderItem);
         }
         
