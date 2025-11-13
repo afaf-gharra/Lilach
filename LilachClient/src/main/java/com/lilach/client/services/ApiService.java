@@ -209,6 +209,23 @@ public class ApiService {
         }
     }
 
+    public static List<ComplaintDTO> getAllComplaints() throws IOException {
+        Request request = new Request.Builder()
+            .url(BASE_URL + "complaints")
+            .get()
+            .build();
+        
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return mapper.readValue(
+                    response.body().string(),
+                    mapper.getTypeFactory().constructCollectionType(List.class, ComplaintDTO.class)
+                );
+            }
+            return List.of();
+        }
+    }
+
     // Add store-related methods
     public static List<StoreDTO> getStores() throws IOException {
         Request request = new Request.Builder()

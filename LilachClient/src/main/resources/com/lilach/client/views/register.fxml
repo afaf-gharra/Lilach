@@ -99,17 +99,21 @@
                     <TextField fx:id="cvvField" promptText="CVV" styleClass="modern-input" 
                                GridPane.rowIndex="13" GridPane.columnIndex="1"/>
                     
-                    <!-- Row 8 - Membership Subscription Header -->
-                    <Label text="Membership Subscription" styleClass="h3 text-dark" GridPane.rowIndex="14" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
-                    
-                    <!-- Row 9 - Subscription Checkbox -->
+                    <!-- Row 8 - CHAIN Account Checkbox -->
+                    <Label text="Account Type" styleClass="h3 text-dark" GridPane.rowIndex="14" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
                     <HBox spacing="10" alignment="CENTER_LEFT" GridPane.rowIndex="15" GridPane.columnIndex="0" GridPane.columnSpan="2">
-                        <CheckBox fx:id="subscriptionCheckbox"/>
-                        <Label text="Subscribe to Lilach Premium Membership ($20/month)" styleClass="input-label"/>
+                        <CheckBox fx:id="chainAccountCheckbox"/>
+                        <Label text="Create a network (CHAIN) account ($5 extra for deliveries)" styleClass="input-label"/>
                     </HBox>
-                    
+
+                    <!-- Row 9 - Subscription Checkbox (only for CHAIN) -->
+                    <HBox spacing="10" alignment="CENTER_LEFT" GridPane.rowIndex="16" GridPane.columnIndex="0" GridPane.columnSpan="2">
+                        <CheckBox fx:id="subscriptionCheckbox" disable="true"/>
+                        <Label text="Subscribe to Lilach Premium Membership $20/month" styleClass="input-label"/>
+                    </HBox>
+
                     <!-- Row 10 - Subscription Benefits -->
-                    <VBox spacing="5" GridPane.rowIndex="16" GridPane.columnIndex="0" GridPane.columnSpan="2">
+                    <VBox spacing="5" GridPane.rowIndex="17" GridPane.columnIndex="0" GridPane.columnSpan="2">
                         <Label text="• 10% discount on all orders" styleClass="text-muted"/>
                         <Label text="• Free delivery on orders over $50" styleClass="text-muted"/>
                         <Label text="• Exclusive access to premium flowers" styleClass="text-muted"/>
@@ -117,14 +121,14 @@
                     </VBox>
                     
                     <!-- Row 11 - Terms and Conditions -->
-                    <HBox spacing="10" alignment="CENTER_LEFT" GridPane.rowIndex="17" GridPane.columnIndex="0" GridPane.columnSpan="2">
+                    <HBox spacing="10" alignment="CENTER_LEFT" GridPane.rowIndex="18" GridPane.columnIndex="0" GridPane.columnSpan="2">
                         <CheckBox fx:id="termsCheckbox" styleClass="terms-checkbox"/>
                         <Label text="I agree to terms and conditions *" styleClass="input-label"/>
                     </HBox>
                     
                     <!-- Row 12 - Terms Link -->
                     <Hyperlink text="View terms and conditions" styleClass="text-link" 
-                               GridPane.rowIndex="18" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+                               GridPane.rowIndex="19" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
                 </GridPane>
                 
                 <!-- Register Button -->

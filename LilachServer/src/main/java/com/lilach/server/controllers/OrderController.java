@@ -28,7 +28,8 @@ public class OrderController {
         mapper.registerModule(new JavaTimeModule());
 
         app.post("/api/orders", OrderController::createOrder);
-        app.get("/api/orders", OrderController::getAllOrders);
+    app.get("/api/orders", OrderController::getAllOrders);
+    app.get("/api/orders/{id}", OrderController::getOrderById);
         app.get("/api/orders/user/{userId}", OrderController::getUserOrders);
         app.put("/api/orders/{id}/cancel", OrderController::cancelOrder);
         // app put status
@@ -43,6 +44,20 @@ public class OrderController {
             ctx.json(orders).status(HttpStatus.OK);
         } catch (Exception e) {
             ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Error retrieving all orders: " + e.getMessage());
+        }
+    }
+
+    public static void getOrderById(Context ctx) {
+        try {
+            int orderId = Integer.parseInt(ctx.pathParam("id"));
+            Order order = OrderService.getOrderById(orderId);
+            if (order != null) {
+                ctx.json(order).status(HttpStatus.OK);
+            } else {
+                ctx.status(HttpStatus.NOT_FOUND).json("Order not found");
+            }
+        } catch (Exception e) {
+            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Error retrieving order: " + e.getMessage());
         }
     }
 

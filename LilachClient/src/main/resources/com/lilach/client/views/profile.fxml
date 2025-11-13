@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.lilach.client.controllers.ProfileController"
+      spacing="0" styleClass="bg-floral-pattern" prefWidth="1600" prefHeight="900"
+      stylesheets="@/com/lilach/client/css/styles.css">
+
+    <!-- Navigation Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="0" styleClass="navbar">
+        <HBox alignment="CENTER_LEFT" spacing="5" styleClass="navbar-brand">
+            <FontIcon iconLiteral="fas-leaf" iconSize="24" iconColor="white"/>
+            <Label text="Lilach Flower Shop" styleClass="navbar-title"/>
+        </HBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <HBox spacing="5" styleClass="navbar-menu">
+            <Button text="Home" onAction="#handleBackToCatalog" styleClass="nav-button">
+                <graphic><FontIcon iconLiteral="fas-home" iconSize="16"/></graphic>
+            </Button>
+            <Button text="Profile" disable="true" styleClass="nav-button">
+                <graphic><FontIcon iconLiteral="fas-user" iconSize="16"/></graphic>
+            </Button>
+            <Button text="Logout" onAction="#handleLogout" styleClass="nav-button-logout">
+                <graphic><FontIcon iconLiteral="fas-sign-out-alt" iconSize="16"/></graphic>
+            </Button>
+        </HBox>
+    </HBox>
+
+    <!-- Content -->
+    <VBox alignment="TOP_CENTER" spacing="25" VBox.vgrow="ALWAYS" styleClass="content-section">
+        <Label text="My Profile" styleClass="h1 text-primary"/>
+        <VBox spacing="15" styleClass="card-container" prefWidth="600">
+            <Label text="Account Information" styleClass="h2 text-dark"/>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Account Type:" styleClass="input-label"/>
+                <Label fx:id="accountTypeLabel" styleClass="h3 text-lilac" text="-"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Membership Status:" styleClass="input-label"/>
+                <Label fx:id="membershipStatusLabel" styleClass="text-muted" text="-"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Days Until Expiry:" styleClass="input-label"/>
+                <Label fx:id="membershipDaysLeftLabel" styleClass="text-muted" text="-"/>
+            </HBox>
+            <Separator />
+            <VBox fx:id="benefitsBox" spacing="8">
+                <Label text="Membership Benefits" styleClass="h3 text-dark"/>
+                <Label text="• 10% discount on orders over $50" styleClass="text-muted"/>
+                <Label text="• Reduced delivery fees (up to $10 off)" styleClass="text-muted"/>
+                <Label text="• Priority support" styleClass="text-muted"/>
+            </VBox>
+            <Button fx:id="subscribeButton" text="Subscribe Now" onAction="#handleSubscribe" styleClass="primary-button">
+                <graphic><FontIcon iconLiteral="fas-user-plus" iconSize="14"/></graphic>
+            </Button>
+            <VBox spacing="10">
+                <Label text="Subscription Payment" styleClass="h3 text-dark"/>
+                <GridPane hgap="15" vgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
+                    <Label text="Card Number *" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="input-label"/>
+                    <TextField fx:id="cardNumberField" promptText="16 digits" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2" styleClass="modern-input"/>
+                    <Label text="Expiry *" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="input-label"/>
+                    <HBox spacing="10" GridPane.rowIndex="3" GridPane.columnIndex="0">
+                        <ComboBox fx:id="monthCombo" promptText="Month" styleClass="modern-input"/>
+                        <ComboBox fx:id="yearCombo" promptText="Year" styleClass="modern-input"/>
+                    </HBox>
+                    <Label text="CVV *" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="input-label"/>
+                    <TextField fx:id="cvvField" promptText="CVV" styleClass="modern-input" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                </GridPane>
+                <Label fx:id="errorLabel" textFill="red" styleClass="text-muted"/>
+                <Button fx:id="saveSubscriptionButton" text="Activate Membership" onAction="#handleSaveSubscription" styleClass="primary-button" visible="false" managed="false">
+                    <graphic><FontIcon iconLiteral="fas-check" iconSize="14"/></graphic>
+                </Button>
+            </VBox>
+        </VBox>
+    </VBox>
+
+    <Label text="© 2025 Lilach Flower Shop" styleClass="copyright"/>
+</VBox>

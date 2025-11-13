@@ -30,6 +30,9 @@
         <Button text="Reports" onAction="#handleReports" style="-fx-background-color: #6a30e3; -fx-text-fill: white; -fx-background-radius: 20;">
             
         </Button>
+    <Button text="Profile" onAction="#handleProfile" style="-fx-background-color: #6a30e3; -fx-text-fill: white; -fx-background-radius: 20;">
+            
+    </Button>
         <Button text="Complaints" onAction="#handleComplaints" style="-fx-background-color: #6a30e3; -fx-text-fill: white; -fx-background-radius: 20;">
             
         </Button>

@@ -16,6 +16,7 @@ public class UserDTO {
     private String creditCard;
     private boolean isActive;
     private boolean isOnline;
+    private String membershipExpiry; // ISO date string (yyyy-MM-dd)
     
     // Default constructor
     public UserDTO() {}
@@ -55,5 +56,8 @@ public class UserDTO {
     public void setActive(boolean active) { isActive = active; }
     public boolean isOnline() { return isOnline; }
     public void setOnline(boolean online) { isOnline = online; }
+
+    public String getMembershipExpiry() { return membershipExpiry; }
+    public void setMembershipExpiry(String membershipExpiry) { this.membershipExpiry = membershipExpiry; }
 
 }

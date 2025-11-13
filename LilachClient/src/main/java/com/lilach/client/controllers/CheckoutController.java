@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -42,6 +43,8 @@ public class CheckoutController extends BaseController  {
     @FXML private TextArea greetingMessage;
     @FXML private ListView<String> orderItems;
     @FXML private Label subtotalLabel;
+    @FXML private HBox discountRow;
+    @FXML private Label discountLabel;
     @FXML private Label totalLabel;
 
     @FXML private ComboBox<StoreDTO> pickupStoreCombo;
@@ -51,10 +54,10 @@ public class CheckoutController extends BaseController  {
     @FXML private TextField pickupPersonField;
 
     private ToggleGroup deliveryMethodGroup;
-    private static final double DELIVERY_FEE = 10.00;
-    private static final double FAST_DELIVERY_FEE = 20.00;
+    // Base fees vary by account type
     private static final double PICKUP_FEE = 0.00;
     private double currentSubtotal = 0.0;
+    private double currentDiscount = 0.0;
 
     
     ObservableList<CartItem> cartItems = CartService.getInstance().getCartItems();
@@ -85,10 +88,55 @@ public class CheckoutController extends BaseController  {
         );
         orderItems.setItems(items);
         
-        // Set prices
-        currentSubtotal = CartService.getInstance().getCartTotal();
-        subtotalLabel.setText(String.format("$%.2f", currentSubtotal));
-        totalLabel.setText(String.format("$%.2f", currentSubtotal + 10.00)); // Add $10 delivery fee
+    // Set prices
+    currentSubtotal = CartService.getInstance().getCartTotal();
+    subtotalLabel.setText(String.format("$%.2f", currentSubtotal));
+    applyMemberDiscountIfEligible();
+    // Initialize with regular delivery by default
+    updateDeliveryFee(getDeliveryFeeForAccount(false));
+    }
+
+    private double getDeliveryFeeForAccount(boolean fast) {
+        String type = (getLoggedInUser() != null && getLoggedInUser().getAccountType() != null)
+            ? getLoggedInUser().getAccountType().toUpperCase()
+            : "STORE";
+        switch (type) {
+            case "MEMBER":
+                return fast ? 10.0 : 0.0;
+            case "CHAIN":
+                return fast ? 25.0 : 15.0;
+            case "STORE":
+            default:
+                return fast ? 20.0 : 10.0;
+        }
+    }
+
+    private void applyMemberDiscountIfEligible() {
+        String type = (getLoggedInUser() != null && getLoggedInUser().getAccountType() != null)
+            ? getLoggedInUser().getAccountType().toUpperCase()
+            : "STORE";
+        if ("MEMBER".equals(type) && currentSubtotal > 50.0) {
+            currentDiscount = Math.round(currentSubtotal * 0.10 * 100.0) / 100.0; // 10% rounded to cents
+            if (discountRow != null) {
+                discountRow.setVisible(true);
+                discountRow.setManaged(true);
+            }
+            if (discountLabel != null) {
+                discountLabel.setText(String.format("-$%.2f", currentDiscount));
+            }
+        } else {
+            currentDiscount = 0.0;
+            if (discountRow != null) {
+                discountRow.setVisible(false);
+                discountRow.setManaged(false);
+            }
+        }
+        // Recompute total with currently selected delivery type
+        double fee;
+        if (fastDeliveryToggle.isSelected()) fee = getDeliveryFeeForAccount(true);
+        else if (deliveryToggle.isSelected()) fee = getDeliveryFeeForAccount(false);
+        else fee = PICKUP_FEE;
+        updateDeliveryFee(fee);
     }
 
     private void initializeTimeComboBoxes() {
@@ -123,7 +171,7 @@ public class CheckoutController extends BaseController  {
         deliveryMethodGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == deliveryToggle) {
                 showDeliverySection();
-                updateDeliveryFee(DELIVERY_FEE);
+                updateDeliveryFee(getDeliveryFeeForAccount(false));
                 // enable manual date/time selection
                 enableDeliveryDateTime(true);
                 if (fastDeliveryTimeLabel != null) {
@@ -132,7 +180,7 @@ public class CheckoutController extends BaseController  {
                 }
             } else if (newValue == fastDeliveryToggle) {
                 showDeliverySection();
-                updateDeliveryFee(FAST_DELIVERY_FEE);
+                updateDeliveryFee(getDeliveryFeeForAccount(true));
                 // set and lock fast delivery time
                 setFastDeliveryTime();
                 enableDeliveryDateTime(false);
@@ -277,7 +325,7 @@ public class CheckoutController extends BaseController  {
 
     private void updateDeliveryFee(double fee) {
         deliveryFeeLabel.setText(String.format("$%.2f", fee));
-        double total = currentSubtotal + fee;
+        double total = currentSubtotal - currentDiscount + fee;
         totalLabel.setText(String.format("$%.2f", total));
         
         if (fee == 0.0) {
@@ -290,13 +338,13 @@ public class CheckoutController extends BaseController  {
     @FXML
     private void handleDeliveryToggle() {
         showDeliverySection();
-        updateDeliveryFee(DELIVERY_FEE);
+        updateDeliveryFee(getDeliveryFeeForAccount(false));
     }
 
     @FXML
     private void handleFastDeliveryToggle() {
         showDeliverySection();
-        updateDeliveryFee(FAST_DELIVERY_FEE);
+        updateDeliveryFee(getDeliveryFeeForAccount(true));
     }
 
     @FXML
@@ -363,10 +411,10 @@ public class CheckoutController extends BaseController  {
         String deliveryType;
         
         if (deliveryToggle.isSelected()) {
-            deliveryFee = DELIVERY_FEE;
+            deliveryFee = getDeliveryFeeForAccount(false);
             deliveryType = "Delivery";
         } else if (fastDeliveryToggle.isSelected()) {
-            deliveryFee = FAST_DELIVERY_FEE;
+            deliveryFee = getDeliveryFeeForAccount(true);
             deliveryType = "Fast Delivery";
         } else {
             deliveryFee = PICKUP_FEE;
@@ -377,7 +425,8 @@ public class CheckoutController extends BaseController  {
         order.setdeliveryType(deliveryType);
         order.setOrderDate(LocalDateTime.now());
         order.setStatus("PENDING");
-        order.setTotalPrice(CartService.getInstance().getCartTotal() + deliveryFee);
+    // total = (subtotal - discount) + delivery
+    order.setTotalPrice((CartService.getInstance().getCartTotal() - currentDiscount) + deliveryFee);
         order.setGreetingMessage(greetingMessage.getText());
         
 

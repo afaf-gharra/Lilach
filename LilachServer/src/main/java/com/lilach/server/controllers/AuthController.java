@@ -1,6 +1,8 @@
 package com.lilach.server.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lilach.server.models.Store;
 import com.lilach.server.models.User;
 import com.lilach.server.models.User.UserRole;
@@ -11,7 +13,9 @@ import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 
 public class AuthController {
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper()
+        .registerModule(new JavaTimeModule())
+        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     
     public static void registerRoutes(io.javalin.Javalin app) {
         app.post("/api/login", AuthController::login);
@@ -86,6 +90,9 @@ public class AuthController {
             public final String creditCard = createdUser.getCreditCard();
             public final boolean  isActive = createdUser.isActive();
             public final boolean isOnline = createdUser.isOnline();
+            public final String membershipExpiry = createdUser.getMembershipExpiry() != null 
+                ? createdUser.getMembershipExpiry().toString() 
+                : null;
         };
     }
 

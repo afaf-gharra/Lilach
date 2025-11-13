@@ -90,6 +90,9 @@ public class UserService {
                 if (userUpdates.getRole() != null) user.setRole(userUpdates.getRole());
                 if (userUpdates.getAccountType() != null) user.setAccountType(userUpdates.getAccountType());
                 if (userUpdates.getStore() != null) user.setStore(userUpdates.getStore());
+                if (userUpdates.getStoreId() != null) user.setStoreId(userUpdates.getStoreId());
+                if (userUpdates.getCreditCard() != null) user.setCreditCard(userUpdates.getCreditCard());
+                if (userUpdates.getMembershipExpiry() != null) user.setMembershipExpiry(userUpdates.getMembershipExpiry());
                 user.setActive(userUpdates.isActive());
                 
                 session.update(user);
