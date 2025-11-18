@@ -1,11 +1,12 @@
 package com.lilach.client;
 
+import org.kordamp.bootstrapfx.BootstrapFX;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.kordamp.bootstrapfx.BootstrapFX;
 
 public class Main extends Application {
     private static Stage primaryStage;
@@ -13,12 +14,19 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
-        Parent root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/catalog.fxml"));
-        Scene scene = new Scene(root, 1600, 900);
-        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-        scene.getStylesheets().add(getClass().getResource("/com/lilach/client/css/styles.css").toExternalForm());
         
-        primaryStage.setTitle("Lilach Flower Shop System");
+        // Load the init page first for server connection
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/lilach/client/views/init.fxml"));
+        Parent root = loader.load();
+        
+        // Pass the stage to the controller
+        com.lilach.client.controllers.InitController controller = loader.getController();
+        controller.setStage(stage);
+        
+        Scene scene = new Scene(root, 500, 400);
+        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+        
+        primaryStage.setTitle("Lilach Flower Shop - Server Connection");
         primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
         primaryStage.show();

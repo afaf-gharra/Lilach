@@ -43,7 +43,12 @@ public class StoreService {
                 if (storeUpdates.getAddress() != null) store.setAddress(storeUpdates.getAddress());
                 if (storeUpdates.getPhone() != null) store.setPhone(storeUpdates.getPhone());
                 if (storeUpdates.getEmail() != null) store.setEmail(storeUpdates.getEmail());
-                store.setActive(storeUpdates.isActive());
+                // Only update isActive if explicitly provided (check if name/address/phone/email are also provided to detect full update)
+                // For partial updates (like discount-only), preserve current isActive
+                if (storeUpdates.getName() != null || storeUpdates.getAddress() != null || 
+                    storeUpdates.getPhone() != null || storeUpdates.getEmail() != null) {
+                    store.setActive(storeUpdates.isActive());
+                }
                 
                 // Update store-wide discount only when provided (0-100)
                 Integer newDiscount = storeUpdates.getStoreDiscountRaw();
