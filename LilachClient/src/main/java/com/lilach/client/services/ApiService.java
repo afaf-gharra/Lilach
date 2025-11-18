@@ -23,7 +23,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ApiService {
-    private static final String BASE_URL = "http://localhost:8080/api/";
+    private static String BASE_URL = "http://localhost:8080/api/";
     private static final OkHttpClient client = new OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
@@ -31,6 +31,16 @@ public class ApiService {
         .build();;
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    
+    // Method to set the base URL dynamically
+    public static void setBaseUrl(String baseUrl) {
+        BASE_URL = baseUrl;
+    }
+    
+    // Method to get the current base URL
+    public static String getBaseUrl() {
+        return BASE_URL;
+    }
     
 
     public static UserDTO login(String username, String password) throws IOException {
