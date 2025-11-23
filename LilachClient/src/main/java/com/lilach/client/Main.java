@@ -2,6 +2,8 @@ package com.lilach.client;
 
 import org.kordamp.bootstrapfx.BootstrapFX;
 
+import com.lilach.client.services.WebSocketService;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,6 +32,15 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
         primaryStage.show();
+
+        // WebSocket will connect when server URL is set in InitController
+    }
+
+    @Override
+    public void stop() throws Exception {
+        // Clean up WebSocket connection when app closes
+        WebSocketService.disconnect();
+        super.stop();
     }
 
     public static Stage getPrimaryStage() {

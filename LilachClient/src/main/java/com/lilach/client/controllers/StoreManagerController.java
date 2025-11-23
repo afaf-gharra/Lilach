@@ -10,7 +10,9 @@ import com.lilach.client.models.OrderItemDTO;
 import com.lilach.client.models.ProductDTO;
 import com.lilach.client.models.StoreDTO;
 import com.lilach.client.services.ApiService;
+import com.lilach.client.services.WebSocketService;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -80,6 +82,38 @@ public class StoreManagerController extends BaseController {
         setupOrderManagement();
         setupProductManagement();
         loadStoreData();
+        
+        // Listen for order and product updates via WebSocket
+        WebSocketService.registerHandler("store-orders", message -> {
+            if ("REFRESH_ORDERS".equals(message)) {
+                Platform.runLater(() -> {
+                    try {
+                        if (currentStore != null) {
+                            loadStoreOrders(currentStore.getId());
+                        } else {
+                            // Chain/member view: refresh all orders
+                            loadAllOrders();
+                        }
+                        ordersTable.refresh();
+                    } catch (Exception ignored) {}
+                });
+            }
+        });
+        WebSocketService.registerHandler("store-products", message -> {
+            if ("REFRESH_PRODUCTS".equals(message)) {
+                Platform.runLater(() -> {
+                    try {
+                        if (currentStore != null) {
+                            loadStoreProducts(currentStore.getId());
+                        } else {
+                            // Chain/member view: refresh all products
+                            loadAllProducts();
+                        }
+                        productsTable.refresh();
+                    } catch (Exception ignored) {}
+                });
+            }
+        });
     }
     
     private void setupOrderManagement() {

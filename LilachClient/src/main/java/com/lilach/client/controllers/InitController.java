@@ -3,6 +3,7 @@ package com.lilach.client.controllers;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
 import com.lilach.client.services.ApiService;
+import com.lilach.client.services.WebSocketService;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -52,7 +53,11 @@ public class InitController {
             try {
                 ApiService.getProducts();
                 
-                // Connection successful, load catalog
+                // Connection successful, connect WebSocket
+                String wsServerUrl = "http://" + ip + ":" + port;
+                WebSocketService.connect(wsServerUrl);
+                
+                // Load catalog
                 loadCatalog();
                 
             } catch (Exception e) {

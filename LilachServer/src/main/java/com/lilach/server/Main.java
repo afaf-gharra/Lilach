@@ -11,6 +11,7 @@ import com.lilach.server.controllers.RefundController;
 import com.lilach.server.controllers.ReportController;
 import com.lilach.server.controllers.StoreController;
 import com.lilach.server.controllers.UserController;
+import com.lilach.server.services.WebSocketBroadcaster;
 
 import io.javalin.Javalin;
 //fffffff
@@ -21,12 +22,18 @@ public class Main {
         
         Javalin app = Javalin.create(config -> {
             config.http.defaultContentType = "application/json";
-            config.plugins.enableDevLogging();
+            // Dev logging disabled to reduce console noise
         }).start(8080);
         
     // Reset any stale online flags from previous runs
     int resetCount = com.lilach.server.services.UserService.resetAllOnlineFlags();
     System.out.println("Reset isOnline flags for " + resetCount + " users");
+
+    app.ws("/ws", ws -> {
+        ws.onConnect(ctx -> WebSocketBroadcaster.addConnection(ctx));
+        ws.onClose(ctx -> WebSocketBroadcaster.removeConnection(ctx));
+        ws.onError(ctx -> WebSocketBroadcaster.removeConnection(ctx));
+    });
 
     // Register controllers
         AuthController.registerRoutes(app);

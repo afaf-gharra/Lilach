@@ -1,14 +1,16 @@
 package com.lilach.server.controllers;
 
+import java.util.List;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.lilach.server.models.Product;
 import com.lilach.server.services.ProductService;
+import com.lilach.server.services.WebSocketBroadcaster;
+
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
-
-import java.util.List;
 
 public class ProductController {
     private static final ObjectMapper mapper = new ObjectMapper();
@@ -58,6 +60,7 @@ public class ProductController {
             
             boolean updated = ProductService.updateProductStock(productId, newStock);
             if (updated) {
+                WebSocketBroadcaster.broadcastProductUpdate();
                 ctx.status(HttpStatus.OK).json("Stock updated successfully");
             } else {
                 ctx.status(HttpStatus.NOT_FOUND).json("Product not found");
@@ -75,6 +78,7 @@ public class ProductController {
             
             Product updatedProduct = ProductService.updateProduct(productId, productUpdates);
             if (updatedProduct != null) {
+                WebSocketBroadcaster.broadcastProductUpdate();
                 ctx.json(updatedProduct).status(HttpStatus.OK);
             } else {
                 ctx.status(HttpStatus.NOT_FOUND).json("Product not found");
@@ -89,6 +93,7 @@ public class ProductController {
             int productId = Integer.parseInt(ctx.pathParam("id"));
             boolean deleted = ProductService.deleteProduct(productId);
             if (deleted) {
+                WebSocketBroadcaster.broadcastProductUpdate();
                 ctx.status(HttpStatus.NO_CONTENT);
             } else {
                 ctx.status(HttpStatus.NOT_FOUND).json("Product not found");
