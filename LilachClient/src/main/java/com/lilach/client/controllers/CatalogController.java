@@ -9,6 +9,7 @@ import com.lilach.client.models.ProductDTO;
 import com.lilach.client.services.ApiService;
 import com.lilach.client.services.CartItem;
 import com.lilach.client.services.CartService;
+import com.lilach.client.services.WebSocketService;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -52,6 +53,13 @@ public class CatalogController extends BaseController  {
         setupCategoryFilter();
         loadProducts();
         setupButtonIcons();
+        
+        // Listen for product updates via WebSocket
+        WebSocketService.registerHandler("catalog", message -> {
+            if ("REFRESH_PRODUCTS".equals(message)) {
+                loadProducts();
+            }
+        });
     }
     
     private void setupButtonIcons() {
@@ -78,19 +86,15 @@ public class CatalogController extends BaseController  {
     private void loadProducts() {
         try {
             if (loggedInUser == null) {
-                // Not logged in - show all products
                 allProducts = ApiService.getAllProducts();
             }
             else if ("member".equalsIgnoreCase(loggedInUser.getAccountType())) {
-                // Member users can see all products
                 allProducts = ApiService.getAllProducts();
             }
             else if ("chain".equalsIgnoreCase(loggedInUser.getAccountType())) {
-                // Chain users can see all products
                 allProducts = ApiService.getAllProducts();
             }
             else {
-                // Default case (store employees, etc) - show store-specific products
                 allProducts = ApiService.getStoreProducts(getLoggedInUser().getStoreId());
             }
             displayProducts(allProducts);
@@ -98,10 +102,30 @@ public class CatalogController extends BaseController  {
             showError("Connection Error", "Failed to load products: " + e.getMessage());
         }
     }
+
+    private void updateProductStock(int productId, int newStock) {
+        if (allProducts == null) return;
+        boolean changed = false;
+        for (ProductDTO p : allProducts) {
+            if (p.getId() == productId) {
+                p.setStock(newStock);
+                changed = true;
+                break;
+            }
+        }
+        if (changed) {
+            filterProducts();
+        }
+    }
+
+    private void removeProduct(int productId) {
+        if (allProducts == null) return;
+        allProducts = allProducts.stream().filter(p -> p.getId() != productId).toList();
+        filterProducts();
+    }
     
     private void displayProducts(List<ProductDTO> products) {
         productsContainer.getChildren().clear();
-        
         for (ProductDTO product : products) {
             VBox productCard = createProductCard(product);
             productsContainer.getChildren().add(productCard);
@@ -114,7 +138,6 @@ public class CatalogController extends BaseController  {
         card.setSpacing(10);
         card.setPrefWidth(200);
 
-        // Product image
         ImageView imageView = new ImageView();
         try {
             String imagePath = "/com/lilach/client/images/" + product.getCategory() + "/" + product.getImageUrl() + ".jpg";
@@ -128,27 +151,19 @@ public class CatalogController extends BaseController  {
             imageView.setImage(new Image(getClass().getResourceAsStream("/com/lilach/client/images/logo.png")));
         }
 
-        // Product details
         Label nameLabel = new Label(product.getName());
         nameLabel.getStyleClass().add("product-name");
-
-        // Use effective discount (max of product discount and store discount)
         int effectiveDiscount = product.getEffectiveDiscount();
-
         double originalPrice = product.getPrice();
-    double effectivePrice = product.getEffectivePrice();
+        double effectivePrice = product.getEffectivePrice();
         Label originalPriceLabel = new Label(String.format("$%.2f", originalPrice));
         originalPriceLabel.getStyleClass().add("product-price");
-
         Label discountedPriceLabel = null;
         Label saleBadge = null;
         if (effectiveDiscount > 0) {
-            // Style original price as smaller & strikethrough
             originalPriceLabel.getStyleClass().add("original-price");
             discountedPriceLabel = new Label(String.format("$%.2f", effectivePrice));
             discountedPriceLabel.getStyleClass().add("discount-price");
-            
-            // Show which discount is being applied
             String badgeText = "SALE -" + effectiveDiscount + "%";
             if (product.getStore() != null && product.getStore().getStoreDiscount() > product.getDiscount()) {
                 badgeText += " (Store)";
@@ -157,14 +172,11 @@ public class CatalogController extends BaseController  {
             saleBadge.getStyleClass().add("sale-badge");
             card.getStyleClass().add("sale-card");
         }
-
         Label categoryLabel = new Label(product.getCategory());
         categoryLabel.getStyleClass().add("product-category");
-
         Button addToCartButton = new Button("Add to Cart");
         addToCartButton.getStyleClass().addAll("btn", "btn-primary");
         addToCartButton.setOnAction(e -> addToCart(product));
-
         try {
             if (product.getStock() <= 0) {
                 addToCartButton.setText("Out of Stock");
@@ -178,12 +190,10 @@ public class CatalogController extends BaseController  {
         } catch (Exception ex) {
             System.out.println("Stock check skipped: " + ex.getMessage());
         }
-
-        // Assemble card children
         card.getChildren().add(imageView);
         if (saleBadge != null) card.getChildren().add(saleBadge);
         card.getChildren().add(nameLabel);
-    if (effectiveDiscount > 0) {
+        if (effectiveDiscount > 0) {
             card.getChildren().add(originalPriceLabel);
             card.getChildren().add(discountedPriceLabel);
         } else {
@@ -191,68 +201,29 @@ public class CatalogController extends BaseController  {
         }
         card.getChildren().add(categoryLabel);
         card.getChildren().add(addToCartButton);
-
         return card;
     }
     
-    @FXML
-    private void handleSearch() {
-        filterProducts();
-    }
-
-    @FXML
-    private void handleLogout() {
-        logout();
-    }
-    
-    @FXML
-    private void handleLoginLogout() {
-        if (loggedInUser != null) {
-            // User is logged in, so logout
-            logout();
-        } else {
-            // User is not logged in, navigate to login
-            navigateToLogin();
-        }
-    }
-    
-    @FXML
-    private void filterProducts() {
+    @FXML private void handleSearch() { filterProducts(); }
+    @FXML private void handleLogout() { logout(); }
+    @FXML private void handleLoginLogout() { if (loggedInUser != null) logout(); else navigateToLogin(); }
+    @FXML private void filterProducts() {
         String searchTerm = searchField.getText().toLowerCase();
         String selectedCategory = categoryComboBox.getValue();
-        
+        if (allProducts == null) return;
         List<ProductDTO> filtered = allProducts.stream()
-            .filter(product -> 
-                (selectedCategory.equals("All Products") || 
-                 product.getCategory().equalsIgnoreCase(selectedCategory)))
-            .filter(product ->
-                product.getName().toLowerCase().contains(searchTerm) ||
-                product.getDescription().toLowerCase().contains(searchTerm))
+            .filter(p -> selectedCategory.equals("All Products") || p.getCategory().equalsIgnoreCase(selectedCategory))
+            .filter(p -> p.getName().toLowerCase().contains(searchTerm) || p.getDescription().toLowerCase().contains(searchTerm))
             .toList();
-        
         displayProducts(filtered);
     }
-    
-    @FXML
-    private void addToCart(ProductDTO product) {
-        // Use effective price (includes best available discount)
+    @FXML private void addToCart(ProductDTO product) {
         double price = product.getEffectivePrice();
-        
-        CartItem item = new CartItem(
-            product.getId(),
-            product.getName(),
-            price,
-            1,
-            product.getImageUrl()
-        );
-        
+        CartItem item = new CartItem(product.getId(), product.getName(), price, 1, product.getImageUrl());
         CartService.getInstance().addItem(item);
-
         showSuccess("Added to Cart", product.getName() + " added to your cart!");
     }
-    
-    @FXML
-    private void handleCreateCustomArrangement() {
+    @FXML private void handleCreateCustomArrangement() {
         try {
             Stage stage = (Stage) productsContainer.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/com/lilach/client/views/custom_arrangement.fxml"));
@@ -262,44 +233,9 @@ public class CatalogController extends BaseController  {
             showError("Navigation Error", "Failed to load custom arrangement view: " + e.getMessage());
         }
     }
-    
-    @FXML
-    private void handleViewCart() {
-        navigateTo("/com/lilach/client/views/cart.fxml", "Shopping Cart");
-    }
-    
-    @FXML
-    private void handleViewOrders() {
-        navigateTo("/com/lilach/client/views/order_history.fxml", "My Orders");
-    }
-
-   
-    
-
-    @FXML
-    private void handleCreateCustom() {
-        navigateTo("/com/lilach/client/views/custom_arrangement.fxml", "Create Custom Arrangement");
-    }
-
-
-    @FXML
-    private void handleComplaints() {
-        navigateTo("/com/lilach/client/views/complaints.fxml", "Complaints Form");
-    }
-
-    @FXML
-    private void navigateToCatalog() {
-        // Already on catalog, do nothing or refresh
-        initialize();
-    }
-
-    // @Override
-    // protected void addNavigationButtons() {
-    //     addNavButton("Cart", "fas-shopping-cart", this::handleViewCart);
-    //     addNavButton("Orders", "fas-history", this::handleViewOrders);
-    //     addNavButton("Custom", "fas-plus", this::handleCreateCustom);
-    // }
-
-    
-
+    @FXML private void handleViewCart() { navigateTo("/com/lilach/client/views/cart.fxml", "Shopping Cart"); }
+    @FXML private void handleViewOrders() { navigateTo("/com/lilach/client/views/order_history.fxml", "My Orders"); }
+    @FXML private void handleCreateCustom() { navigateTo("/com/lilach/client/views/custom_arrangement.fxml", "Create Custom Arrangement"); }
+    @FXML private void handleComplaints() { navigateTo("/com/lilach/client/views/complaints.fxml", "Complaints Form"); }
+    @FXML private void navigateToCatalog() { /* already here */ }
 }

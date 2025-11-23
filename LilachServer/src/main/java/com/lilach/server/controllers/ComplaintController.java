@@ -11,6 +11,7 @@ import com.lilach.server.models.User;
 import com.lilach.server.services.ComplaintService;
 import com.lilach.server.services.OrderService;
 import com.lilach.server.services.UserService;
+import com.lilach.server.services.WebSocketBroadcaster;
 
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
@@ -140,6 +141,7 @@ public class ComplaintController {
             complaint.setContactPhone(complaintDTO.isContactPhone());
             
             Complaint createdComplaint = ComplaintService.createComplaint(complaint);
+            WebSocketBroadcaster.broadcastComplaintUpdate();
             ctx.json(convertToDTO(createdComplaint)).status(HttpStatus.CREATED);
             
         } catch (Exception e) {
@@ -174,6 +176,7 @@ public class ComplaintController {
             
             Complaint updatedComplaint = ComplaintService.updateComplaint(complaintId, complaintUpdates);
             if (updatedComplaint != null) {
+                WebSocketBroadcaster.broadcastComplaintUpdate();
                 ctx.json(convertToDTO(updatedComplaint)).status(HttpStatus.OK);
             } else {
                 ctx.status(HttpStatus.NOT_FOUND).json("Complaint not found");

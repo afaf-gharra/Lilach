@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 
 import com.lilach.client.models.ComplaintDTO;
 import com.lilach.client.services.ApiService;
+import com.lilach.client.services.WebSocketService;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -50,6 +52,13 @@ public class ComplaintsManagerController extends BaseController {
         setupFilters();
         setupForm();
         loadComplaints();
+        
+        // Listen for complaint updates via WebSocket
+        WebSocketService.registerHandler("complaints", message -> {
+            if ("REFRESH_COMPLAINTS".equals(message)) {
+                Platform.runLater(() -> loadComplaints());
+            }
+        });
     }
     
     private void setupTable() {

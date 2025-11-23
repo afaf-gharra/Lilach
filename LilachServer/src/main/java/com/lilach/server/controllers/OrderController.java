@@ -16,6 +16,7 @@ import com.lilach.server.services.OrderService;
 import com.lilach.server.services.ProductService;
 import com.lilach.server.services.StoreService;
 import com.lilach.server.services.UserService;
+import com.lilach.server.services.WebSocketBroadcaster;
 
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
@@ -137,6 +138,8 @@ public class OrderController {
             //order.setTotalPrice(totalPrice);
             order.setStatus(Order.OrderStatus.PENDING);
             Order createdOrder = OrderService.createOrder(order);
+            WebSocketBroadcaster.broadcastOrderUpdate();
+            WebSocketBroadcaster.broadcastProductUpdate(); // Stock changes with order
             ctx.json(createdOrder).status(HttpStatus.CREATED);
         } catch (Exception e) {
             ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json("Error creating order: " + e.getMessage());
@@ -158,6 +161,7 @@ public class OrderController {
             int orderId = Integer.parseInt(ctx.pathParam("id"));
             boolean cancelledOrder = OrderService.cancelOrder(orderId);
             if (cancelledOrder) {
+                WebSocketBroadcaster.broadcastOrderUpdate();
                 ctx.status(HttpStatus.OK).json("Order cancelled successfully");
             } else {
                 ctx.status(HttpStatus.BAD_REQUEST).json("Cannot cancel order");
@@ -175,6 +179,7 @@ public class OrderController {
             
             Order updatedOrder = OrderService.updateOrderStatus(orderId, status);
             if (updatedOrder != null) {
+                WebSocketBroadcaster.broadcastOrderUpdate();
                 ctx.json(updatedOrder).status(HttpStatus.OK);
             } else {
                 ctx.status(HttpStatus.BAD_REQUEST).json("Cannot update order status");
