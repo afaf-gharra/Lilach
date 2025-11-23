@@ -115,6 +115,11 @@ public class CartController extends BaseController {
 
     @FXML
     private void handleCheckout() {
+        // Ensure user is logged in before proceeding to checkout
+        if (getLoggedInUser() == null) {
+            // getLoggedInUser already shows error and redirects to login
+            return;
+        }
         navigateTo("/com/lilach/client/views/checkout.fxml", "Checkout");
     }
 
