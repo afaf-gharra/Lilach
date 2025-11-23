@@ -42,6 +42,7 @@
                 <transformer>
                   <mainClass>com.lilach.client.Launcher</mainClass>
                 </transformer>
+                <transformer />
               </transformers>
               <filters>
                 <filter>

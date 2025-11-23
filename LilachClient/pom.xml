@@ -117,6 +117,8 @@
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>com.lilach.client.Launcher</mainClass>
                                 </transformer>
+                                <!-- Merge service files for Ikonli icon providers -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             </transformers>
                             <filters>
                                 <filter>
